@@ -8,6 +8,6 @@ export default function KAPName() {
     return <>luke.koin</>;
   } else {
     // TODO better fallback
-    return <>no name</>;
+    return <>nobody</>;
   }
 }
