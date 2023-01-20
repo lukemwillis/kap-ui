@@ -17,11 +17,11 @@ export const ContractsProvider = ({
 }: {
   children: React.ReactNode;
 }): JSX.Element => {
-  const { account } = useAccount();
+  const { address } = useAccount();
   const { rpc } = useRpc();
 
   const provider = new Provider(rpc!);
-  const signer = account ? kondor.getSigner(account) as Signer : undefined;
+  const signer = address ? kondor.getSigner(address) as Signer : undefined;
 
   return (
     <ContractsContext.Provider
