@@ -59,10 +59,11 @@ const Home: NextPage = () => {
           margin="1"
           paddingRight="6"
           color={gray[500]}
-          children=".koin"
-        />
+        >
+          .koin
+        </InputRightElement>
       </InputGroup>
-      <Link href={query.length > 0 ? `/search?q=${query}` : '#'}>
+      <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
         <Button
           variant="solid"
           minWidth="unset"

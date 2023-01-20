@@ -20,6 +20,7 @@ export default function Avatar({ size }: AvatarProps) {
         borderRadius="50%"
         borderWidth="1px"
         overflow="hidden"
+        alt="KAP Account Avatar"
       />
     );
   } else {
