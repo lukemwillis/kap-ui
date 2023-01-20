@@ -1,20 +1,18 @@
 import { Image } from "@chakra-ui/react";
 import { createAvatar } from "@dicebear/avatars";
-import { useAccount } from "../context/AccountProvider";
 import * as identiconStyle from "@dicebear/avatars-identicon-sprites";
 
 interface AvatarProps {
+  src?: string;
+  address?: string;
   size: string;
 }
 
-export default function Avatar({ size }: AvatarProps) {
-  const { account } = useAccount();
-
-  // TODO pull avatar from chain, use identicon as backup
-  if (account === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
+export default function Avatar({ src, address, size }: AvatarProps) {
+  if (src) {
     return (
       <Image
-        src="https://bafybeial7korh5zldyo7qmz4kkeeo5tt7tybhd7jiorz2nx7iwvpzeadhi.ipfs.nftstorage.link/assets/01.png"
+        src={src}
         width={size}
         height={size}
         borderRadius="50%"
@@ -24,7 +22,7 @@ export default function Avatar({ size }: AvatarProps) {
       />
     );
   } else {
-    const identicon = createAvatar(identiconStyle, { seed: account });
+    const identicon = createAvatar(identiconStyle, { seed: address });
 
     return (
       <span

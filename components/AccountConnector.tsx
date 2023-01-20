@@ -16,13 +16,15 @@ import {
   useClipboard,
   useColorModeValue,
   Tooltip,
+  Box,
+  Input,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
 import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
-import { ReactElement } from "react";
+import { ReactElement, useRef } from "react";
 import Avatar from "./Avatar";
-import KAPName from "./KAPName";
 import Link from "next/link";
+import Search from "./Search";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -36,11 +38,18 @@ export default function AccountConnector({
   const {
     colors: { gray },
   } = useTheme();
-  const { account, isConnecting, connectKondor, connectMKW, isMKWSupported } =
-    useAccount();
+  const {
+    address,
+    isConnecting,
+    connectKondor,
+    connectMKW,
+    isMKWSupported,
+    primaryUsername,
+    primaryAvatarSrc,
+  } = useAccount();
   const toast = useToast();
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const { onCopy, hasCopied } = useClipboard(account || "");
+  const { onCopy, hasCopied } = useClipboard(address || "");
 
   const connectCallback = async (wallet: "Kondor" | "MKW") => {
     let connected = false;
@@ -79,23 +88,27 @@ export default function AccountConnector({
     >
       <PopoverTrigger>
         <Button
-          variant={account ? "ghost" : "outline"}
+          variant={address ? "ghost" : "outline"}
           isLoading={isConnecting}
           minWidth="unset"
           height="auto"
-          padding={account ? "2" : "3"}
+          padding={address ? "2" : "3"}
           borderColor={useColorModeValue("black", "white")}
         >
-          {account && !isConnecting ? (
+          {address && !isConnecting ? (
             <Flex gap="2" alignItems="center">
-              <Avatar size="40px" />
+              <Avatar size="40px" src={primaryAvatarSrc} address={address} />
               <Stack alignItems="start" lineHeight="1">
-                <Text fontSize="1.2em">
-                  <KAPName />
-                </Text>
-                <Text fontSize="0.9em" color="gray.500" fontWeight="normal">
-                  {account.substring(0, 4)}...
-                  {account.substring(account.length - 4)}
+                {primaryUsername && (
+                  <Text fontSize="1.2em">{primaryUsername}</Text>
+                )}
+                <Text
+                  fontSize={primaryUsername ? "0.9em" : "1.3em"}
+                  color="gray.500"
+                  fontWeight="normal"
+                >
+                  {address.substring(0, 4)}...
+                  {address.substring(address.length - 4)}
                 </Text>
               </Stack>
             </Flex>
@@ -107,13 +120,26 @@ export default function AccountConnector({
       <PopoverContent width="auto">
         <PopoverBody padding="3">
           <Stack spacing="2">
-            {!!account ? (
+            {address && (
               <>
-                <Flex direction="column" alignItems="center" gap="2">
-                  <Avatar size="128px" />
-                  <Text fontSize="1.5em">
-                    <KAPName />
-                  </Text>
+                <Flex direction="column" alignItems="center" gap="4">
+                  <Avatar
+                    size="128px"
+                    src={primaryAvatarSrc}
+                    address={address}
+                  />
+                  {primaryUsername ? (
+                    <Text fontSize="1.5em" lineHeight="1">
+                      {primaryUsername}
+                    </Text>
+                  ) : (
+                    <Search
+                      placeholder="Pick a username..."
+                      buttonLabel="Search"
+                      inlineButton
+                      onSearch={onClose}
+                    />
+                  )}
                   <Flex
                     borderColor={gray[500]}
                     borderWidth="1px"
@@ -123,7 +149,7 @@ export default function AccountConnector({
                     color={gray[500]}
                     gap="1"
                   >
-                    <Text fontSize="0.9em">{account}</Text>
+                    <Text fontSize="0.9em">{address}</Text>
                     <IconButton
                       aria-label={hasCopied ? "Copied!" : "Copy"}
                       onClick={onCopy}
@@ -134,13 +160,15 @@ export default function AccountConnector({
                       {hasCopied ? <CheckIcon /> : <CopyIcon />}
                     </IconButton>
                   </Flex>
-                  <Link href="/dashboard">
-                    <Button variant="outline" marginTop="2">
-                      Manage KAP Account
-                    </Button>
-                  </Link>
+                  {primaryUsername && (
+                    <Link href="/dashboard">
+                      <Button variant="outline" onClick={onClose}>
+                        Manage KAP Account
+                      </Button>
+                    </Link>
+                  )}
                 </Flex>
-                {sitePreferences ? (
+                {sitePreferences && (
                   <>
                     <StackDivider
                       display="flex"
@@ -164,8 +192,6 @@ export default function AccountConnector({
                     </StackDivider>
                     {sitePreferences}
                   </>
-                ) : (
-                  ""
                 )}
                 <StackDivider
                   display="flex"
@@ -188,8 +214,6 @@ export default function AccountConnector({
                   connect another wallet
                 </StackDivider>
               </>
-            ) : (
-              ""
             )}
             <Flex gap="2">
               <IconButton
@@ -223,7 +247,7 @@ export default function AccountConnector({
                 />
               </Tooltip>
             </Flex>
-            {!account ? (
+            {!address ? (
               <>
                 <StackDivider
                   display="flex"
@@ -249,12 +273,15 @@ export default function AccountConnector({
                   as="a"
                   href="https://chrome.google.com/webstore/detail/kondor/ghipkefkpgkladckmlmdnadmcchefhjl"
                   target="_blank"
-                  rightIcon={
-                    <Image
-                      src="/kondor-logo.png"
-                      alt="Kondor Logo"
-                      height={6}
-                    />
+                  justifyContent="start"
+                  leftIcon={
+                    <Flex width="6" justifyContent="center">
+                      <Image
+                        src="/kondor-logo.png"
+                        alt="Kondor Logo"
+                        height={6}
+                      />
+                    </Flex>
                   }
                 >
                   Install Kondor Wallet
@@ -263,7 +290,8 @@ export default function AccountConnector({
                   as="a"
                   href="https://mykw.vercel.app"
                   target="_blank"
-                  rightIcon={
+                  justifyContent="start"
+                  leftIcon={
                     <Image src="/mkw-logo.png" alt="MKW Logo" height={6} />
                   }
                 >

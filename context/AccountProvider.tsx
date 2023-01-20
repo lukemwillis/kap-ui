@@ -11,11 +11,13 @@ import MyKoinosWallet from "@roamin/my-koinos-wallet-sdk";
 const LOCAL_STORAGE_KEY = "ACCOUNT";
 
 type AccountContextType = {
-  account?: string;
+  address?: string;
   isConnecting: boolean;
   connectKondor: () => Promise<boolean>;
   connectMKW: () => Promise<boolean>;
   isMKWSupported: boolean;
+  primaryUsername?: string;
+  primaryAvatarSrc?: string;
 };
 
 export const AccountContext = createContext<AccountContextType>({
@@ -35,13 +37,20 @@ export const AccountProvider = ({
   const [isConnecting, setIsConnecting] = useState(false);
   const [isMKWSupported, setIsMKWSupported] = useState(true);
 
-  const [account, setAccount] = useState<string | undefined>(undefined);
+  const [address, setAddress] = useState<string | undefined>(undefined);
+  const [primaryUsername, setPrimaryUsername] = useState<string | undefined>(
+    undefined
+  );
+  const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
+    undefined
+  );
+
   const mkwRef = useRef<MyKoinosWallet>();
 
   useEffect(() => {
     const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (saved) {
-      setAccount(saved);
+      setAddress(saved);
     }
 
     mkwRef.current = new MyKoinosWallet(
@@ -61,9 +70,16 @@ export const AccountProvider = ({
   }, []);
 
   useEffect(() => {
-    if (!account) return;
-    localStorage.setItem(LOCAL_STORAGE_KEY, account);
-  }, [account]);
+    if (!address) return;
+    localStorage.setItem(LOCAL_STORAGE_KEY, address);
+
+    if (address === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
+      setPrimaryUsername("luke.koin");
+      setPrimaryAvatarSrc(
+        "https://bafybeial7korh5zldyo7qmz4kkeeo5tt7tybhd7jiorz2nx7iwvpzeadhi.ipfs.nftstorage.link/assets/01.png"
+      );
+    }
+  }, [address]);
 
   const connectKondor = async () => {
     if (isConnecting) return false;
@@ -76,7 +92,11 @@ export const AccountProvider = ({
         setTimeout(() => resolve([{ address: "" }]), 10000)
       ),
     ]);
-    if (address) setAccount(address);
+    if (address) {
+      setPrimaryUsername("");
+      setPrimaryAvatarSrc("");
+      setAddress(address);
+    }
     setIsConnecting(false);
 
     return !!address;
@@ -89,7 +109,7 @@ export const AccountProvider = ({
 
     setIsConnecting(true);
     try {
-      console.log('begin')
+      console.log("begin");
       const permissions = await mkwRef.current.requestPermissions({
         accounts: ["getAccounts"],
         provider: ["readContract"],
@@ -99,7 +119,11 @@ export const AccountProvider = ({
       console.log(accounts);
       address = accounts[0].address;
       console.log(address);
-      if (address) setAccount(address);
+      if (address) {
+        setPrimaryUsername("");
+        setPrimaryAvatarSrc("");
+        setAddress(address);
+      }
     } catch (e) {
       console.error(e);
     } finally {
@@ -111,11 +135,13 @@ export const AccountProvider = ({
   return (
     <AccountContext.Provider
       value={{
-        account,
+        address,
         isConnecting,
         connectKondor,
         connectMKW,
         isMKWSupported,
+        primaryUsername,
+        primaryAvatarSrc,
       }}
     >
       {children}
