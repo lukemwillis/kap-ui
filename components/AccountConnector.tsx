@@ -22,6 +22,7 @@ import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
 import { ReactElement } from "react";
 import Avatar from "./Avatar";
 import KAPName from "./KAPName";
+import Link from "next/link";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -85,7 +86,7 @@ export default function AccountConnector({
           padding={account ? "2" : "3"}
           borderColor={useColorModeValue("black", "white")}
         >
-          {(account && !isConnecting) ? (
+          {account && !isConnecting ? (
             <Flex gap="2" alignItems="center">
               <Avatar size="40px" />
               <Stack alignItems="start" lineHeight="1">
@@ -133,9 +134,11 @@ export default function AccountConnector({
                       {hasCopied ? <CheckIcon /> : <CopyIcon />}
                     </IconButton>
                   </Flex>
-                  <Button variant="outline" marginTop="2">
-                    Manage KAP Account
-                  </Button>
+                  <Link href="/dashboard">
+                    <Button variant="outline" marginTop="2">
+                      Manage KAP Account
+                    </Button>
+                  </Link>
                 </Flex>
                 {sitePreferences ? (
                   <>
