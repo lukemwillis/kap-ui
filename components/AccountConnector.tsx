@@ -115,7 +115,7 @@ export default function AccountConnector({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent width="auto">
+      <PopoverContent width="auto" maxWidth={window.innerWidth}>
         <PopoverBody padding="3">
           <Stack spacing="2">
             {address && (
@@ -138,7 +138,7 @@ export default function AccountConnector({
                       onSearch={onClose}
                     />
                   )}
-                  <Flex
+                  <Flex     
                     borderColor={gray[500]}
                     borderWidth="1px"
                     borderRadius={8}

@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 padding={{ base: 4, md: 8 }}
                 margin="auto"
                 maxWidth="1024px"
-                minHeight="100vh"
+                minHeight={typeof window !== 'undefined' ? window.innerHeight : '100vh'}
                 direction="column"
               >
                 <Header />
