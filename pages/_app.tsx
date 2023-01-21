@@ -39,7 +39,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                 padding={{ base: 4, md: 8 }}
                 margin="auto"
                 maxWidth="1024px"
-                minHeight="100%"
+                height="100%"
                 direction="column"
               >
                 <Header />
