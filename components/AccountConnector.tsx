@@ -115,7 +115,7 @@ export default function AccountConnector({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent width="auto" maxWidth={window.innerWidth}>
+      <PopoverContent width="auto" maxWidth="100vw">
         <PopoverBody padding="3">
           <Stack spacing="2">
             {address && (
