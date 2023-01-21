@@ -1,5 +1,5 @@
 import React, { useContext, createContext } from "react";
-import { Contract, Provider, Signer, utils } from "koilib";
+import { Contract, Provider, Signer } from "koilib";
 import * as kondor from "../node_modules/kondor-js/lib/browser";
 import { useAccount } from "./AccountProvider";
 import { useRpc } from "./RpcProvider";

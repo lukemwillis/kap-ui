@@ -16,12 +16,10 @@ import {
   useClipboard,
   useColorModeValue,
   Tooltip,
-  Box,
-  Input,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
 import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
-import { ReactElement, useRef } from "react";
+import { ReactElement } from "react";
 import Avatar from "./Avatar";
 import Link from "next/link";
 import Search from "./Search";

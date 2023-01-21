@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import "@fontsource/poppins";
 import type { AppProps } from "next/app";
-import { Box, ChakraProvider, Flex } from "@chakra-ui/react";
+import { ChakraProvider, Flex } from "@chakra-ui/react";
 import { AccountProvider } from "../context/AccountProvider";
 import { RpcProvider } from "../context/RpcProvider";
 import { SwrProvider } from "../context/SwrProvider";
