@@ -9,7 +9,6 @@ import {
   useToast,
   Image,
   StackDivider,
-  useTheme,
   IconButton,
   Flex,
   useDisclosure,
@@ -19,7 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
 import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
-import { ReactElement } from "react";
+import { ReactElement, useRef } from "react";
 import Avatar from "./Avatar";
 import Link from "next/link";
 import Search from "./Search";
@@ -34,9 +33,6 @@ export default function AccountConnector({
   sitePreferences,
 }: ConnectorProps) {
   const {
-    colors: { gray },
-  } = useTheme();
-  const {
     address,
     isConnecting,
     connectKondor,
@@ -48,6 +44,7 @@ export default function AccountConnector({
   const toast = useToast();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { onCopy, hasCopied } = useClipboard(address || "");
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const connectCallback = async (wallet: "Kondor" | "MKW") => {
     let connected = false;
@@ -83,6 +80,7 @@ export default function AccountConnector({
       onOpen={onOpen}
       onClose={onClose}
       placement="bottom-end"
+      initialFocusRef={inputRef}
     >
       <PopoverTrigger>
         <Button
@@ -95,7 +93,7 @@ export default function AccountConnector({
         >
           {address && !isConnecting ? (
             <Flex gap="2" alignItems="center">
-              <Avatar size="40px" src={primaryAvatarSrc} address={address} />
+              <Avatar size="2.6em" src={primaryAvatarSrc} address={address} />
               <Stack alignItems="start" lineHeight="1">
                 {primaryUsername && (
                   <Text fontSize="1.2em">{primaryUsername}</Text>
@@ -115,17 +113,17 @@ export default function AccountConnector({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent width="auto" maxWidth="100vw">
+      <PopoverContent
+        width="auto"
+        maxWidth="100vw"
+        boxShadow="lg"
+      >
         <PopoverBody padding="3">
           <Stack spacing="2">
             {address && (
               <>
                 <Flex direction="column" alignItems="center" gap="4">
-                  <Avatar
-                    size="128px"
-                    src={primaryAvatarSrc}
-                    address={address}
-                  />
+                  <Avatar size="8em" src={primaryAvatarSrc} address={address} />
                   {primaryUsername ? (
                     <Text fontSize="1.5em" lineHeight="1">
                       {primaryUsername}
@@ -136,24 +134,27 @@ export default function AccountConnector({
                       buttonLabel="Search"
                       inlineButton
                       onSearch={onClose}
+                      inputRef={inputRef}
                     />
                   )}
-                  <Flex     
-                    borderColor={gray[500]}
+                  <Flex
+                    borderColor="gray.500"
                     borderWidth="1px"
                     borderRadius={8}
                     alignItems="center"
                     paddingLeft="2"
-                    color={gray[500]}
+                    color="gray.500"
                     gap="1"
                   >
-                    <Text fontSize="0.9em">{address}</Text>
+                    <Text fontSize="0.9em" overflowWrap="anywhere">
+                      {address}
+                    </Text>
                     <IconButton
                       aria-label={hasCopied ? "Copied!" : "Copy"}
                       onClick={onCopy}
                       size="sm"
                       variant="ghost"
-                      color={gray[500]}
+                      color="gray.500"
                     >
                       {hasCopied ? <CheckIcon /> : <CopyIcon />}
                     </IconButton>
@@ -172,15 +173,15 @@ export default function AccountConnector({
                       display="flex"
                       alignItems="center"
                       gap="2"
-                      color={gray[500]}
+                      color="gray.500"
                       _before={{
-                        background: gray[500],
+                        background: "gray.500",
                         content: '""',
                         flexGrow: 1,
                         height: "1px",
                       }}
                       _after={{
-                        background: gray[500],
+                        background: "gray.500",
                         content: '""',
                         flexGrow: 1,
                         height: "1px",
@@ -195,15 +196,15 @@ export default function AccountConnector({
                   display="flex"
                   alignItems="center"
                   gap="2"
-                  color={gray[500]}
+                  color="gray.500"
                   _before={{
-                    background: gray[500],
+                    background: "gray.500",
                     content: '""',
                     flexGrow: 1,
                     height: "1px",
                   }}
                   _after={{
-                    background: gray[500],
+                    background: "gray.500",
                     content: '""',
                     flexGrow: 1,
                     height: "1px",
@@ -245,21 +246,21 @@ export default function AccountConnector({
                 />
               </Tooltip>
             </Flex>
-            {!address ? (
+            {!address && (
               <>
                 <StackDivider
                   display="flex"
                   alignItems="center"
                   gap="2"
-                  color={gray[500]}
+                  color="gray.500"
                   _before={{
-                    background: gray[500],
+                    background: "gray.500",
                     content: '""',
                     flexGrow: 1,
                     height: "1px",
                   }}
                   _after={{
-                    background: gray[500],
+                    background: "gray.500",
                     content: '""',
                     flexGrow: 1,
                     height: "1px",
@@ -296,8 +297,6 @@ export default function AccountConnector({
                   Set up My Koinos Wallet
                 </Button>
               </>
-            ) : (
-              ""
             )}
           </Stack>
         </PopoverBody>

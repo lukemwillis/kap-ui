@@ -9,11 +9,15 @@ export default function Header() {
   const router = useRouter();
 
   return (
-    <Flex h={20} alignItems={"center"} justifyContent={"space-between"}>
+    <Flex
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      flexShrink="0"
+    >
       {router.route !== "/" ? (
         <Link href="/">
           <a>
-            <Logo size="48px" />
+            <Logo size="3em" />
           </a>
         </Link>
       ) : (

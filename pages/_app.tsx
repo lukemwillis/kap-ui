@@ -37,6 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               </Head>
               <Flex
                 padding={{ base: 4, md: 8 }}
+                gap={{ base: 4, md: 8 }}
                 margin="auto"
                 maxWidth="1024px"
                 height="100%"

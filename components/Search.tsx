@@ -8,16 +8,28 @@ import {
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import {
+  Dispatch,
+  RefObject,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { SearchIcon } from "@chakra-ui/icons";
+import CTA from "./CTA";
 
 interface SearchProps {
   placeholder?: string;
   buttonLabel?: string;
   inlineButton?: boolean;
   onSearch?: () => void;
+  inputRef?: RefObject<HTMLInputElement>;
+  value?: string;
+  setValue?: Dispatch<SetStateAction<string>>;
+  autoFocus?: boolean;
 }
 
 export default function Search({
@@ -25,18 +37,37 @@ export default function Search({
   buttonLabel = "Search",
   inlineButton = false,
   onSearch = () => {},
+  inputRef,
+  value = "",
+  setValue,
+  autoFocus = true
 }: SearchProps) {
-  const [query, setQuery] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [query, internalSetQuery] = useState(value);
+  const altRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
-  const buttonBackground = useColorModeValue("brand.navy", "brand.orange");
-  const buttonForeground = useColorModeValue("brand.orange", "white");
+
+  const setQuery = (val: string) => {
+    if (setValue) {
+      setValue(val);
+    } else {
+      internalSetQuery(val);
+    }
+  };
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (!autoFocus) return;
+
+    if (inputRef && inputRef.current) {
       inputRef.current.focus();
+    } else if (altRef.current) {
+      altRef.current.focus();
     }
   }, []);
+
+  useEffect(() => {
+    internalSetQuery(value);
+  }, [value]);
+
   return (
     <>
       <InputGroup maxWidth="30em">
@@ -52,12 +83,13 @@ export default function Search({
               onSearch();
             }
           }}
-          ref={inputRef}
+          ref={inputRef || altRef}
           _focusVisible={{
             borderColor: useColorModeValue("brand.navy", "white"),
           }}
-          paddingRight={inlineButton ? "7em" : "16"}
+          paddingRight={inlineButton && query ? "7em" : "16"}
         />
+        {!inlineButton &&
         <InputLeftElement
           pointerEvents="none"
           fontSize="lg"
@@ -65,7 +97,7 @@ export default function Search({
           color={"gray.500"}
         >
           <SearchIcon />
-        </InputLeftElement>
+        </InputLeftElement>}
         <InputRightElement
           pointerEvents={inlineButton && query ? "auto" : "none"}
           fontSize="lg"
@@ -77,25 +109,7 @@ export default function Search({
             <Text>.koin</Text>
             {inlineButton && query && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-                <Button
-                  variant="solid"
-                  minWidth="unset"
-                  fontWeight="bold"
-                  background={buttonBackground}
-                  color={"white"}
-                  boxSizing="border-box"
-                  borderWidth="2px"
-                  borderColor={buttonBackground}
-                  _hover={{
-                    background: "transparent",
-                    borderColor: buttonForeground,
-                    color: buttonForeground,
-                  }}
-                  size="sm"
-                  onClick={onSearch}
-                >
-                  {buttonLabel}
-                </Button>
+                <CTA size="sm" onClick={onSearch} label={buttonLabel} />
               </Link>
             )}
           </Flex>
@@ -103,24 +117,7 @@ export default function Search({
       </InputGroup>
       {!inlineButton && (
         <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-          <Button
-            variant="solid"
-            minWidth="unset"
-            fontWeight="bold"
-            background={buttonBackground}
-            color={"white"}
-            boxSizing="border-box"
-            _hover={{
-              background: "transparent",
-              borderColor: buttonForeground,
-              borderWidth: "2px",
-              color: buttonForeground,
-            }}
-            size="lg"
-            onClick={onSearch}
-          >
-            {buttonLabel}
-          </Button>
+          <CTA size="lg" onClick={onSearch} label={buttonLabel} />
         </Link>
       )}
     </>

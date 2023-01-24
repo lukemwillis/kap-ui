@@ -1,6 +1,7 @@
-import { Image } from "@chakra-ui/react";
+import { Image, SkeletonCircle } from "@chakra-ui/react";
 import { createAvatar } from "@dicebear/avatars";
 import * as identiconStyle from "@dicebear/avatars-identicon-sprites";
+import { useState } from "react";
 
 interface AvatarProps {
   src?: string;
@@ -9,17 +10,22 @@ interface AvatarProps {
 }
 
 export default function Avatar({ src, address, size }: AvatarProps) {
+  const [loading, setLoading] = useState(true);
+
   if (src) {
     return (
-      <Image
-        src={src}
-        width={size}
-        height={size}
-        borderRadius="50%"
-        borderWidth="1px"
-        overflow="hidden"
-        alt="KAP Account Avatar"
-      />
+      <SkeletonCircle height={size} width={size} isLoaded={!loading}>
+        <Image
+          src={src}
+          width={size}
+          height={size}
+          borderRadius="50%"
+          borderWidth="1px"
+          overflow="hidden"
+          alt="KAP Account Avatar"
+          onLoad={() => setLoading(false)}
+        />
+      </SkeletonCircle>
     );
   } else {
     const identicon = createAvatar(identiconStyle, { seed: address });

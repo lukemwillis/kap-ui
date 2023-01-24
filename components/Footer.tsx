@@ -10,8 +10,9 @@ export default function Footer() {
       alignItems="center"
       justifyContent="center"
       gap="8"
-      h={20}
       fontWeight="bold"
+      flexShrink="0"
+      lineHeight="3em"
     >
       <Link href="/about">
         <a>ABOUT</a>
