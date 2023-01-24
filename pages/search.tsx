@@ -61,7 +61,7 @@ const Search: NextPage = () => {
           <Box marginTop="0.5em" marginBottom="1em">
             <Price query={query} />
           </Box>
-          <Text>Price is important because reasons and stuff and things</Text>
+          <Text>This price includes your NFT account name, simple account privacy and security features, and free access to the Koinos blockchain.</Text>
         </Flex>
         <Box
           background={background}
