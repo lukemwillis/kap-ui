@@ -5,15 +5,52 @@ import {
   AccordionItem,
   AccordionPanel,
   Box,
+  Flex,
   Heading,
   Text,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
+import Free from "../components/icons/Free";
+import Name from "../components/icons/Name";
+import Security from "../components/icons/Security";
 import OutboundLink from "../components/OutboundLink";
 
 const About: NextPage = () => {
   return (
     <Box width="100%">
+      <Heading as="h1">Koinos Account Protocol</Heading>
+      <Flex textAlign="center" gap={{ base: "4", md: "8" }} marginY={{ base: "4", md: "8" }} flexWrap="wrap">
+        <Box
+          padding={{ base: "6", md: "12" }}
+          borderRadius="8"
+          background="brand.navy"
+          color="white"
+          flex="1"
+        >
+          <Name color="white" size="5em" />
+          <Heading>NFT Name Service</Heading>
+        </Box>
+        <Box
+          padding={{ base: "6", md: "12" }}
+          borderRadius="8"
+          background="brand.navy"
+          color="white"
+          flex="1"
+        >
+          <Security color="white" size="5em" />
+          <Heading>Account Security</Heading>
+        </Box>
+        <Box
+          padding={{ base: "6", md: "12" }}
+          borderRadius="8"
+          background="brand.navy"
+          color="white"
+          flex="1"
+        >
+          <Free color="white" size="5em" />
+          <Heading>Free dApp Access</Heading>
+        </Box>
+      </Flex>
       <Heading mb="0.5em">FAQ</Heading>
 
       <Accordion>

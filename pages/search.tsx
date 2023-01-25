@@ -1,7 +1,15 @@
-import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Tooltip,
+  useColorModeValue,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
-import Airdrop from "../components/Airdrop";
+import Airdrop from "../components/icons/Airdrop";
 import CTA from "../components/CTA";
 import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
@@ -23,6 +31,8 @@ const Search: NextPage = () => {
   if (query.endsWith(".koin")) {
     query = query.substring(0, query.length - 5);
   }
+
+  if (query.length === 0) return <>Query too short</>;
 
   return (
     <Flex direction="column" width="100%" gap={{ base: "4", md: "8" }}>
@@ -51,7 +61,14 @@ const Search: NextPage = () => {
               </>
             </Shiny>
           </Heading>
-          <CTA size="lg" onClick={() => {}} label="Claim your name" />
+          <Tooltip
+            label="Thanks for your interest! KAP is coming soon..."
+            placement="bottom"
+            hasArrow
+          >
+            <Box>
+            <CTA size="lg" onClick={() => {}} label="Claim your name" /></Box>
+          </Tooltip>
           <Box marginTop="0.5em" marginBottom="1em">
             <Price query={query} />
           </Box>

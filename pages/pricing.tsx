@@ -61,9 +61,15 @@ const Pricing: NextPage = () => {
       >
         <Flex flexWrap="wrap" gap="4" mb="4">
           <Box flexBasis={{ base: "100%", md: "2" }} flexGrow="2">
-            <Heading><Shiny size="0.5em" color="white">Premium Account NFTs</Shiny></Heading>
+            <Heading>
+              <Shiny size="0.5em" color="white">
+                Premium Account NFTs
+              </Shiny>
+            </Heading>
             <Text>
-              Shorter account names with additional benefits. Whatver your budget, find the username you really want. Priced to minimize name squatting.
+              Shorter account names with additional benefits. Whatver your
+              budget, find the username you really want. Priced to minimize name
+              squatting.
             </Text>
           </Box>
           <Box flexBasis="1" flexGrow="1">
@@ -92,6 +98,9 @@ const Pricing: NextPage = () => {
             color="black"
             textAlign="center"
           >
+            <Box color="brand.orange">
+              <StarIcon />
+            </Box>
             <Text>7-10 Characters</Text>
             <Price query="lukewillis" />
           </Box>
@@ -103,6 +112,9 @@ const Pricing: NextPage = () => {
             color="black"
             textAlign="center"
           >
+            <Box color="brand.orange">
+              <StarIcon /> <StarIcon />
+            </Box>
             <Text>4-6 Characters</Text>
             <Price query="luke" />
           </Box>
@@ -114,6 +126,9 @@ const Pricing: NextPage = () => {
             color="black"
             textAlign="center"
           >
+            <Box color="brand.orange">
+              <StarIcon /> <StarIcon /> <StarIcon />
+            </Box>
             <Text>2-3 Characters</Text>
             <Price query="kui" />
           </Box>
@@ -125,6 +140,9 @@ const Pricing: NextPage = () => {
             color="black"
             textAlign="center"
           >
+            <Box color="brand.orange">
+              <StarIcon /> <StarIcon /> <StarIcon /> <StarIcon />
+            </Box>
             <Text>1 Character</Text>
             <Price query="x" />
           </Box>

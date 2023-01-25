@@ -1,5 +1,4 @@
 import { Icon } from "@chakra-ui/react";
-import { ReactNode } from "react";
 
 interface AirdropProps {
   size: string;
