@@ -14,11 +14,11 @@ export default function Footer() {
       flexShrink="0"
       lineHeight="3em"
     >
+      <Link href="/">
+        <a>HOME</a>
+      </Link>
       <Link href="/about">
         <a>ABOUT</a>
-      </Link>
-      <Link href="/faq">
-        <a>FAQ</a>
       </Link>
       <Link href="/pricing">
         <a>PRICING</a>

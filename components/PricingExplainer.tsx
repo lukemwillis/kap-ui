@@ -36,8 +36,6 @@ export default function PricingExplainer({
 
   return (
     <>
-    <Heading>Too expensive?</Heading>
-    <Text>With KAP, longer names cost less. If your name is longer than 10 characters, it&apos;s completely free. Forever.</Text>
       <Flex
         alignItems="center"
         justifyContent={{ base: "center", md: "space-between" }}

@@ -1,10 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Airdrop from "../components/Airdrop";
@@ -61,7 +55,10 @@ const Search: NextPage = () => {
           <Box marginTop="0.5em" marginBottom="1em">
             <Price query={query} />
           </Box>
-          <Text>This price includes your NFT account name, simple account privacy and security features, and free access to the Koinos blockchain.</Text>
+          <Text>
+            This price includes your NFT account name, simple account privacy
+            and security features, and free access to the Koinos blockchain.
+          </Text>
         </Flex>
         <Box
           background={background}
@@ -87,6 +84,11 @@ const Search: NextPage = () => {
         borderColor={background}
         borderRadius="8"
       >
+        <Heading>Too expensive?</Heading>
+        <Text>
+          With KAP, longer names cost less. If your name is longer than 10
+          characters, it&apos;s completely free. Forever.
+        </Text>
         <PricingExplainer initialQuery={query} />
       </Box>
     </Flex>
