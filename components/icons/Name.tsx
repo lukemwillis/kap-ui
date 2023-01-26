@@ -1,11 +1,7 @@
 import { Icon } from "@chakra-ui/react";
+import IconProps from "./IconProps";
 
-interface NameProps {
-  size: string;
-  color: string;
-}
-
-export default function Name({ size, color }: NameProps) {
+export default function Name({ size, color }: IconProps) {
   return (
     <Icon width={size} height={size} color={color} viewBox="0 0 1200 1200">
       <g fill="currentColor">

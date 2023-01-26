@@ -1,11 +1,7 @@
 import { Icon } from "@chakra-ui/react";
+import IconProps from "./IconProps";
 
-interface SecurityProps {
-  size: string;
-  color: string;
-}
-
-export default function Security({ size, color }: SecurityProps) {
+export default function Security({ size, color }: IconProps) {
   return (
     <Icon width={size} height={size} color={color} viewBox="0 0 1200 1200">
       <path

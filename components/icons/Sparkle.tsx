@@ -1,11 +1,9 @@
-import { Icon, ResponsiveValue } from "@chakra-ui/react";
+import { Icon } from "@chakra-ui/react";
+import IconProps from "./IconProps";
 
-interface SparkleProps {
-  size: ResponsiveValue<string>;
-  color: string;
-}
 
-export default function Sparkle({ size, color }: SparkleProps) {
+
+export default function Sparkle({ size, color }: IconProps) {
   return (
     <Icon width={size} height={size} color={color} viewBox="0 0 1200 1200">
       <path

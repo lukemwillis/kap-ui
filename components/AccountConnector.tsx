@@ -21,7 +21,7 @@ import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
 import { ReactElement, useRef } from "react";
 import Avatar from "./Avatar";
 import Link from "next/link";
-import Search from "./Search";
+import SearchBox from "./SearchBox";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -129,7 +129,7 @@ export default function AccountConnector({
                       {primaryUsername}
                     </Text>
                   ) : (
-                    <Search
+                    <SearchBox
                       placeholder="Pick a username..."
                       buttonLabel="Search"
                       inlineButton

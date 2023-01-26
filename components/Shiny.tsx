@@ -1,4 +1,4 @@
-import { Flex, ResponsiveValue } from "@chakra-ui/react";
+import { Box, ResponsiveValue } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import Sparkle from "./icons/Sparkle";
 
@@ -10,9 +10,10 @@ interface ShinyProps {
 
 export default function Shiny({ size, color, children }: ShinyProps) {
   return (
-    <Flex alignItems="start" marginLeft={`-${size}`}>
+    <>
+    <Box marginLeft={`-${size}`} display="inline">
       <Sparkle size={size} color={color} />
-      {children}
-    </Flex>
+    </Box>
+      {children}</>
   );
 }

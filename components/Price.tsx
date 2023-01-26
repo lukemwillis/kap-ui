@@ -1,29 +1,25 @@
 import { Text } from "@chakra-ui/react";
+import { calculatePrice } from "../context/CartProvider";
 
 interface PriceProps {
   query: string;
+  years?: number;
 }
 
-export default function Price({ query }: PriceProps) {
+export default function Price({ query, years }: PriceProps) {
   const length = query.length;
+
+  if (length === 0) return <></>;
   return (
     <Text>
       <Text as="span" fontSize="2xl" verticalAlign="middle">
-        {length === 0
-          ? ""
-          : length === 1
-          ? "$1000"
-          : length <= 3
-          ? "$500"
-          : length <= 6
-          ? "$100"
-          : length < 11
-          ? "$10"
-          : "FREE FOREVER"}
+        {length > 10 ? "FREE FOREVER" : `$${calculatePrice(length, years)}`}
       </Text>
-      <Text as="span" fontSize="lg" verticalAlign="middle">
-        {length > 0 && length < 11 && "/year"}
-      </Text>
+      {!years && length < 11 && (
+        <Text as="span" fontSize="lg" verticalAlign="middle">
+          /year
+        </Text>
+      )}
     </Text>
   );
 }

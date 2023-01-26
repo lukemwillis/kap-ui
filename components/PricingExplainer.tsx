@@ -1,7 +1,6 @@
 import {
   Box,
   Flex,
-  Heading,
   Slider,
   SliderFilledTrack,
   SliderMark,
@@ -13,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import Price from "./Price";
-import Search from "./Search";
+import SearchBox from "./SearchBox";
 
 interface PricingExplainerProps {
   initialQuery: string;
@@ -44,11 +43,12 @@ export default function PricingExplainer({
         mt="4"
       >
         <Flex gap="4">
-          <Search
+          <SearchBox
             value={query}
             setValue={setQuery}
             inlineButton={useBreakpointValue({ base: true, md: false })}
             autoFocus={false}
+            secondaryCTA
           />
         </Flex>
         <Price query={query} />

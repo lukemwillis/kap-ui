@@ -1,12 +1,4 @@
-import {
-  Box,
-  Flex,
-  Heading,
-  Text,
-  Tooltip,
-  useColorModeValue,
-  useDisclosure,
-} from "@chakra-ui/react";
+import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Airdrop from "../components/icons/Airdrop";
@@ -14,6 +6,7 @@ import CTA from "../components/CTA";
 import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
+import { useCart } from "../context/CartProvider";
 
 const Search: NextPage = () => {
   const {
@@ -23,6 +16,11 @@ const Search: NextPage = () => {
   const foreground = useColorModeValue("gray.600", "gray.400");
   const accentColor = "brand.orange";
   const iconColor = useColorModeValue("brand.navy", "white");
+  const {
+    state: { items },
+    upsertItem,
+    onCartOpen,
+  } = useCart();
 
   if (typeof q !== "string") return <>Could not parse query</>;
 
@@ -33,6 +31,8 @@ const Search: NextPage = () => {
   }
 
   if (query.length === 0) return <>Query too short</>;
+
+  const isInCart = items && !!items[query];
 
   return (
     <Flex direction="column" width="100%" gap={{ base: "4", md: "8" }}>
@@ -51,24 +51,35 @@ const Search: NextPage = () => {
           textAlign={{ base: "center", md: "left" }}
         >
           <Text>It&apos;s available!</Text>
-          <Heading size="3xl" overflowWrap="anywhere" marginBottom="0.3em">
+          <Heading
+            size="3xl"
+            overflowWrap="anywhere"
+            marginBottom="0.3em"
+            wordBreak="break-all"
+          >
             <Shiny color={accentColor} size="0.5em">
               <>
                 {query}
-                <Text as="span" color={foreground} marginStart="0">
+                <Text
+                  as="span"
+                  color={foreground}
+                  marginStart="0"
+                  display="inline"
+                  wordBreak="keep-all"
+                >
                   .koin
                 </Text>
               </>
             </Shiny>
           </Heading>
-          <Tooltip
-            label="Thanks for your interest! KAP is coming soon..."
-            placement="bottom"
-            hasArrow
-          >
-            <Box>
-            <CTA size="lg" onClick={() => {}} label="Claim your name" /></Box>
-          </Tooltip>
+          <CTA
+            size="lg"
+            onClick={() =>
+              isInCart ? onCartOpen() : upsertItem({ name: query, years: 1 })
+            }
+            label={isInCart ? "Go to cart" : "Claim your name"}
+            secondary={isInCart}
+          />
           <Box marginTop="0.5em" marginBottom="1em">
             <Price query={query} />
           </Box>

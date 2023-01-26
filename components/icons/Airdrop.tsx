@@ -1,11 +1,7 @@
 import { Icon } from "@chakra-ui/react";
+import IconProps from "./IconProps";
 
-interface AirdropProps {
-  size: string;
-  color: string;
-}
-
-export default function Airdrop({ size, color }: AirdropProps) {
+export default function Airdrop({ size, color }: IconProps) {
   return (
     <Icon width={size} height={size} color={color} viewBox="200 200 800 800">
       <path

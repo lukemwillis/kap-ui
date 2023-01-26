@@ -1,5 +1,4 @@
 import {
-  Button,
   Flex,
   Input,
   InputGroup,
@@ -21,7 +20,7 @@ import Link from "next/link";
 import { SearchIcon } from "@chakra-ui/icons";
 import CTA from "./CTA";
 
-interface SearchProps {
+interface SearchBoxProps {
   placeholder?: string;
   buttonLabel?: string;
   inlineButton?: boolean;
@@ -30,9 +29,10 @@ interface SearchProps {
   value?: string;
   setValue?: Dispatch<SetStateAction<string>>;
   autoFocus?: boolean;
+  secondaryCTA?: boolean
 }
 
-export default function Search({
+export default function SearchBox({
   placeholder,
   buttonLabel = "Search",
   inlineButton = false,
@@ -40,8 +40,9 @@ export default function Search({
   inputRef,
   value = "",
   setValue,
-  autoFocus = true
-}: SearchProps) {
+  autoFocus = true,
+  secondaryCTA
+}: SearchBoxProps) {
   const [query, internalSetQuery] = useState(value);
   const altRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -109,7 +110,7 @@ export default function Search({
             <Text>.koin</Text>
             {inlineButton && query && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-                <CTA size="sm" onClick={onSearch} label={buttonLabel} />
+                <CTA size="sm" onClick={onSearch} label={buttonLabel} secondary={secondaryCTA} />
               </Link>
             )}
           </Flex>
@@ -117,7 +118,7 @@ export default function Search({
       </InputGroup>
       {!inlineButton && (
         <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-          <CTA size="lg" onClick={onSearch} label={buttonLabel} />
+          <CTA size="lg" onClick={onSearch} label={buttonLabel} secondary={secondaryCTA} />
         </Link>
       )}
     </>
