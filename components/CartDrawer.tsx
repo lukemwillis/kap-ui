@@ -43,21 +43,18 @@ export default function CartDrawer() {
   const { address } = useAccount();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isFloating = useBreakpointValue({ base: true, sm: false });
-  const floatingBorder = useColorModeValue("white", "gray.700");
+  const floatingBorder = useColorModeValue("white", "gray.800");
 
   const pulse = keyframes`
-    0% {transform: scale(1);}
-    25% {transform: scale(1.1);}
-    50% {transform: scale(1);}
-    75% {transform: scale(1.1);}
-    100% {transform: scale(1);}
+  30% { transform: scale(1.1); }
+  40%, 60% { transform: rotate(-10deg) scale(1.1); }
+  50% { transform: rotate(10deg) scale(1.1); }
+  70% { transform: rotate(0deg) scale(1.1); }
+  100% { transform: scale(1); }
   `;
   const pulseMobile = keyframes`
-    0% {transform: scale(1) rotate(-45deg);}
-    25% {transform: scale(1.05) rotate(-45deg);}
-    50% {transform: scale(1) rotate(-45deg);}
-    75% {transform: scale(1.05) rotate(-45deg);}
-    100% {transform: scale(1) rotate(-45deg);;}
+  from { transform: rotate(0deg); }
+  to { transform: rotate(-45deg); }
   `;
 
   const itemNames = Object.keys(items || {});
@@ -78,15 +75,16 @@ export default function CartDrawer() {
             _hover={{
               background: "brand.orange",
             }}
+            transformOrigin="left top"
             transform="rotate(-45deg)"
             position="fixed"
-            bottom="-6em"
-            right="-6em"
+            bottom="-11em"
+            right="-4em"
             paddingBottom="7em"
             zIndex="1000"
             borderColor={floatingBorder}
-            borderWidth="2px"
-            animation={`${pulseMobile} 1s ease-in-out`}
+            borderWidth="4px"
+            animation={`${pulseMobile} 0.5s ease-in-out`}
           >
             <Cart color="white" size="1.5em" />
           </IconButton>
