@@ -11,9 +11,10 @@ interface ShinyProps {
 export default function Shiny({ size, color, children }: ShinyProps) {
   return (
     <>
-    <Box marginLeft={`-${size}`} display="inline">
-      <Sparkle size={size} color={color} />
-    </Box>
-      {children}</>
+      <Box marginLeft={`-${size}`} display="inline" verticalAlign="super" lineHeight="0">
+        <Sparkle size={size} color={color} />
+      </Box>
+      {children}
+    </>
   );
 }

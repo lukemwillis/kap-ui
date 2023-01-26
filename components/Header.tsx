@@ -1,4 +1,4 @@
-import { Flex, Stack } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 import AccountConnector from "./AccountConnector";
 import Logo from "./Logo";
 import Link from "next/link";

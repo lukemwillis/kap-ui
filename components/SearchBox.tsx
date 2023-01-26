@@ -29,7 +29,7 @@ interface SearchBoxProps {
   value?: string;
   setValue?: Dispatch<SetStateAction<string>>;
   autoFocus?: boolean;
-  secondaryCTA?: boolean
+  secondaryCTA?: boolean;
 }
 
 export default function SearchBox({
@@ -41,7 +41,7 @@ export default function SearchBox({
   value = "",
   setValue,
   autoFocus = true,
-  secondaryCTA
+  secondaryCTA,
 }: SearchBoxProps) {
   const [query, internalSetQuery] = useState(value);
   const altRef = useRef<HTMLInputElement>(null);
@@ -89,16 +89,18 @@ export default function SearchBox({
             borderColor: useColorModeValue("brand.navy", "white"),
           }}
           paddingRight={inlineButton && query ? "7em" : "16"}
+          onFocus={(e) => e.target.select()}
         />
-        {!inlineButton &&
-        <InputLeftElement
-          pointerEvents="none"
-          fontSize="lg"
-          margin="1"
-          color={"gray.500"}
-        >
-          <SearchIcon />
-        </InputLeftElement>}
+        {!inlineButton && (
+          <InputLeftElement
+            pointerEvents="none"
+            fontSize="lg"
+            margin="1"
+            color={"gray.500"}
+          >
+            <SearchIcon />
+          </InputLeftElement>
+        )}
         <InputRightElement
           pointerEvents={inlineButton && query ? "auto" : "none"}
           fontSize="lg"
@@ -110,7 +112,12 @@ export default function SearchBox({
             <Text>.koin</Text>
             {inlineButton && query && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-                <CTA size="sm" onClick={onSearch} label={buttonLabel} secondary={secondaryCTA} />
+                <CTA
+                  size="sm"
+                  onClick={onSearch}
+                  label={buttonLabel}
+                  secondary={secondaryCTA}
+                />
               </Link>
             )}
           </Flex>
@@ -118,7 +125,12 @@ export default function SearchBox({
       </InputGroup>
       {!inlineButton && (
         <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-          <CTA size="lg" onClick={onSearch} label={buttonLabel} secondary={secondaryCTA} />
+          <CTA
+            size="lg"
+            onClick={onSearch}
+            label={buttonLabel}
+            secondary={secondaryCTA}
+          />
         </Link>
       )}
     </>

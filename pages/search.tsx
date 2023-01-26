@@ -7,6 +7,7 @@ import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
 import { useCart } from "../context/CartProvider";
+import Infinite from "../components/icons/Infinite";
 
 const Search: NextPage = () => {
   const {
@@ -60,6 +61,7 @@ const Search: NextPage = () => {
             <Shiny color={accentColor} size="0.5em">
               <>
                 {query}
+                <wbr />
                 <Text
                   as="span"
                   color={foreground}
@@ -85,27 +87,45 @@ const Search: NextPage = () => {
             <Price query={query} />
           </Box>
           <Text>
-            This price includes your NFT account name, simple account privacy
-            and security features, and free access to the Koinos blockchain.
+            This includes your NFT account name, simple account privacy and
+            security features, and free access to Koinos dApps.
           </Text>
         </Flex>
-        <Box
+        <Flex
           background={background}
           borderRadius="8"
           padding={{ base: "4", md: "8" }}
           width={{ base: "100%", md: "auto" }}
+          alignItems="center"
+          justifyContent="center"
           textAlign="center"
           maxWidth={{ base: "100%", md: "20em" }}
+          direction="column"
         >
-          <Airdrop size="8em" color={iconColor} />
-          <Heading as="h3" size="md" lineHeight="2">
-            $KAP Airdrop Eligible
-          </Heading>
-          <Text>
-            Every dollar you spend on .koin names now will earn you $KAP tokens
-            later.
-          </Text>
-        </Box>
+          {query.length > 10 ? (
+            <>
+              <Infinite size="8em" color={iconColor} />
+              <Heading as="h3" size="md" lineHeight="2">
+                Yours, Forever
+              </Heading>
+              <Text>
+                Free KAP account NFTs do not require annual renewal. Mint once,
+                use always.
+              </Text>
+            </>
+          ) : (
+            <>
+              <Airdrop size="8em" color={iconColor} />
+              <Heading as="h3" size="md" lineHeight="2">
+                $KAP Airdrop Eligible
+              </Heading>
+              <Text>
+                Every dollar you spend on .koin names now will earn you $KAP
+                tokens later.
+              </Text>
+            </>
+          )}
+        </Flex>
       </Flex>
       <Box
         padding={{ base: "6", md: "12" }}
@@ -113,11 +133,23 @@ const Search: NextPage = () => {
         borderColor={background}
         borderRadius="8"
       >
-        <Heading>Too expensive?</Heading>
-        <Text>
-          With KAP, longer names cost less. If your name is longer than 10
-          characters, it&apos;s completely free. Forever.
-        </Text>
+        {query.length > 10 ? (
+          <>
+            <Heading>Want a premium name?</Heading>
+            <Text>
+              With KAP, shorter names cost more. This helps minimize squatting
+              to ensure you can find the name you want within your budget.
+            </Text>
+          </>
+        ) : (
+          <>
+            <Heading>Too expensive?</Heading>
+            <Text>
+              With KAP, longer names cost less. If your name is longer than 10
+              characters, it&apos;s completely free forever.
+            </Text>
+          </>
+        )}
         <PricingExplainer initialQuery={query} />
       </Box>
     </Flex>
