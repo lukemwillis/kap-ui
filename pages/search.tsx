@@ -74,9 +74,10 @@ const Search: NextPage = () => {
           </Heading>
           <CTA
             size="lg"
-            onClick={() =>
-              isInCart ? onCartOpen() : upsertItem({ name: query, years: 1 })
-            }
+            onClick={() => {
+              if (!isInCart) upsertItem({ name: query, years: 1 });
+              onCartOpen();
+            }}
             label={isInCart ? "Go to cart" : "Claim your name"}
             secondary={isInCart}
           />

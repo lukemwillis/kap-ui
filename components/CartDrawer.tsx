@@ -19,7 +19,6 @@ import { useCart } from "../context/CartProvider";
 import AccountConnector from "./AccountConnector";
 import CTA from "./CTA";
 import Cart from "./icons/Cart";
-import Price from "./Price";
 
 export default function CartDrawer() {
   const {
@@ -29,7 +28,6 @@ export default function CartDrawer() {
     onCartOpen,
     onCartClose,
   } = useCart();
-  const [isFirstItem, setIsFirstItem] = useState(true);
   const {
     query: { q },
   } = useRouter();
@@ -37,12 +35,6 @@ export default function CartDrawer() {
   const muted = useColorModeValue("gray.600", "gray.400");
 
   const itemNames = Object.keys(items || {});
-  useEffect(() => {
-    if (isFirstItem && itemNames.length > 0) {
-      onCartOpen();
-      setIsFirstItem(false);
-    }
-  }, [itemNames, isFirstItem, onCartOpen]);
 
   return (
     <>
