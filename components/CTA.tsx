@@ -27,6 +27,7 @@ export default React.forwardRef(function CTA(
   return (
     <Button
       variant={secondary ? "outline" : "solid"}
+      width={{ base: "100%", sm: "auto"}}
       minWidth="unset"
       fontWeight="bold"
       background={secondary ? "transparent" : buttonBackground}

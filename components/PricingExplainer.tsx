@@ -73,7 +73,7 @@ export default function PricingExplainer({
           </SliderTrack>
           <SliderThumb boxSize={10} textAlign="center" pt="8" lineHeight="2">
             <Text>
-              <Text as="span" display="block" color="black">
+              <Text as="span" display="block" color="gray.800">
                 {length}
                 {length === 11 && "+"}
               </Text>

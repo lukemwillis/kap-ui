@@ -95,7 +95,7 @@ const Pricing: NextPage = () => {
             borderRadius="8"
             flex="1"
             background="white"
-            color="black"
+            color="gray.800"
             textAlign="center"
           >
             <Box color="brand.orange">
@@ -109,7 +109,7 @@ const Pricing: NextPage = () => {
             borderRadius="8"
             flex="1"
             background="white"
-            color="black"
+            color="gray.800"
             textAlign="center"
           >
             <Box color="brand.orange">
@@ -123,7 +123,7 @@ const Pricing: NextPage = () => {
             borderRadius="8"
             flex="1"
             background="white"
-            color="black"
+            color="gray.800"
             textAlign="center"
           >
             <Box color="brand.orange">
@@ -137,7 +137,7 @@ const Pricing: NextPage = () => {
             borderRadius="8"
             flex="1"
             background="white"
-            color="black"
+            color="gray.800"
             textAlign="center"
           >
             <Box color="brand.orange">

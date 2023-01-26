@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -11,11 +11,11 @@ import {
   Heading,
   List,
   ListItem,
+  Link,
   Text,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
-import Link from "next/link";
 import Free from "../components/icons/Free";
 import Name from "../components/icons/Name";
 import Security from "../components/icons/Security";
@@ -26,8 +26,10 @@ const About: NextPage = () => {
       <Box
         padding={{ base: "6", md: "12" }}
         borderRadius="8"
-        background="brand.navy"
-        color="white"
+        background="white"
+        color="gray.800"
+        border="1px"
+        borderColor={useColorModeValue("gray.200", "white")}
       >
         <Flex
           justifyContent="space-between"
@@ -35,64 +37,67 @@ const About: NextPage = () => {
           marginBottom={{ base: "4", md: "8" }}
           flexWrap="wrap"
           alignItems="center"
+          width="100%"
         >
           <Heading as="h1">Koinos Account Protocol</Heading>
-          <a
+          <Link
             href="https://kap-domains-bucket.s3.us-east-1.amazonaws.com/kap-whitepaper.pdf"
             target="_blank"
             rel="noreferrer"
+            width={{ base: "100%", sm: "auto" }}
           >
             <Button
               variant="solid"
               minWidth="unset"
+              width="100%"
               fontWeight="bold"
-              background="brand.orange"
-              borderColor="brand.orange"
+              background="brand.navy"
+              borderColor="brand.navy"
               color="white"
               borderWidth="2px"
               boxSizing="border-box"
               _hover={{
                 background: "transparent",
                 borderWidth: "2px",
-                color: "white",
-                borderColor: "white",
+                color: useColorModeValue("brand.orange", "white"),
+                borderColor: useColorModeValue("brand.orange", "white"),
               }}
               size="lg"
               rightIcon={<ExternalLinkIcon />}
             >
               Read The Whitepaper
             </Button>
-          </a>
+          </Link>
         </Flex>
         <Flex textAlign="center" gap={{ base: "4", md: "8" }} flexWrap="wrap">
           <Box
             padding={{ base: "6", md: "12" }}
             borderRadius="8"
-            background="white"
-            color="black"
+            background="brand.orange"
+            color="white"
             flex="1"
           >
-            <Name color="black" size="4em" />
+            <Name color="white" size="4em" />
             <Heading size="lg">NFT Name Service</Heading>
           </Box>
           <Box
             padding={{ base: "6", md: "12" }}
             borderRadius="8"
-            background="white"
-            color="black"
+            background="brand.orange"
+            color="white"
             flex="1"
           >
-            <Security color="black" size="4em" />
+            <Security color="white" size="4em" />
             <Heading size="lg">Account Security</Heading>
           </Box>
           <Box
             padding={{ base: "6", md: "12" }}
             borderRadius="8"
-            background="white"
-            color="black"
+            background="brand.orange"
+            color="white"
             flex="1"
           >
-            <Free color="black" size="4em" />
+            <Free color="white" size="4em" />
             <Heading size="lg">Free dApp Access</Heading>
           </Box>
         </Flex>
@@ -101,7 +106,7 @@ const About: NextPage = () => {
       <Box
         padding={{ base: "6", md: "12" }}
         borderRadius="8"
-        background="brand.orange"
+        background="brand.navy"
         color="white"
       >
         <Heading>Roadmap</Heading>
@@ -115,7 +120,9 @@ const About: NextPage = () => {
               width: "1em",
               height: "1em",
               borderRadius: "50%",
-              background: "white",
+              background: "brand.orange",
+              borderColor: "white",
+              borderWidth: "2px",
               position: "absolute",
               marginLeft: "calc(-2.5em - 1px)",
             }}
@@ -206,7 +213,8 @@ const About: NextPage = () => {
             </List>
           </Box>
           <Box
-            paddingLeft="calc(2em + 2px)"
+            borderLeft="2px"
+            paddingLeft="2em"
             paddingBottom="1em"
             _before={{
               content: '""',
@@ -218,16 +226,19 @@ const About: NextPage = () => {
               marginLeft: "calc(-2.5em - 1px)",
             }}
           >
-          <Text>2024</Text>
-          <Heading as="h3" size="lg">
-            KAP DAO
-          </Heading>
-          <List>
-            <ListItem>$KAP airdrop to premium account holders</ListItem>
-            <ListItem>Fully decentralize protocol</ListItem>
-            <ListItem>Enable public $KOIN deposits to generate yield with Mana Station</ListItem>
-          </List>
+            <Text>2024</Text>
+            <Heading as="h3" size="lg">
+              KAP DAO
+            </Heading>
+            <List>
+              <ListItem>$KAP airdrop to premium account holders</ListItem>
+              <ListItem>Fully decentralize protocol</ListItem>
+              <ListItem>
+                Enable public $KOIN deposits to generate yield with Mana Station
+              </ListItem>
+            </List>
           </Box>
+          <Box width="0" height="0" borderX="0.5em solid transparent" borderTop="1em solid white" position="absolute" marginLeft="calc(-0.5em + 1px)" />
         </Box>
       </Box>
 
@@ -267,11 +278,7 @@ const About: NextPage = () => {
               Each KAP account name is unique but an account name with fewer
               characters is likely to be highly desirable and thus considered
               &quot;premium.&quot; Premium names have 10 or fewer characters and
-              will be priced based on character count only. See{" "}
-              <Link href="/pricing">
-                <a style={{ textDecoration: "underline" }}>the pricing page</a>
-              </Link>{" "}
-              for details.
+              will be priced based on character count only.
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem>

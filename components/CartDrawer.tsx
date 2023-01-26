@@ -1,6 +1,7 @@
 import { DeleteIcon, InfoOutlineIcon } from "@chakra-ui/icons";
 import {
   Box,
+  Button,
   Divider,
   Drawer,
   DrawerBody,
@@ -12,10 +13,12 @@ import {
   Flex,
   Heading,
   IconButton,
+  keyframes,
   Select,
   Stack,
   Text,
   Tooltip,
+  useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
 import { useRouter } from "next/router";
@@ -39,20 +42,73 @@ export default function CartDrawer() {
   } = useRouter();
   const { address } = useAccount();
   const muted = useColorModeValue("gray.600", "gray.400");
+  const isFloating = useBreakpointValue({ base: true, sm: false });
+  const floatingBorder = useColorModeValue("white", "gray.700");
+
+  const pulse = keyframes`
+    0% {transform: scale(1);}
+    25% {transform: scale(1.1);}
+    50% {transform: scale(1);}
+    75% {transform: scale(1.1);}
+    100% {transform: scale(1);}
+  `;
+  const pulseMobile = keyframes`
+    0% {transform: scale(1) rotate(-45deg);}
+    25% {transform: scale(1.05) rotate(-45deg);}
+    50% {transform: scale(1) rotate(-45deg);}
+    75% {transform: scale(1.05) rotate(-45deg);}
+    100% {transform: scale(1) rotate(-45deg);;}
+  `;
 
   const itemNames = Object.keys(items || {});
 
   return (
     <>
-      {itemNames.length > 0 && (
-        <CTA
-          onClick={onCartOpen}
-          label="Cart"
-          size="md"
-          leftIcon={Cart}
-          secondary={typeof q === "string" && items && !items[q]}
-        />
-      )}
+      {itemNames.length > 0 &&
+        (isFloating ? (
+          <IconButton
+            aria-label="Cart"
+            background="brand.orange"
+            onClick={onCartOpen}
+            color="white"
+            variant="solid"
+            size="lg"
+            width="10em"
+            height="10em"
+            _hover={{
+              background: "brand.orange",
+            }}
+            transform="rotate(-45deg)"
+            position="fixed"
+            bottom="-6em"
+            right="-6em"
+            paddingBottom="7em"
+            zIndex="1000"
+            borderColor={floatingBorder}
+            borderWidth="2px"
+            animation={`${pulseMobile} 1s ease-in-out`}
+          >
+            <Cart color="white" size="1.5em" />
+          </IconButton>
+        ) : (
+          <Button
+            variant="solid"
+            minWidth="unset"
+            fontWeight="bold"
+            background="brand.orange"
+            color="white"
+            boxSizing="border-box"
+            _hover={{
+              background: "brand.navy",
+            }}
+            size="lg"
+            onClick={onCartOpen}
+            leftIcon={<Cart color="white" size="1.25em" />}
+            animation={`${pulse} 1s ease-in-out`}
+          >
+            Cart
+          </Button>
+        ))}
       <Drawer isOpen={isCartOpen} onClose={onCartClose} size="md">
         <DrawerOverlay />
         <DrawerContent>

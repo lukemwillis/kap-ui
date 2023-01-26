@@ -56,8 +56,8 @@ export default function AccountConnector({
           isLoading={isConnecting}
           minWidth="unset"
           height="auto"
-          padding={address ? "2" : "3"}
-          borderColor={useColorModeValue("black", "white")}
+          padding={address ? "2" : "3.5"}
+          borderColor={useColorModeValue("gray.800", "white")}
         >
           {address && !isConnecting ? (
             <Flex gap="2" alignItems="center">
