@@ -1,5 +1,6 @@
 import { useDisclosure } from "@chakra-ui/react";
-import React, { useContext, createContext, useReducer } from "react";
+import React, { useContext, createContext, useReducer, useMemo } from "react";
+import useLocalStorage from "./useLocalStorage";
 
 type State = {
   items: { [key: string]: { years: number; price: number } };
@@ -7,6 +8,7 @@ type State = {
 };
 
 enum ActionTypes {
+  LOAD = "load",
   UPSERT = "upsert",
   REMOVE = "remove",
   CLEAR = "clear",
@@ -14,6 +16,7 @@ enum ActionTypes {
 type UpsertParams = { name: string; years: number };
 type RemoveParams = { name: string };
 type Action =
+  | { type: ActionTypes.LOAD; state: State }
   | { type: ActionTypes.UPSERT; params: UpsertParams }
   | { type: ActionTypes.REMOVE; params: RemoveParams }
   | { type: ActionTypes.CLEAR };
@@ -53,6 +56,8 @@ export const CartProvider = ({
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
       switch (action.type) {
+        case ActionTypes.LOAD:
+          return action.state;
         case ActionTypes.UPSERT:
           const price = calculatePrice(
             action.params.name.length,
@@ -67,7 +72,9 @@ export const CartProvider = ({
               },
             },
             totalPrice:
-              state.totalPrice - (state.items[action.params.name]?.price || 0) + price,
+              state.totalPrice -
+              (state.items[action.params.name]?.price || 0) +
+              price,
           };
         case ActionTypes.REMOVE:
           const { [action.params.name]: removed, ...items } = state.items;
@@ -79,25 +86,33 @@ export const CartProvider = ({
     { items: {}, totalPrice: 0 }
   );
 
-  const upsertItem = (params: UpsertParams) => {
-    dispatch({ type: ActionTypes.UPSERT, params });
-  };
+  const actions = useMemo(
+    () => ({
+      loadState: (state: State) => {
+        dispatch({ type: ActionTypes.LOAD, state });
+      },
+      upsertItem: (params: UpsertParams) => {
+        dispatch({ type: ActionTypes.UPSERT, params });
+      },
+      removeItem: (params: RemoveParams) => {
+        dispatch({ type: ActionTypes.REMOVE, params });
+      },
+      clearItems: () => {
+        dispatch({ type: ActionTypes.CLEAR });
+      },
+    }),
+    [dispatch]
+  );
 
-  const removeItem = (params: RemoveParams) => {
-    dispatch({ type: ActionTypes.REMOVE, params });
-  };
-
-  const clearItems = () => {
-    dispatch({ type: ActionTypes.CLEAR });
-  };
+  useLocalStorage("CART", state, actions.loadState);
 
   return (
     <CartContext.Provider
       value={{
         state,
-        upsertItem,
-        removeItem,
-        clearItems,
+        upsertItem: actions.upsertItem,
+        removeItem: actions.removeItem,
+        clearItems: actions.clearItems,
         isCartOpen,
         onCartOpen,
         onCartClose,

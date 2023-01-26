@@ -63,7 +63,7 @@ export default function SearchBox({
     } else if (altRef.current) {
       altRef.current.focus();
     }
-  }, []);
+  }, [autoFocus, inputRef, altRef]);
 
   useEffect(() => {
     internalSetQuery(value);

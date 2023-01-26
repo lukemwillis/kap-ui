@@ -1,5 +1,5 @@
 import { useColorModeValue, ResponsiveValue, Button } from "@chakra-ui/react";
-import { ComponentType, useState } from "react";
+import React, { ComponentType, useState } from "react";
 import IconProps from "./icons/IconProps";
 
 interface CTAProps {
@@ -9,14 +9,10 @@ interface CTAProps {
   leftIcon?: ComponentType<IconProps>;
   secondary?: boolean;
 }
-
-export default function CTA({
-  size,
-  onClick,
-  label,
-  leftIcon: LeftIcon,
-  secondary,
-}: CTAProps) {
+export default React.forwardRef(function CTA(
+  { size, onClick, label, leftIcon: LeftIcon, secondary }: CTAProps,
+  ref: React.ForwardedRef<HTMLButtonElement>
+) {
   const [hover, setHover] = useState(false);
   const buttonBackground = useColorModeValue("brand.navy", "brand.orange");
   const buttonForeground = useColorModeValue("brand.orange", "white");
@@ -50,8 +46,9 @@ export default function CTA({
           />
         )
       }
+      ref={ref}
     >
       {label}
     </Button>
   );
-}
+});

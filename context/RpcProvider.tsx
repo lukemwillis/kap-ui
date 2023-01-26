@@ -3,10 +3,8 @@ import React, {
   useContext,
   useState,
   createContext,
-  useEffect,
 } from "react";
-
-const LOCAL_STORAGE_KEY = "RPC";
+import useLocalStorage from "./useLocalStorage";
 
 type RpcContextType = {
   rpc?: string;
@@ -26,18 +24,7 @@ export const RpcProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const [rpc, setRpc] = useState(process.env.NEXT_PUBLIC_KOINOS_RPC_URL!.split(',')[0]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      setRpc(saved);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!rpc) return;
-    localStorage.setItem(LOCAL_STORAGE_KEY, rpc);
-  }, [rpc]);
+  useLocalStorage("RPC", rpc, setRpc);
 
   return (
     <RpcContext.Provider value={{ rpc, setRpc }}>

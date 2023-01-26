@@ -7,8 +7,7 @@ import React, {
 } from "react";
 import * as kondor from "../node_modules/kondor-js/lib/browser";
 import MyKoinosWallet from "@roamin/my-koinos-wallet-sdk";
-
-const LOCAL_STORAGE_KEY = "ACCOUNT";
+import useLocalStorage from "./useLocalStorage";
 
 type AccountContextType = {
   address?: string;
@@ -48,11 +47,6 @@ export const AccountProvider = ({
   const mkwRef = useRef<MyKoinosWallet>();
 
   useEffect(() => {
-    const saved = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (saved) {
-      setAddress(saved);
-    }
-
     mkwRef.current = new MyKoinosWallet(
       "https://mykw.vercel.app/embed/wallet-connector"
     );
@@ -70,9 +64,6 @@ export const AccountProvider = ({
   }, []);
 
   useEffect(() => {
-    if (!address) return;
-    localStorage.setItem(LOCAL_STORAGE_KEY, address);
-
     if (address === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
       setPrimaryUsername("luke.koin");
       setPrimaryAvatarSrc(
@@ -80,6 +71,8 @@ export const AccountProvider = ({
       );
     }
   }, [address]);
+
+  useLocalStorage("ACCOUNT", address, setAddress);
 
   const connectKondor = async () => {
     if (isConnecting) return false;
