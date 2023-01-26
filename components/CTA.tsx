@@ -7,10 +7,18 @@ interface CTAProps {
   onClick: () => void;
   label: string;
   leftIcon?: ComponentType<IconProps>;
+  rightIcon?: ComponentType<IconProps>;
   secondary?: boolean;
 }
 export default React.forwardRef(function CTA(
-  { size, onClick, label, leftIcon: LeftIcon, secondary }: CTAProps,
+  {
+    size,
+    onClick,
+    label,
+    leftIcon: LeftIcon,
+    rightIcon: RightIcon,
+    secondary,
+  }: CTAProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
   const [hover, setHover] = useState(false);
@@ -39,6 +47,16 @@ export default React.forwardRef(function CTA(
       leftIcon={
         LeftIcon && (
           <LeftIcon
+            size="1.25em"
+            color={
+              hover ? buttonForeground : secondary ? buttonBackground : "white"
+            }
+          />
+        )
+      }
+      rightIcon={
+        RightIcon && (
+          <RightIcon
             size="1.25em"
             color={
               hover ? buttonForeground : secondary ? buttonBackground : "white"
