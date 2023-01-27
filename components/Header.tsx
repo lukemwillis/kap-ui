@@ -22,8 +22,8 @@ export default function Header() {
       gap="4"
     >
       {router.route !== "/" ? (
-        <Link as={NextLink} href="/" flexShrink="0">
-          <a>
+        <Link as={NextLink} href="/">
+          <a style={{ flexShrink: "0" }}>
             <Logo size="3em" />
           </a>
         </Link>

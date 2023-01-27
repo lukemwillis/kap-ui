@@ -3,7 +3,6 @@ import {
   Flex,
   Slider,
   SliderFilledTrack,
-  SliderMark,
   SliderThumb,
   SliderTrack,
   Text,
@@ -34,13 +33,16 @@ export default function PricingExplainer({
   const length = Math.min(query.length, 11);
 
   return (
-    <>
+    <Flex
+      mt={{ base: "2", md: "4" }}
+      direction="column"
+      gap={{ base: "2", md: "4" }}
+    >
       <Flex
         alignItems="center"
         justifyContent={{ base: "center", md: "space-between" }}
         flexWrap="wrap"
         gap="4"
-        mt="4"
       >
         <Flex gap="4">
           <SearchBox
@@ -53,7 +55,7 @@ export default function PricingExplainer({
         </Flex>
         <Price query={query} />
       </Flex>
-      <Box marginX={{ base: "8", md: "10" }} marginTop="5" marginBottom="3">
+      <Box marginX="1.25em" marginTop="1" marginBottom="5">
         <Slider
           focusThumbOnChange={false}
           value={length}
@@ -62,26 +64,29 @@ export default function PricingExplainer({
           max={11}
           step={1}
         >
-          <SliderMark
-            value={length}
-            textAlign="center"
-            mt="5"
-            ml="-10"
-          ></SliderMark>
           <SliderTrack bg={useColorModeValue("gray.200", "gray.700")}>
             <SliderFilledTrack bg="brand.orange" />
           </SliderTrack>
-          <SliderThumb boxSize={10} textAlign="center" pt="8" lineHeight="2">
-            <Text>
+          <SliderThumb boxSize={10} pt="8" lineHeight="2">
+            <Text textAlign="center">
               <Text as="span" display="block" color="gray.800">
                 {length}
                 {length === 11 && "+"}
               </Text>
-              character{length !== 1 && "s"}
+              <Text
+                as="span"
+                display="block"
+                marginLeft={
+                  length === 0 ? "2.75em" : length === 1 ? "2.25em" : ""
+                }
+                marginRight={length > 10 ? "2.75em" : ""}
+              >
+                character{length !== 1 && "s"}
+              </Text>
             </Text>
           </SliderThumb>
         </Slider>
       </Box>
-    </>
+    </Flex>
   );
 }
