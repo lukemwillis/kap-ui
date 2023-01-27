@@ -1,7 +1,7 @@
-import { Flex, HStack } from "@chakra-ui/react";
+import { Flex, HStack, Link } from "@chakra-ui/react";
 import AccountConnector from "./AccountConnector";
 import Logo from "./Logo";
-import Link from "next/link";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import SitePreferences from "./SitePreferences";
 import CartDrawer from "./CartDrawer";
@@ -15,23 +15,25 @@ export default function Header() {
   const hasItems = Object.keys(items || {}).length > 0;
 
   return (
-      <Flex
-        alignItems={"center"}
-        justifyContent={"space-between"}
-        flexShrink="0"
-      >
-        {router.route !== "/" ? (
-          <Link href="/">
-            <a>
-              <Logo size="3em" />
-            </a>
-          </Link>
-        ) : (
-          <span />
-        )}
-        <HStack>
-      {hasItems && <CartDrawer />}
-        <AccountConnector sitePreferences={<SitePreferences />} /></HStack>
-      </Flex>
+    <Flex
+      alignItems={"center"}
+      justifyContent={"space-between"}
+      flexShrink="0"
+      gap="4"
+    >
+      {router.route !== "/" ? (
+        <Link as={NextLink} href="/" flexShrink="0">
+          <a>
+            <Logo size="3em" />
+          </a>
+        </Link>
+      ) : (
+        <span />
+      )}
+      <HStack>
+        {hasItems && <CartDrawer />}
+        <AccountConnector sitePreferences={<SitePreferences />} />
+      </HStack>
+    </Flex>
   );
 }

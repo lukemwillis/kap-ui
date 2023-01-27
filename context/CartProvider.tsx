@@ -56,31 +56,35 @@ export const CartProvider = ({
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
       switch (action.type) {
-        case ActionTypes.LOAD:
+        case ActionTypes.LOAD: {
           return action.state;
-        case ActionTypes.UPSERT:
+        }
+        case ActionTypes.UPSERT: {
+          const name = action.params.name.toLowerCase();
           const price = calculatePrice(
-            action.params.name.length,
+            name.length,
             action.params.years
           );
           return {
             items: {
               ...state.items,
-              [action.params.name]: {
+              [name]: {
                 years: action.params.years,
                 price,
               },
             },
             totalPrice:
-              state.totalPrice -
-              (state.items[action.params.name]?.price || 0) +
-              price,
+              state.totalPrice - (state.items[name]?.price || 0) + price,
           };
-        case ActionTypes.REMOVE:
-          const { [action.params.name]: removed, ...items } = state.items;
+        }
+        case ActionTypes.REMOVE: {
+          const name = action.params.name.toLowerCase();
+          const { [name]: removed, ...items } = state.items;
           return { items, totalPrice: state.totalPrice - removed.price };
-        case ActionTypes.CLEAR:
+        }
+        case ActionTypes.CLEAR: {
           return { items: {}, totalPrice: 0 };
+        }
       }
     },
     { items: {}, totalPrice: 0 }

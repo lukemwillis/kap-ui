@@ -1,4 +1,7 @@
-import { ArrowDownIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+import {
+  ChevronRightIcon,
+  ExternalLinkIcon,
+} from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -14,6 +17,7 @@ import {
   Link,
   Text,
   useColorModeValue,
+  ListIcon,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Free from "../components/icons/Free";
@@ -117,24 +121,33 @@ const About: NextPage = () => {
             paddingBottom="1em"
             _before={{
               content: '""',
-              width: "1em",
-              height: "1em",
+              width: "1.5em",
+              height: "1.5em",
               borderRadius: "50%",
               background: "brand.orange",
               borderColor: "white",
               borderWidth: "2px",
               position: "absolute",
-              marginLeft: "calc(-2.5em - 1px)",
+              marginLeft: "calc(-2.75em - 1px)",
             }}
           >
-            <Text>Q2 2023</Text>
+            <Text fontWeight="bold">Q2 2023</Text>
             <Heading as="h3" size="lg">
               Genesis
             </Heading>
             <List>
-              <ListItem>Launch KAP premium named accounts</ListItem>
-              <ListItem>Requires $KOIN to purchase</ListItem>
-              <ListItem>All purchasers qualify for $KAP airdrop</ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Launch KAP premium named accounts
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Requires $KOIN to purchase
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                All purchasers qualify for $KAP airdrop
+              </ListItem>
             </List>
           </Box>
           <Box
@@ -143,24 +156,31 @@ const About: NextPage = () => {
             paddingBottom="1em"
             _before={{
               content: '""',
-              width: "1em",
-              height: "1em",
+              width: "1.5em",
+              height: "1.5em",
               borderRadius: "50%",
               background: "white",
               position: "absolute",
-              marginLeft: "calc(-2.5em - 1px)",
+              marginLeft: "calc(-2.75em - 1px)",
             }}
           >
-            <Text>Q3 2023</Text>
+            <Text fontWeight="bold">Q3 2023</Text>
             <Heading as="h3" size="lg">
               Integration
             </Heading>
             <List>
               <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
                 Integrate with existing wallets and block explorers
               </ListItem>
-              <ListItem>Create integration tools for dApps</ListItem>
-              <ListItem>Set up KAP profiles with NFT avatars</ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Create integration tools for dApps
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Set up KAP profiles with NFT avatars
+              </ListItem>
             </List>
           </Box>
           <Box
@@ -169,23 +189,27 @@ const About: NextPage = () => {
             paddingBottom="1em"
             _before={{
               content: '""',
-              width: "1em",
-              height: "1em",
+              width: "1.5em",
+              height: "1.5em",
               borderRadius: "50%",
               background: "white",
               position: "absolute",
-              marginLeft: "calc(-2.5em - 1px)",
+              marginLeft: "calc(-2.75em - 1px)",
             }}
           >
-            <Text>Q3 2023</Text>
+            <Text fontWeight="bold">Q3 2023</Text>
             <Heading as="h3" size="lg">
               Tokenless Access
             </Heading>
             <List>
               <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
                 Launch Mana Station to provide free dApp access
               </ListItem>
-              <ListItem>Prepare protocol for free account launch</ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Prepare protocol for free account launch
+              </ListItem>
             </List>
           </Box>
           <Box
@@ -194,22 +218,31 @@ const About: NextPage = () => {
             paddingBottom="1em"
             _before={{
               content: '""',
-              width: "1em",
-              height: "1em",
+              width: "1.5em",
+              height: "1.5em",
               borderRadius: "50%",
               background: "white",
               position: "absolute",
-              marginLeft: "calc(-2.5em - 1px)",
+              marginLeft: "calc(-2.75em - 1px)",
             }}
           >
-            <Text>Q4 2023</Text>
+            <Text fontWeight="bold">Q4 2023</Text>
             <Heading as="h3" size="lg">
               One-Step Access
             </Heading>
             <List>
-              <ListItem>Open free account registration</ListItem>
-              <ListItem>Launch account abstraction features</ListItem>
-              <ListItem>Launch credit card support for premium names</ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Open free account registration
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Launch account abstraction features
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Launch credit card support for premium names
+              </ListItem>
             </List>
           </Box>
           <Box
@@ -218,27 +251,41 @@ const About: NextPage = () => {
             paddingBottom="1em"
             _before={{
               content: '""',
-              width: "1em",
-              height: "1em",
+              width: "1.5em",
+              height: "1.5em",
               borderRadius: "50%",
               background: "white",
               position: "absolute",
-              marginLeft: "calc(-2.5em - 1px)",
+              marginLeft: "calc(-2.75em - 1px)",
             }}
           >
-            <Text>2024</Text>
+            <Text fontWeight="bold">2024</Text>
             <Heading as="h3" size="lg">
               KAP DAO
             </Heading>
             <List>
-              <ListItem>$KAP airdrop to premium account holders</ListItem>
-              <ListItem>Fully decentralize protocol</ListItem>
               <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                $KAP airdrop to premium account holders
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Fully decentralize protocol
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
                 Enable public $KOIN deposits to generate yield with Mana Station
               </ListItem>
             </List>
           </Box>
-          <Box width="0" height="0" borderX="0.5em solid transparent" borderTop="1em solid white" position="absolute" marginLeft="calc(-0.5em + 1px)" />
+          <Box
+            width="0"
+            height="0"
+            borderX="0.5em solid transparent"
+            borderTop="1em solid white"
+            position="absolute"
+            marginLeft="calc(-0.5em + 1px)"
+          />
         </Box>
       </Box>
 
