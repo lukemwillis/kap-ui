@@ -47,8 +47,8 @@ export default function CartDrawer() {
 
   const pulse = keyframes`
   30% { transform: scale(1.1); }
-  40%, 60% { transform: rotate(-10deg) scale(1.1); }
-  50% { transform: rotate(10deg) scale(1.1); }
+  40%, 60% { transform: rotate(-5deg) scale(1.1); }
+  50% { transform: rotate(5deg) scale(1.1); }
   70% { transform: rotate(0deg) scale(1.1); }
   100% { transform: scale(1); }
   `;
@@ -84,7 +84,7 @@ export default function CartDrawer() {
             zIndex="1000"
             borderColor={floatingBorder}
             borderWidth="4px"
-            animation={`${pulseMobile} 0.5s ease-in-out`}
+            animation={isCartOpen ? '' : `${pulseMobile} 0.25s ease-in-out`}
           >
             <Cart color="white" size="1.5em" />
           </IconButton>
@@ -102,7 +102,7 @@ export default function CartDrawer() {
             size="lg"
             onClick={onCartOpen}
             leftIcon={<Cart color="white" size="1.25em" />}
-            animation={`${pulse} 1s ease-in-out`}
+            animation={isCartOpen ? '' : `${pulse} 0.5s ease-in-out`}
           >
             Cart
           </Button>

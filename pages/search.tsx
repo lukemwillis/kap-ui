@@ -25,7 +25,7 @@ const Search: NextPage = () => {
 
   if (typeof q !== "string") return <>Could not parse query</>;
 
-  let query = q as string;
+  let query = (q as string).toLowerCase();
 
   if (query.endsWith(".koin")) {
     query = query.substring(0, query.length - 5);
