@@ -2,12 +2,13 @@ import { useColorModeValue, Image, ResponsiveValue } from "@chakra-ui/react";
 
 interface LogoProps {
     size: ResponsiveValue<string>;
+    inverse?: boolean;
 }
 
-export default function Logo({ size }: LogoProps) {
+export default function Logo({ size, inverse = false }: LogoProps) {
   return (
       <Image
-        src={useColorModeValue("/logo.png", "/logo-inverse.png")}
+        src={useColorModeValue(`/logo${inverse ? '-inverse' : ''}.png`, `/logo${!inverse ? '-inverse' : ''}.png`)}
         alt="KAP Logo"
         height={size}
       />

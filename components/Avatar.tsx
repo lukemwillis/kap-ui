@@ -14,7 +14,12 @@ export default function Avatar({ src, address, size }: AvatarProps) {
 
   if (src) {
     return (
-      <SkeletonCircle height={size} width={size} isLoaded={!loading}>
+      <SkeletonCircle
+        height={size}
+        width={size}
+        isLoaded={!loading}
+        flexShrink="0"
+      >
         <Image
           src={src}
           width={size}
@@ -40,6 +45,7 @@ export default function Avatar({ src, address, size }: AvatarProps) {
           borderRadius: "50%",
           borderWidth: "1px",
           overflow: "hidden",
+          flexShrink: "0",
         }}
       />
     );
