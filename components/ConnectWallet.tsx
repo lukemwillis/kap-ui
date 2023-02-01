@@ -5,7 +5,6 @@ import {
   StackDivider,
   IconButton,
   Flex,
-  Tooltip,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
 interface ConnectWalletProps {
@@ -30,6 +29,17 @@ export default function ConnectWallet({
     if (wallet === "Kondor") {
       connected = await connectKondor();
     } else if (wallet === "MKW") {
+      if (!isMKWSupported) {
+        // TODO LMW check for popup support
+        toast({
+          title: "Check browser settings",
+          description:
+            "MKW requires support for 'cross-site cookies'. Please check your browser settings if you want to connect with MKW.",
+          status: "error",
+          isClosable: true,
+        });
+        return;
+      }
       connected = await connectMKW();
     }
 
@@ -60,24 +70,14 @@ export default function ConnectWallet({
           padding="4"
           icon={<Image src="/kondor-logo.png" alt="Kondor Logo" height={16} />}
         />
-        <Tooltip
-          placement="top-end"
-          label={
-            isMKWSupported
-              ? ""
-              : "MKW requires support for 'cross-site cookies'. Please check your browser settings if you want to connect with MKW."
-          }
-        >
-          <IconButton
-            onClick={() => connectCallback("MKW")}
-            aria-label="Connect with MKW"
-            flex="1"
-            height="auto"
-            padding="4"
-            disabled={!isMKWSupported}
-            icon={<Image src="/mkw-logo.png" alt="MKW Logo" height={16} />}
-          />
-        </Tooltip>
+        <IconButton
+          onClick={() => connectCallback("MKW")}
+          aria-label="Connect with MKW"
+          flex="1"
+          height="auto"
+          padding="4"
+          icon={<Image src="/mkw-logo.png" alt="MKW Logo" height={16} />}
+        />
       </Flex>
       {!address && (
         <>

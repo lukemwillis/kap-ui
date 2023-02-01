@@ -83,7 +83,7 @@ export default function SocialLinks({
   const [lastKey, setLastKey] = useState("");
   const popoverColor = useColorModeValue("gray.800", "white");
   return (
-    <Flex gap="2">
+    <Flex gap="2" flexWrap="wrap" justifyContent="center" maxWidth="20em">
       {Object.values(SocialKeys)
         .filter((key) => typeof values[key as SocialKeys] !== "undefined")
         .map((key) => (

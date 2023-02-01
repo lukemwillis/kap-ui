@@ -14,7 +14,12 @@ interface TextareaProps {
   isThemeLight: boolean;
 }
 
-export default function Textarea({ label, max, placeholder, isThemeLight }: TextareaProps) {
+export default function Textarea({
+  label,
+  max,
+  placeholder,
+  isThemeLight,
+}: TextareaProps) {
   const [value, setValue] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
   const background = useColorModeValue("white", "gray.800");
@@ -30,7 +35,7 @@ export default function Textarea({ label, max, placeholder, isThemeLight }: Text
   return (
     <InputGroup>
       <Txa
-      variant="filled"
+        variant="filled"
         placeholder={placeholder}
         resize="none"
         paddingTop="2em"
@@ -44,21 +49,22 @@ export default function Textarea({ label, max, placeholder, isThemeLight }: Text
         }}
         background={isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"}
         _hover={{
-            background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200"
+          background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200",
         }}
         _focusVisible={{
-            background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200"
+          background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200",
         }}
         _placeholder={{
-            color: isThemeLight ? "gray.600" : "gray.300"
+          color: isThemeLight ? "gray.600" : "gray.300",
         }}
       />
-      <InputLeftElement>{label}</InputLeftElement>
+      <InputLeftElement pointerEvents="none">{label}</InputLeftElement>
       {value.length > 0 && (
         <InputRightElement
           color={value.length > max ? "red.400" : "inherit"}
           width="auto"
           marginRight="2"
+          pointerEvents="none"
         >
           {value.length}/{max}
         </InputRightElement>

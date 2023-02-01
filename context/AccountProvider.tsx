@@ -102,16 +102,12 @@ export const AccountProvider = ({
 
     setIsConnecting(true);
     try {
-      console.log("begin");
-      const permissions = await mkwRef.current.requestPermissions({
+      await mkwRef.current.requestPermissions({
         accounts: ["getAccounts"],
         provider: ["readContract"],
       });
-      console.log(permissions);
       const accounts = await mkwRef.current.getAccounts();
-      console.log(accounts);
       address = accounts[0].address;
-      console.log(address);
       if (address) {
         setPrimaryUsername("");
         setPrimaryAvatarSrc("");

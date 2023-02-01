@@ -26,9 +26,8 @@ export default function ColorPicker({
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.match(COLOR_REGEX)) {
       setValue(e.target.value);
-    } else {
-      setInput(e.target.value);
     }
+    setInput(e.target.value);
   };
 
   return (
@@ -39,9 +38,10 @@ export default function ColorPicker({
         value={input}
         onChange={handleInputChange}
         isInvalid={!input.match(COLOR_REGEX)}
+        paddingStart="7"
         {...inputProps}
       />
-      <InputLeftElement>#</InputLeftElement>
+      <InputLeftElement pointerEvents="none">#</InputLeftElement>
     </InputGroup>
   );
 }

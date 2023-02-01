@@ -17,7 +17,6 @@ import {
   Select,
   Stack,
   Text,
-  Tooltip,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
@@ -149,9 +148,6 @@ export default function CartDrawer() {
                           alignItems="center"
                         >
                           <Text>Forever</Text>
-                          <Tooltip label="Free names are registered once and owned forever. No need to renew annually.">
-                            <InfoOutlineIcon fontSize="0.8em" />
-                          </Tooltip>
                         </Flex>
                         <Text fontSize="2xl" textAlign="right">
                           FREE

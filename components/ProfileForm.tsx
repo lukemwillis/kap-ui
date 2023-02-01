@@ -46,7 +46,7 @@ export default function ProfileForm() {
         <Heading fontSize="2xl">Your Profile</Heading>
       </CardHeader>
       <CardBody>
-        <Stack alignItems="center" maxWidth="30em" margin="0 auto">
+        <Stack alignItems="center" maxWidth="30em" margin="0 auto" gap="2">
           <Box position="relative">
             <Avatar size="12em" src={primaryAvatarSrc} address={address} />
             <Box
@@ -78,7 +78,7 @@ export default function ProfileForm() {
               />
             </Box>
           </Box>
-          <Text fontSize="4xl">{primaryUsername}</Text>
+          <Text fontSize="4xl" lineHeight="1">{primaryUsername}</Text>
           <Textarea
             placeholder="I like long walks on the beach..."
             label="Bio"
