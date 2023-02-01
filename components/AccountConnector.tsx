@@ -128,7 +128,7 @@ export default function AccountConnector({
                     </IconButton>
                   </Flex>
                   {primaryUsername && (
-                    <Link href="/dashboard">
+                    <Link href="/account">
                       <Button variant="outline" onClick={onClose}>
                         Manage KAP Account
                       </Button>

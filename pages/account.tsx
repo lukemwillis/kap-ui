@@ -1,6 +1,5 @@
 import {
   ChevronDownIcon,
-  SettingsIcon,
   StarIcon,
 } from "@chakra-ui/icons";
 import {
@@ -31,6 +30,7 @@ import Sell from "../components/icons/Sell";
 import Send from "../components/icons/Send";
 import SearchBox from "../components/SearchBox";
 import ProfileForm from "../components/ProfileForm";
+import { FaEllipsisV } from "react-icons/fa";
 
 const names = [
   "luke",
@@ -43,17 +43,25 @@ const names = [
   "steve",
 ];
 
-const Dashboard: NextPage = () => {
-  const isMenuIcon = useBreakpointValue({ base: true, sm: false });
+const Account: NextPage = () => {
+  const isMenuIcon = useBreakpointValue({ base: true, md: false });
   const muted = useColorModeValue("gray.600", "gray.400");
   return (
     <Flex direction="column" width="100%" gap={{ base: "4", md: "8" }}>
       <ProfileForm />
+      <Flex gap="4" justifyContent="center">
+        <SearchBox
+          placeholder="Find a new username..."
+          buttonLabel="Search"
+          inlineButton={useBreakpointValue({ base: true, md: false })}
+          autoFocus={false}
+          secondaryCTA
+        />
+      </Flex>
       <Card variant="outline">
         <CardHeader>
           <Heading fontSize="2xl">Your Names</Heading>
         </CardHeader>
-        {/* <TableContainer> */}
         <Table width="100%">
           <Thead>
             <Tr>
@@ -77,14 +85,14 @@ const Dashboard: NextPage = () => {
                 <Td whiteSpace={{ base: "normal", md: "nowrap" }}>
                   <Text color={muted}>Aug 2, 2024</Text>
                 </Td>
-                <Td>
+                <Td paddingInline={{ base: "4", md: "6" }}>
                   <Menu>
                     {isMenuIcon ? (
                       <MenuButton
                         as={IconButton}
-                        icon={<SettingsIcon />}
+                        icon={<FaEllipsisV fontWeight="normal" />}
                         aria-label="Manage"
-                        variant="outline"
+                        variant="ghost"
                       />
                     ) : (
                       <MenuButton
@@ -123,18 +131,8 @@ const Dashboard: NextPage = () => {
           </Tfoot>
         </Table>
       </Card>
-      {/* </TableContainer> */}
-      <Flex gap="4" justifyContent="center">
-        <SearchBox
-          placeholder="Find a new username..."
-          buttonLabel="Search"
-          inlineButton={useBreakpointValue({ base: true, md: false })}
-          autoFocus={false}
-          secondaryCTA
-        />
-      </Flex>
     </Flex>
   );
 };
 
-export default Dashboard;
+export default Account;

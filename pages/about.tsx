@@ -356,7 +356,7 @@ const About: NextPage = () => {
             <AccordionPanel>
               Absolutely. You can have as many names as you want. If you have
               more than one KAP NFT in a single wallet, you simply need to
-              select your primary name in the KAP dashboard.
+              select your primary name in the KAP account manager page.
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
