@@ -90,7 +90,7 @@ const Account: NextPage = () => {
                     {isMenuIcon ? (
                       <MenuButton
                         as={IconButton}
-                        icon={<FaEllipsisV fontWeight="normal" />}
+                        icon={<FaEllipsisV />}
                         aria-label="Manage"
                         variant="ghost"
                       />

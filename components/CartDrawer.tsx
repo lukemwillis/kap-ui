@@ -1,4 +1,4 @@
-import { DeleteIcon, InfoOutlineIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Button,
