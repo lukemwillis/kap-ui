@@ -86,7 +86,7 @@ const Account: NextPage = () => {
                   <Text color={muted}>Aug 2, 2024</Text>
                 </Td>
                 <Td paddingInline={{ base: "4", md: "6" }}>
-                  <Menu>
+                  <Menu placement="bottom-end">
                     {isMenuIcon ? (
                       <MenuButton
                         as={IconButton}
