@@ -127,8 +127,9 @@ export default function SocialLinks({
                   onChange={(e) => setValue(key, e.target.value)}
                   autoFocus
                   variant="outline"
+                  size="lg"
                 />
-                <InputLeftElement>{ICONS[key as SocialKeys]}</InputLeftElement>
+                <InputLeftElement height="100%">{ICONS[key as SocialKeys]}</InputLeftElement>
               </InputGroup>
             </PopoverContent>
           </Popover>
@@ -167,7 +168,7 @@ export default function SocialLinks({
               Add Social Links
             </MenuButton>
           )}
-          <MenuList color={popoverColor}>
+          <MenuList color={popoverColor} fontSize="lg">
             {Object.values(SocialKeys)
               .filter((key) => typeof values[key as SocialKeys] === "undefined")
               .map((key) => (

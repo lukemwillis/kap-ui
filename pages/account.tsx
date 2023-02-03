@@ -25,12 +25,9 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { NextPage } from "next";
-import AddYears from "../components/icons/AddYears";
-import Sell from "../components/icons/Sell";
-import Send from "../components/icons/Send";
 import SearchBox from "../components/SearchBox";
 import ProfileForm from "../components/ProfileForm";
-import { FaEllipsisV } from "react-icons/fa";
+import { FaCalendarPlus, FaEllipsisV, FaPaperPlane, FaRegPaperPlane, FaTag } from "react-icons/fa";
 
 const names = [
   "luke",
@@ -104,16 +101,16 @@ const Account: NextPage = () => {
                       </MenuButton>
                     )}
                     <MenuList fontSize="lg">
-                      <MenuItem icon={<AddYears size="1em" color="inherit" />}>
+                      <MenuItem icon={<FaCalendarPlus />}>
                         Add Years
                       </MenuItem>
                       <MenuItem icon={<StarIcon mb="1" />}>
                         Make Primary
                       </MenuItem>
-                      <MenuItem icon={<Send size="1em" color="inherit" />}>
+                      <MenuItem icon={<FaPaperPlane />}>
                         Transfer
                       </MenuItem>
-                      <MenuItem icon={<Sell size="1em" color="inherit" />}>
+                      <MenuItem icon={<FaTag />}>
                         List For Sale
                       </MenuItem>
                     </MenuList>

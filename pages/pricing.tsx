@@ -21,41 +21,6 @@ const Pricing: NextPage = () => {
       <Box
         padding={{ base: "6", md: "12" }}
         borderRadius="8"
-        background="brand.navy"
-        color="white"
-      >
-        <Flex flexWrap="wrap" gap="4">
-          <Box flexBasis={{ base: "100%", md: "2" }} flexGrow="2">
-            <Heading>
-              FREE Account NFTs <Badge fontSize="0.6em">MOST POPULAR</Badge>
-            </Heading>
-            <Text>
-              With KAP, you can get a free username on the Koinos blockchain
-              when you pick a name that&apos;s 11 or more characters long.
-            </Text>
-          </Box>
-          <Box flexBasis="1" flexGrow="1">
-            <List spacing="2">
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} mb="1" />
-                100% Free Name NFT
-              </ListItem>
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} mb="1" />
-                Account Security Tools
-              </ListItem>
-              <ListItem>
-                <ListIcon as={CheckCircleIcon} mb="1" />
-                Use dApps for Free
-              </ListItem>
-            </List>
-          </Box>
-        </Flex>
-      </Box>
-
-      <Box
-        padding={{ base: "6", md: "12" }}
-        borderRadius="8"
         background="brand.orange"
         color="white"
       >
@@ -67,9 +32,8 @@ const Pricing: NextPage = () => {
               </Shiny>
             </Heading>
             <Text>
-              Shorter account names with additional benefits. Whatver your
-              budget, find the username you really want. Priced to minimize name
-              squatting.
+              Short account names with serious benefits. Whatver your budget,
+              find the username you really want. No compromising required.
             </Text>
           </Box>
           <Box flexBasis="1" flexGrow="1">
@@ -80,11 +44,11 @@ const Pricing: NextPage = () => {
               </ListItem>
               <ListItem>
                 <ListIcon as={CheckCircleIcon} mb="1" />
-                Added Security Services
+                Advanced Security Tools
               </ListItem>
               <ListItem>
                 <ListIcon as={CheckCircleIcon} mb="1" />
-                Greater Free dApp Access
+                Free dApp Access
               </ListItem>
             </List>
           </Box>
@@ -99,24 +63,10 @@ const Pricing: NextPage = () => {
             textAlign="center"
           >
             <Box color="brand.orange">
-              <StarIcon />
+              <StarIcon /> <StarIcon /> <StarIcon /> <StarIcon />
             </Box>
-            <Text>7-10 Characters</Text>
-            <Price query="lukewillis" />
-          </Box>
-          <Box
-            padding={{ base: "4", md: "8" }}
-            borderRadius="8"
-            flex="1"
-            background="white"
-            color="gray.800"
-            textAlign="center"
-          >
-            <Box color="brand.orange">
-              <StarIcon /> <StarIcon />
-            </Box>
-            <Text>4-6 Characters</Text>
-            <Price query="luke" />
+            <Text>1 Character</Text>
+            <Price query="x" />
           </Box>
           <Box
             padding={{ base: "4", md: "8" }}
@@ -141,10 +91,58 @@ const Pricing: NextPage = () => {
             textAlign="center"
           >
             <Box color="brand.orange">
-              <StarIcon /> <StarIcon /> <StarIcon /> <StarIcon />
+              <StarIcon /> <StarIcon />
             </Box>
-            <Text>1 Character</Text>
-            <Price query="x" />
+            <Text>4-6 Characters</Text>
+            <Price query="luke" />
+          </Box>
+          <Box
+            padding={{ base: "4", md: "8" }}
+            borderRadius="8"
+            flex="1"
+            background="white"
+            color="gray.800"
+            textAlign="center"
+          >
+            <Box color="brand.orange">
+              <StarIcon />
+            </Box>
+            <Text>7-10 Characters</Text>
+            <Price query="lukewillis" />
+          </Box>
+        </Flex>
+      </Box>
+      <Box
+        padding={{ base: "6", md: "12" }}
+        borderRadius="8"
+        background="brand.navy"
+        color="white"
+      >
+        <Flex flexWrap="wrap" gap="4">
+          <Box flexBasis={{ base: "100%", md: "2" }} flexGrow="2">
+            <Heading>
+              FREE Account NFTs <Badge fontSize="0.6em">MOST POPULAR</Badge>
+            </Heading>
+            <Text>
+              No cost to mint. No gas fees. Register your name once and own it
+              forever. No trial periods, just plain free.
+            </Text>
+          </Box>
+          <Box flexBasis="1" flexGrow="1">
+            <List spacing="2">
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} mb="1" />
+                11+ Character Name NFT
+              </ListItem>
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} mb="1" />
+                Basic Security Tools
+              </ListItem>
+              <ListItem>
+                <ListIcon as={CheckCircleIcon} mb="1" />
+                Limited Free dApp Access
+              </ListItem>
+            </List>
           </Box>
         </Flex>
       </Box>

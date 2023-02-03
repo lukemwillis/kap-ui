@@ -8,20 +8,38 @@ import {
   Flex,
   Heading,
   IconButton,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Stack,
   Text,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Avatar from "../components/Avatar";
 import Textarea from "../components/Textarea";
 import { useAccount } from "../context/AccountProvider";
 import SocialLinks from "../components/SocialLinks";
 import { useEffect, useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
+import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
+
+// TODO pull from chain
+const names = [
+  "luke",
+  "kui",
+  "areallyreallyreallyreallyreallyreallylongnamejusttoseewhathappens",
+  "123",
+  "a",
+  "andrarchy",
+  "vandeberg",
+  "steve",
+];
 
 export default function ProfileForm() {
   const [themeColor, setThemeColor] = useState("ffffff");
   const [isThemeLight, setIsThemeLight] = useState(true);
+  const popoverColor = useColorModeValue("gray.800", "white");
 
   const { address, primaryUsername, primaryAvatarSrc } = useAccount();
   const [socialLinks, setSocialLinks] = useState({});
@@ -61,7 +79,7 @@ export default function ProfileForm() {
               <IconButton
                 variant="solid"
                 background={isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"}
-                icon={<FaPencilAlt />}
+                icon={<FaCamera />}
                 aria-label="Change NFT Avatar"
                 borderRadius="50%"
                 size="lg"
@@ -78,7 +96,26 @@ export default function ProfileForm() {
               />
             </Box>
           </Box>
-          <Text fontSize="4xl" lineHeight="1">{primaryUsername}</Text>
+          <Flex>
+            <Text fontSize="4xl" lineHeight="1">
+              {primaryUsername}
+            </Text>
+            <Menu placement="bottom"  >
+              <MenuButton
+                as={IconButton}
+                icon={<FaPencilAlt />}
+                aria-label="Change Primary Account Name"
+                variant="ghost"
+                color={isThemeLight ? "gray.800" : "white"}
+              />
+              <MenuList fontSize="lg"
+                color={popoverColor} maxWidth="100vw">
+                {names.map((name) => (
+                  <MenuItem key={name}><Text overflowWrap="break-word" maxWidth="100%">{name}.koin</Text></MenuItem>
+                ))}
+              </MenuList>
+            </Menu>
+          </Flex>
           <Textarea
             placeholder="I like long walks on the beach..."
             label="Bio"
