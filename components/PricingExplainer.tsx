@@ -9,7 +9,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Price from "./Price";
 import SearchBox from "./SearchBox";
 
@@ -23,6 +23,10 @@ export default function PricingExplainer({
   initialQuery,
 }: PricingExplainerProps) {
   const [query, setQuery] = useState(initialQuery);
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery, setQuery]);
+
   const onSliderChange = (val: number) => {
     if (initialQuery.length > val) {
       setQuery(initialQuery.substring(0, val));

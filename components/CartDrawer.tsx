@@ -193,11 +193,12 @@ export default function CartDrawer() {
                   <CTA
                     label="Checkout"
                     size="lg"
+                    // TODO mint
                     onClick={() => alert("This will mint")}
                   />
                   <Text color={muted}>
                     Once you sign with your wallet, your selected NFTs will be
-                    minted and you will be charged X $KOIN.
+                    minted and you will be charged {/* TODO price */} X $KOIN.
                   </Text>
                 </>
               ) : (

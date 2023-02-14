@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
 
-// TODO pull from chain
+// TODO get_names
 const names = [
   "luke",
   "kui",

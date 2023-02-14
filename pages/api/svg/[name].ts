@@ -4,7 +4,7 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
   const { name } = req.query;
 
   if (name) {
-    // TODO pull name from blockchain
+    // TODO get_name
     if (true) {
       res
         .status(200)

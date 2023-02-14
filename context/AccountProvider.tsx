@@ -8,12 +8,15 @@ import React, {
 import * as kondor from "../node_modules/kondor-js/lib/browser";
 import MyKoinosWallet from "@roamin/my-koinos-wallet-sdk";
 import useLocalStorage from "./useLocalStorage";
+import { Provider, Signer } from "koilib";
 
 type AccountContextType = {
   address?: string;
   isConnecting: boolean;
   connectKondor: () => Promise<boolean>;
   connectMKW: () => Promise<boolean>;
+  provider?: Provider;
+  signer?: Signer;
   isMKWSupported: boolean;
   primaryUsername?: string;
   primaryAvatarSrc?: string;
@@ -43,6 +46,8 @@ export const AccountProvider = ({
   const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
     undefined
   );
+  const [provider, setProvider] = useState<Provider | undefined>();
+  const [signer, setSigner] = useState<Signer | undefined>();
 
   const mkwRef = useRef<MyKoinosWallet>();
 
@@ -69,6 +74,13 @@ export const AccountProvider = ({
       setPrimaryAvatarSrc(
         "https://bafybeial7korh5zldyo7qmz4kkeeo5tt7tybhd7jiorz2nx7iwvpzeadhi.ipfs.nftstorage.link/assets/01.png"
       );
+    }
+
+    // TODO kondor updated?
+    // TODO MKW version
+    setProvider(kondor.provider as unknown as Provider);
+    if (address) {
+      setSigner(kondor.getSigner(address) as Signer);
     }
   }, [address]);
 
@@ -131,6 +143,8 @@ export const AccountProvider = ({
         isMKWSupported,
         primaryUsername,
         primaryAvatarSrc,
+        provider,
+        signer,
       }}
     >
       {children}

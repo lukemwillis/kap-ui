@@ -1,4 +1,12 @@
-import { Box, Flex, Heading, Text, useColorModeValue } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  Heading,
+  Skeleton,
+  Text,
+  useBoolean,
+  useColorModeValue,
+} from "@chakra-ui/react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Airdrop from "../components/icons/Airdrop";
@@ -8,6 +16,8 @@ import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
 import { useCart } from "../context/CartProvider";
 import Infinite from "../components/icons/Infinite";
+import { useNameService } from "../context/NameServiceProvider";
+import { useEffect, useState } from "react";
 
 const Search: NextPage = () => {
   const {
@@ -22,16 +32,30 @@ const Search: NextPage = () => {
     upsertItem,
     onCartOpen,
   } = useCart();
+  const { getName } = useNameService();
+  const [query, setQuery] = useState("");
+  const [name, setName] = useState();
+  const [isLoading, setIsLoading] = useBoolean(true);
 
-  if (typeof q !== "string") return <>Could not parse query</>;
+  useEffect(() => {
+    if (typeof q !== "string") return;
+    let parsed = (q as string).toLowerCase();
+    if (parsed.endsWith(".koin")) {
+      parsed = parsed.substring(0, parsed.length - 5);
+    }
+    if (parsed.length === 0) return;
 
-  let query = (q as string).toLowerCase();
+    if (parsed !== query) {
+      setIsLoading.on();
 
-  if (query.endsWith(".koin")) {
-    query = query.substring(0, query.length - 5);
-  }
+      setQuery(parsed);
 
-  if (query.length === 0) return <>Query too short</>;
+      getName!(`${parsed}.koin`).then((result: any) => {
+        setName(result);
+        setIsLoading.off();
+      });
+    }
+  }, [getName, q, query, setIsLoading]);
 
   const isInCart = items && !!items[query];
 
@@ -51,7 +75,10 @@ const Search: NextPage = () => {
           direction="column"
           textAlign={{ base: "center", md: "left" }}
         >
-          <Text>It&apos;s available!</Text>
+          {/* TODO get_name */}
+          <Skeleton isLoaded={!isLoading}>
+            <Text>{name ? "Sorry, unavailable" : "It's available!"}</Text>
+          </Skeleton>
           <Heading
             size="3xl"
             overflowWrap="anywhere"

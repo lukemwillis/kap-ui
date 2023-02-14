@@ -4,17 +4,17 @@ import type { AppProps } from "next/app";
 import { ChakraProvider, Flex } from "@chakra-ui/react";
 import { AccountProvider } from "../context/AccountProvider";
 import theme from "../styles/theme";
-import { ContractsProvider } from "../context/ContractsProvider";
 import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { CartProvider } from "../context/CartProvider";
+import { NameServiceProvider } from "../context/NameServiceProvider";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <AccountProvider>
-        <ContractsProvider>
+        <NameServiceProvider>
           <CartProvider>
             <Head>
               <title>KAP</title>
@@ -48,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Footer />
             </Flex>
           </CartProvider>
-        </ContractsProvider>
+        </NameServiceProvider>
       </AccountProvider>
     </ChakraProvider>
   );
