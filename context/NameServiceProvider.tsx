@@ -17,7 +17,6 @@ export type NameObject = {
   owner: string;
   expiration: string;
   grace_period_end: string;
-  // TODO owner?
 };
 
 type NameServiceContextType = {

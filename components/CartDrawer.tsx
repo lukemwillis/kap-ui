@@ -16,14 +16,18 @@ import {
   keyframes,
   Progress,
   Select,
+  Skeleton,
   Stack,
   Text,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { utils } from "koilib";
+import { useEffect, useMemo, useState } from "react";
 import { useAccount } from "../context/AccountProvider";
 import { useCart } from "../context/CartProvider";
 import { useNameService } from "../context/NameServiceProvider";
+import { useUsdOracle } from "../context/UsdOracleProvider";
 import ConnectWallet from "./ConnectWallet";
 import CTA from "./CTA";
 import Cart from "./icons/Cart";
@@ -37,11 +41,17 @@ export default function CartDrawer() {
     onCartOpen,
     onCartClose,
   } = useCart();
-  const { mint, isLoading } = useNameService();
+  const { mint, isLoading: isNsLoading } = useNameService();
+  const { getLatestKoinPrice, isLoading: isUoLoading } = useUsdOracle();
   const { address } = useAccount();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const floatingBorder = useColorModeValue("white", "gray.800");
+
+  const [koinPrice, setKoinPrice] = useState("");
+  useEffect(() => {
+    getLatestKoinPrice().then((result) => setKoinPrice(result?.price || ""));
+  }, []);
 
   const pulse = keyframes`
     30% { transform: scale(1.1); }
@@ -189,7 +199,19 @@ export default function CartDrawer() {
                       {totalPrice === 0 ? "FREE" : `$${totalPrice}`}
                     </Text>
                   </Flex>
-                  {isLoading ? (
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <span />
+                    <Skeleton isLoaded={!isUoLoading}>
+                      <Text fontSize="xl">
+                        {utils.formatUnits(
+                          parseInt(koinPrice || "0") * totalPrice,
+                          8
+                        )}{" "}
+                        $KOIN
+                      </Text>
+                    </Skeleton>
+                  </Flex>
+                  {isNsLoading ? (
                     <Progress
                       isIndeterminate
                       height={12}
@@ -201,7 +223,7 @@ export default function CartDrawer() {
                   )}
                   <Text color={muted}>
                     Once you sign with your wallet, your selected NFTs will be
-                    minted and you will be charged {/* TODO price */} X $KOIN.
+                    minted and you will be charged the total $KOIN amount.
                   </Text>
                 </>
               ) : (
