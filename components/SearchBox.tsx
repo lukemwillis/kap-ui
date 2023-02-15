@@ -1,4 +1,5 @@
 import {
+  Button,
   Flex,
   Input,
   InputGroup,
@@ -110,7 +111,7 @@ export default function SearchBox({
         >
           <Flex gap="2" alignItems="center" paddingRight="2">
             <Text>.koin</Text>
-            {inlineButton && query && (
+            {inlineButton && query && process.env.NEXT_PUBLIC_IS_LIVE === "true" && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
                 <CTA
                   size="sm"
@@ -123,16 +124,21 @@ export default function SearchBox({
           </Flex>
         </InputRightElement>
       </InputGroup>
-      {!inlineButton && (
-        <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
-          <CTA
-            size="lg"
-            onClick={onSearch}
-            label={buttonLabel}
-            secondary={secondaryCTA}
-          />
-        </Link>
-      )}
+      {!inlineButton &&
+        (process.env.NEXT_PUBLIC_IS_LIVE === "true" ? (
+          <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
+            <CTA
+              size="lg"
+              onClick={onSearch}
+              label={buttonLabel}
+              secondary={secondaryCTA}
+            />
+          </Link>
+        ) : (
+          <Button size="lg" disabled>
+            Coming Soon
+          </Button>
+        ))}
     </>
   );
 }
