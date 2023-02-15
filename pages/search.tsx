@@ -16,7 +16,7 @@ import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
 import { useCart } from "../context/CartProvider";
 import Infinite from "../components/icons/Infinite";
-import { useNameService } from "../context/NameServiceProvider";
+import { NameObject, useNameService } from "../context/NameServiceProvider";
 import { useEffect, useState } from "react";
 
 const Search: NextPage = () => {
@@ -32,10 +32,9 @@ const Search: NextPage = () => {
     upsertItem,
     onCartOpen,
   } = useCart();
-  const { getName } = useNameService();
+  const { getName, isLoading } = useNameService();
   const [query, setQuery] = useState("");
-  const [name, setName] = useState();
-  const [isLoading, setIsLoading] = useBoolean(true);
+  const [name, setName] = useState<NameObject>();
 
   useEffect(() => {
     if (typeof q !== "string") return;
@@ -46,20 +45,16 @@ const Search: NextPage = () => {
     if (parsed.length === 0) return;
 
     if (parsed !== query) {
-      setIsLoading.on();
-
       setQuery(parsed);
 
-      getName!(`${parsed}.koin`).then((result: any) => {
-        setName(result);
-        setIsLoading.off();
-      });
+      getName!(`${parsed}.koin`).then(setName);
     }
-  }, [getName, q, query, setIsLoading]);
+  }, [getName, q, query]);
 
   const isInCart = items && !!items[query];
 
   return (
+    // TODO unavailable treatment
     <Flex direction="column" width="100%" gap={{ base: "4", md: "8" }}>
       <Flex
         padding={{ base: "6", md: "12" }}
@@ -75,7 +70,6 @@ const Search: NextPage = () => {
           direction="column"
           textAlign={{ base: "center", md: "left" }}
         >
-          {/* TODO get_name */}
           <Skeleton isLoaded={!isLoading}>
             <Text>{name ? "Sorry, unavailable" : "It's available!"}</Text>
           </Skeleton>

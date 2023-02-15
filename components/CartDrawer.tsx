@@ -14,15 +14,16 @@ import {
   Heading,
   IconButton,
   keyframes,
+  Progress,
   Select,
   Stack,
   Text,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { useAccount } from "../context/AccountProvider";
 import { useCart } from "../context/CartProvider";
+import { useNameService } from "../context/NameServiceProvider";
 import ConnectWallet from "./ConnectWallet";
 import CTA from "./CTA";
 import Cart from "./icons/Cart";
@@ -36,24 +37,22 @@ export default function CartDrawer() {
     onCartOpen,
     onCartClose,
   } = useCart();
-  const {
-    query: { q },
-  } = useRouter();
+  const { mint, isLoading } = useNameService();
   const { address } = useAccount();
   const muted = useColorModeValue("gray.600", "gray.400");
-  const isFloating = useBreakpointValue({ base: true, sm: false });
+  const isMobile = useBreakpointValue({ base: true, sm: false });
   const floatingBorder = useColorModeValue("white", "gray.800");
 
   const pulse = keyframes`
-  30% { transform: scale(1.1); }
-  40%, 60% { transform: rotate(-5deg) scale(1.1); }
-  50% { transform: rotate(5deg) scale(1.1); }
-  70% { transform: rotate(0deg) scale(1.1); }
-  100% { transform: scale(1); }
+    30% { transform: scale(1.1); }
+    40%, 60% { transform: rotate(-5deg) scale(1.1); }
+    50% { transform: rotate(5deg) scale(1.1); }
+    70% { transform: rotate(0deg) scale(1.1); }
+    100% { transform: scale(1); }
   `;
   const pulseMobile = keyframes`
-  from { transform: rotate(0deg); }
-  to { transform: rotate(-45deg); }
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-45deg); }
   `;
 
   const itemNames = Object.keys(items || {});
@@ -61,7 +60,7 @@ export default function CartDrawer() {
   return (
     <>
       {itemNames.length > 0 &&
-        (isFloating ? (
+        (isMobile ? (
           <IconButton
             aria-label="Cart"
             background="brand.orange"
@@ -83,7 +82,7 @@ export default function CartDrawer() {
             zIndex="1000"
             borderColor={floatingBorder}
             borderWidth="4px"
-            animation={isCartOpen ? '' : `${pulseMobile} 0.25s ease-in-out`}
+            animation={isCartOpen ? "" : `${pulseMobile} 0.25s ease-in-out`}
           >
             <Cart color="white" size="1.5em" />
           </IconButton>
@@ -101,7 +100,7 @@ export default function CartDrawer() {
             size="lg"
             onClick={onCartOpen}
             leftIcon={<Cart color="white" size="1.25em" />}
-            animation={isCartOpen ? '' : `${pulse} 0.5s ease-in-out`}
+            animation={isCartOpen ? "" : `${pulse} 0.5s ease-in-out`}
           >
             Cart
           </Button>
@@ -190,12 +189,16 @@ export default function CartDrawer() {
                       {totalPrice === 0 ? "FREE" : `$${totalPrice}`}
                     </Text>
                   </Flex>
-                  <CTA
-                    label="Checkout"
-                    size="lg"
-                    // TODO mint
-                    onClick={() => alert("This will mint")}
-                  />
+                  {isLoading ? (
+                    <Progress
+                      isIndeterminate
+                      height={12}
+                      borderRadius="md"
+                      colorScheme="gray"
+                    />
+                  ) : (
+                    <CTA label="Checkout" size="lg" onClick={mint} />
+                  )}
                   <Text color={muted}>
                     Once you sign with your wallet, your selected NFTs will be
                     minted and you will be charged {/* TODO price */} X $KOIN.

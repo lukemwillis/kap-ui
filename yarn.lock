@@ -2636,7 +2636,7 @@ kind-of@^3.0.2:
   dependencies:
     is-buffer "^1.1.5"
 
-koilib@^5.0.0, koilib@roaminro/koilib#7504cb996001affb04a988aa5d2245258bc5c0ec:
+koilib@^5.0.0:
   version "5.1.0"
   resolved "https://codeload.github.com/roaminro/koilib/tar.gz/7504cb996001affb04a988aa5d2245258bc5c0ec"
   dependencies:
@@ -2646,7 +2646,7 @@ koilib@^5.0.0, koilib@roaminro/koilib#7504cb996001affb04a988aa5d2245258bc5c0ec:
     multibase "^4.0.6"
     protobufjs "^7.0.0"
 
-koilib@^5.2.3:
+koilib@^5.2.2, koilib@^5.2.3:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/koilib/-/koilib-5.3.1.tgz#262d5fef33cc5a005bc715f1e048c3b8566475c2"
   integrity sha512-yOeSFhO7pGZTHJL8ENUz8AhAAZy2ZsGFOmPWNNZK8Lgj1Cu9qFNomPjqmLa0vcAF6x00AZ/PzyBLHTleGsfTqg==

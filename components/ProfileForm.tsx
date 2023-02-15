@@ -23,20 +23,13 @@ import SocialLinks from "../components/SocialLinks";
 import { useEffect, useState } from "react";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
+import { NameObject } from "../context/NameServiceProvider";
 
-// TODO get_names
-const names = [
-  "luke",
-  "kui",
-  "areallyreallyreallyreallyreallyreallylongnamejusttoseewhathappens",
-  "123",
-  "a",
-  "andrarchy",
-  "vandeberg",
-  "steve",
-];
+interface ProfileFormProps {
+  names: NameObject[]
+}
 
-export default function ProfileForm() {
+export default function ProfileForm({ names }: ProfileFormProps) {
   const [themeColor, setThemeColor] = useState("ffffff");
   const [isThemeLight, setIsThemeLight] = useState(true);
   const popoverColor = useColorModeValue("gray.800", "white");
@@ -110,8 +103,8 @@ export default function ProfileForm() {
               />
               <MenuList fontSize="lg"
                 color={popoverColor} maxWidth="100vw">
-                {names.map((name) => (
-                  <MenuItem key={name}><Text overflowWrap="break-word" maxWidth="100%">{name}.koin</Text></MenuItem>
+                {names.map(({name, domain}) => (
+                  <MenuItem key={`${name}.${domain}`}><Text overflowWrap="break-word" maxWidth="100%">{name}.{domain}</Text></MenuItem>
                 ))}
               </MenuList>
             </Menu>

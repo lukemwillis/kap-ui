@@ -46,7 +46,7 @@ export const AccountProvider = ({
   const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
     undefined
   );
-  const [provider, setProvider] = useState<Provider | undefined>();
+  const [provider, setProvider] = useState<Provider>(new Provider(["https://harbinger-api.koinos.io"]));
   const [signer, setSigner] = useState<Signer | undefined>();
 
   const mkwRef = useRef<MyKoinosWallet>();
@@ -69,6 +69,7 @@ export const AccountProvider = ({
   }, []);
 
   useEffect(() => {
+    // TODO not this
     if (address === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
       setPrimaryUsername("luke.koin");
       setPrimaryAvatarSrc(

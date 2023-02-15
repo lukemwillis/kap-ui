@@ -14,8 +14,8 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <AccountProvider>
-        <NameServiceProvider>
-          <CartProvider>
+        <CartProvider>
+          <NameServiceProvider>
             <Head>
               <title>KAP</title>
               <meta
@@ -47,8 +47,8 @@ function MyApp({ Component, pageProps }: AppProps) {
               </main>
               <Footer />
             </Flex>
-          </CartProvider>
-        </NameServiceProvider>
+          </NameServiceProvider>
+        </CartProvider>
       </AccountProvider>
     </ChakraProvider>
   );
