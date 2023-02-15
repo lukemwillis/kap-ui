@@ -87,7 +87,6 @@ export const NameServiceProvider = ({
         mint: async () => {
           try {
             setIsLoading.on();
-            nameService.options.onlyOperation = true;
             const operations = await Promise.all(
               Object.keys(items).map(async (name) => {
                 const { operation } = await nameService!.functions.mint({
@@ -96,12 +95,12 @@ export const NameServiceProvider = ({
                   owner: address,
                   payment_from: address,
                   payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
+                }, {
+                  onlyOperation: true
                 });
-                console.log({ name, operation });
                 return operation;
               })
             );
-            nameService.options.onlyOperation = false;
             const tx = await signer!.prepareTransaction({
               header: {
                 // TODO improve rclimit
@@ -134,6 +133,7 @@ export const NameServiceProvider = ({
               title: `Mint transaction failed`,
               description: `The transaction to mint your names failed with error message: ${e}`,
               status: "error",
+              duration: 10000,
               isClosable: true,
               position: "bottom-left"
             });

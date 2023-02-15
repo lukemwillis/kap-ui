@@ -31,16 +31,11 @@ export default function AccountConnector({
   onConnect,
   sitePreferences,
 }: ConnectorProps) {
-  const {
-    address,
-    isConnecting,
-    primaryUsername,
-    primaryAvatarSrc,
-  } = useAccount();
+  const { address, isConnecting, primaryUsername, primaryAvatarSrc } =
+    useAccount();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { onCopy, hasCopied } = useClipboard(address || "");
   const inputRef = useRef<HTMLInputElement>(null);
-
 
   return (
     <Popover
@@ -81,30 +76,28 @@ export default function AccountConnector({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent
-        width="auto"
-        maxWidth="100vw"
-        boxShadow="lg"
-      >
+      <PopoverContent width="auto" maxWidth="100vw" boxShadow="lg">
         <PopoverBody padding="3">
           <Stack spacing="2">
             {address && (
               <>
                 <Flex direction="column" alignItems="center" gap="4">
                   <Avatar size="8em" src={primaryAvatarSrc} address={address} />
-                  {primaryUsername ? (
-                    <Text fontSize="1.5em" lineHeight="1">
-                      {primaryUsername}
-                    </Text>
-                  ) : (
-                    <SearchBox
-                      placeholder="Pick a username..."
-                      buttonLabel="Search"
-                      inlineButton
-                      onSearch={onClose}
-                      inputRef={inputRef}
-                    />
-                  )}
+
+                  {process.env.NEXT_PUBLIC_IS_LIVE === "true" &&
+                    (primaryUsername ? (
+                      <Text fontSize="1.5em" lineHeight="1">
+                        {primaryUsername}
+                      </Text>
+                    ) : (
+                      <SearchBox
+                        placeholder="Pick a username..."
+                        buttonLabel="Search"
+                        inlineButton
+                        onSearch={onClose}
+                        inputRef={inputRef}
+                      />
+                    ))}
                   <Flex
                     borderColor="gray.500"
                     borderWidth="1px"

@@ -46,7 +46,7 @@ export const AccountProvider = ({
   const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
     undefined
   );
-  const [provider, setProvider] = useState<Provider>(new Provider(["https://harbinger-api.koinos.io"]));
+  const [provider, setProvider] = useState<Provider>(new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!]));
   const [signer, setSigner] = useState<Signer | undefined>();
 
   const mkwRef = useRef<MyKoinosWallet>();
