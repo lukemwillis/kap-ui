@@ -41,8 +41,8 @@ export default function CartDrawer() {
     onCartOpen,
     onCartClose,
   } = useCart();
-  const { mint, isLoading: isNsLoading } = useNameService();
-  const { getLatestKoinPrice, isLoading: isUoLoading } = useUsdOracle();
+  const { mint, isMinting } = useNameService();
+  const { getLatestKoinPrice } = useUsdOracle();
   const { address } = useAccount();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
@@ -51,7 +51,7 @@ export default function CartDrawer() {
   const [koinPrice, setKoinPrice] = useState("");
   useEffect(() => {
     getLatestKoinPrice().then((result) => setKoinPrice(result?.price || ""));
-  }, []);
+  }, [getLatestKoinPrice]);
 
   const pulse = keyframes`
     30% { transform: scale(1.1); }
@@ -201,7 +201,7 @@ export default function CartDrawer() {
                   </Flex>
                   <Flex justifyContent="space-between" alignItems="center">
                     <span />
-                    <Skeleton isLoaded={!isUoLoading}>
+                    <Skeleton isLoaded={!!koinPrice}>
                       <Text fontSize="xl">
                         {utils.formatUnits(
                           parseInt(koinPrice || "0") * totalPrice,
@@ -211,7 +211,7 @@ export default function CartDrawer() {
                       </Text>
                     </Skeleton>
                   </Flex>
-                  {isNsLoading ? (
+                  {isMinting ? (
                     <Progress
                       isIndeterminate
                       height={12}

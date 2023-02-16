@@ -12,12 +12,10 @@ const abi: Abi = {
 
 type UsdOracleContextType = {
   getLatestKoinPrice: () => Promise<{ price: string } | undefined>;
-  isLoading: boolean;
 };
 
 export const UsdOracleContext = createContext<UsdOracleContextType>({
   getLatestKoinPrice: async () => undefined,
-  isLoading: false,
 });
 
 export const useUsdOracle = () => useContext(UsdOracleContext);
@@ -28,30 +26,30 @@ export const UsdOracleProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const { provider } = useAccount();
-  const [isLoading, setIsLoading] = useBoolean(false);
 
-  const usdOracle = useMemo(
-    () =>
-      new Contract({
-        id: process.env.NEXT_PUBLIC_USD_ORACLE_ADDR,
-        abi,
-        provider,
-      }),
-    [provider]
-  );
+  const { getLatestKoinPrice } = useMemo(() => {
+    const usdOracle = new Contract({
+      id: process.env.NEXT_PUBLIC_USD_ORACLE_ADDR,
+      abi,
+      provider,
+    });
+
+    return {
+      getLatestKoinPrice: async () => {
+        const { result } = await usdOracle!.functions.get_latest_price<{
+          price: string;
+        }>({
+          token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
+        });
+        return result;
+      },
+    };
+  }, [provider]);
 
   return (
     <UsdOracleContext.Provider
       value={{
-        getLatestKoinPrice: async () => {
-          setIsLoading.on();
-          const { result } = await usdOracle!.functions.get_latest_price<{ price: string }>({
-            token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
-          });
-          setIsLoading.off();
-          return result;
-        },
-        isLoading
+        getLatestKoinPrice,
       }}
     >
       {children}
