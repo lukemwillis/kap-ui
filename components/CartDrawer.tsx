@@ -23,7 +23,8 @@ import {
   useColorModeValue,
 } from "@chakra-ui/react";
 import { utils } from "koilib";
-import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAccount } from "../context/AccountProvider";
 import { useCart } from "../context/CartProvider";
 import { useNameService } from "../context/NameServiceProvider";
@@ -44,6 +45,7 @@ export default function CartDrawer() {
   const { mint, isMinting } = useNameService();
   const { getLatestKoinPrice } = useUsdOracle();
   const { address } = useAccount();
+  const { push } = useRouter();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const floatingBorder = useColorModeValue("white", "gray.800");
@@ -219,7 +221,17 @@ export default function CartDrawer() {
                       colorScheme="gray"
                     />
                   ) : (
-                    <CTA label="Checkout" size="lg" onClick={mint} />
+                    <CTA
+                      label="Checkout"
+                      size="lg"
+                      onClick={() =>
+                        mint().then((res) => {
+                          if (res) {
+                            push("/account");
+                          }
+                        })
+                      }
+                    />
                   )}
                   <Text color={muted}>
                     Once you sign with your wallet, your selected NFTs will be

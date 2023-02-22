@@ -22,14 +22,14 @@ export type NameObject = {
 type NameServiceContextType = {
   getName: (name: string) => Promise<NameObject | undefined>;
   getNames: () => Promise<{ names: NameObject[] } | undefined>;
-  mint: () => void;
+  mint: () => Promise<boolean>;
   isMinting: boolean;
 };
 
 export const NameServiceContext = createContext<NameServiceContextType>({
   getName: async () => undefined,
   getNames: async () => undefined,
-  mint: () => {},
+  mint: async () => false,
   isMinting: false,
 });
 
@@ -75,6 +75,7 @@ export const NameServiceProvider = ({
         return result;
       },
       mint: async () => {
+        let result = false;
         try {
           setIsMinting.on();
           const operations = await Promise.all(
@@ -119,7 +120,7 @@ export const NameServiceProvider = ({
             isClosable: true,
             position: "bottom-left",
           });
-
+          result = true;
           clearItems();
         } catch (e) {
           toast({
@@ -133,6 +134,7 @@ export const NameServiceProvider = ({
         } finally {
           setIsMinting.off();
         }
+        return result;
       },
     };
   }, [address, clearItems, items, provider, setIsMinting, signer, toast]);

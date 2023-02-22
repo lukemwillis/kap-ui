@@ -3,7 +3,6 @@ import { Contract } from "koilib";
 import { useAccount } from "./AccountProvider";
 import usdoracleAbi from "../contract/abi/usdoracle-abi.json";
 import { Abi } from "koilib/lib/interface";
-import { useBoolean } from "@chakra-ui/react";
 
 const abi: Abi = {
   koilib_types: usdoracleAbi.types,
