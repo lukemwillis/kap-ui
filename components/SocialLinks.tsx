@@ -27,6 +27,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { LinkObject } from "../context/ProfileProvider";
 
 enum SocialKeys {
   WEBSITE = "website",
@@ -37,16 +38,13 @@ enum SocialKeys {
   DISCORD = "discord",
   TELEGRAM = "telegram",
   ETH = "eth",
-  BTC = "btc",
+  BTC = "btc"
+  // TODO other?
 }
 
-type SocialLinksType = {
-  [key in SocialKeys]?: string;
-};
-
 interface SocialLinksProps {
-  values: SocialLinksType;
-  setValue: (key: SocialKeys, val: string) => void;
+  values: LinkObject[];
+  setValue: (key: string, val: string) => void;
   isThemeLight: boolean;
 }
 
@@ -84,9 +82,8 @@ export default function SocialLinks({
   const popoverColor = useColorModeValue("gray.800", "white");
   return (
     <Flex gap="2" flexWrap="wrap" justifyContent="center" maxWidth="20em">
-      {Object.values(SocialKeys)
-        .filter((key) => typeof values[key as SocialKeys] !== "undefined")
-        .map((key) => (
+      {values
+        .map(({ key, value }) => (
           <Popover
             key={key}
             onOpen={() => {
@@ -123,7 +120,7 @@ export default function SocialLinks({
               <InputGroup>
                 <Input
                   placeholder={LABELS[key as SocialKeys]}
-                  value={values[key]}
+                  value={value}
                   onChange={(e) => setValue(key, e.target.value)}
                   autoFocus
                   variant="outline"
@@ -170,7 +167,7 @@ export default function SocialLinks({
           )}
           <MenuList color={popoverColor} fontSize="lg">
             {Object.values(SocialKeys)
-              .filter((key) => typeof values[key as SocialKeys] === "undefined")
+              .filter((item) => values.every(({ key }) => item !== key))
               .map((key) => (
                 <MenuItem
                   onClick={() => {

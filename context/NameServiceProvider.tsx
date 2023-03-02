@@ -98,7 +98,7 @@ export const NameServiceProvider = ({
           const tx = await signer!.prepareTransaction({
             header: {
               // TODO improve rclimit
-              rcLimit: "10000000000",
+              rcLimit: "1000000000",
             },
             operations,
           });

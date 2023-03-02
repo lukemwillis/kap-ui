@@ -18,8 +18,6 @@ type AccountContextType = {
   provider?: Provider;
   signer?: Signer;
   isMKWSupported: boolean;
-  primaryUsername?: string;
-  primaryAvatarSrc?: string;
 };
 
 export const AccountContext = createContext<AccountContextType>({
@@ -40,12 +38,6 @@ export const AccountProvider = ({
   const [isMKWSupported, setIsMKWSupported] = useState(true);
 
   const [address, setAddress] = useState<string | undefined>(undefined);
-  const [primaryUsername, setPrimaryUsername] = useState<string | undefined>(
-    undefined
-  );
-  const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
-    undefined
-  );
   const [provider, setProvider] = useState<Provider>(new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!]));
   const [signer, setSigner] = useState<Signer | undefined>();
 
@@ -69,14 +61,6 @@ export const AccountProvider = ({
   }, []);
 
   useEffect(() => {
-    // TODO not this
-    if (address === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
-      setPrimaryUsername("luke.koin");
-      setPrimaryAvatarSrc(
-        "https://bafybeial7korh5zldyo7qmz4kkeeo5tt7tybhd7jiorz2nx7iwvpzeadhi.ipfs.nftstorage.link/assets/01.png"
-      );
-    }
-
     // TODO kondor updated?
     // TODO MKW version
     setProvider(kondor.provider as unknown as Provider);
@@ -99,8 +83,6 @@ export const AccountProvider = ({
       ),
     ]);
     if (address) {
-      setPrimaryUsername("");
-      setPrimaryAvatarSrc("");
       setAddress(address);
     }
     setIsConnecting(false);
@@ -122,8 +104,6 @@ export const AccountProvider = ({
       const accounts = await mkwRef.current.getAccounts();
       address = accounts[0].address;
       if (address) {
-        setPrimaryUsername("");
-        setPrimaryAvatarSrc("");
         setAddress(address);
       }
     } catch (e) {
@@ -142,8 +122,6 @@ export const AccountProvider = ({
         connectKondor,
         connectMKW,
         isMKWSupported,
-        primaryUsername,
-        primaryAvatarSrc,
         provider,
         signer,
       }}

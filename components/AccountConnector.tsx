@@ -21,6 +21,7 @@ import Avatar from "./Avatar";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
 import ConnectWallet from "./ConnectWallet";
+import { useProfile } from "../context/ProfileProvider";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -31,8 +32,8 @@ export default function AccountConnector({
   onConnect,
   sitePreferences,
 }: ConnectorProps) {
-  const { address, isConnecting, primaryUsername, primaryAvatarSrc } =
-    useAccount();
+  const { address, isConnecting } = useAccount();
+  const { profile } = useProfile();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { onCopy, hasCopied } = useClipboard(address || "");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -56,13 +57,13 @@ export default function AccountConnector({
         >
           {address && !isConnecting ? (
             <Flex gap="2" alignItems="center">
-              <Avatar size="2.6em" src={primaryAvatarSrc} address={address} />
+              <Avatar size="2.6em" />
               <Stack alignItems="start" lineHeight="1">
-                {primaryUsername && (
-                  <Text fontSize="1.2em">{primaryUsername}</Text>
+                {profile?.name && (
+                  <Text fontSize="1.2em">{profile.name}</Text>
                 )}
                 <Text
-                  fontSize={primaryUsername ? "0.9em" : "1.3em"}
+                  fontSize={profile?.name ? "0.9em" : "1.3em"}
                   color="gray.500"
                   fontWeight="normal"
                 >
@@ -82,12 +83,12 @@ export default function AccountConnector({
             {address && (
               <>
                 <Flex direction="column" alignItems="center" gap="4">
-                  <Avatar size="8em" src={primaryAvatarSrc} address={address} />
+                  <Avatar size="8em" />
 
                   {process.env.NEXT_PUBLIC_IS_LIVE === "true" &&
-                    (primaryUsername ? (
+                    (profile?.name ? (
                       <Text fontSize="1.5em" lineHeight="1">
-                        {primaryUsername}
+                        {profile.name}
                       </Text>
                     ) : (
                       <SearchBox
@@ -120,7 +121,7 @@ export default function AccountConnector({
                       {hasCopied ? <CheckIcon /> : <CopyIcon />}
                     </IconButton>
                   </Flex>
-                  {primaryUsername && (
+                  {profile?.name && (
                     <Link href="/account">
                       <Button variant="outline" onClick={onClose}>
                         Manage KAP Account

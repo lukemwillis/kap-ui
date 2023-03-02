@@ -2,6 +2,8 @@ import { Image, SkeletonCircle } from "@chakra-ui/react";
 import { createAvatar } from "@dicebear/avatars";
 import * as identiconStyle from "@dicebear/avatars-identicon-sprites";
 import { useState } from "react";
+import { useAccount } from "../context/AccountProvider";
+import { useProfile } from "../context/ProfileProvider";
 
 interface AvatarProps {
   src?: string;
@@ -9,10 +11,12 @@ interface AvatarProps {
   size: string;
 }
 
-export default function Avatar({ src, address, size }: AvatarProps) {
+export default function Avatar({ size }: AvatarProps) {
+  const { address } = useAccount();
+  const { avatarSrc } = useProfile();
   const [loading, setLoading] = useState(true);
 
-  if (src) {
+  if (avatarSrc) {
     return (
       <SkeletonCircle
         height={size}
@@ -21,7 +25,7 @@ export default function Avatar({ src, address, size }: AvatarProps) {
         flexShrink="0"
       >
         <Image
-          src={src}
+          src={avatarSrc}
           width={size}
           height={size}
           borderRadius="50%"

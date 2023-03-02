@@ -12,6 +12,8 @@ interface TextareaProps {
   max: number;
   placeholder: string;
   isThemeLight: boolean;
+  value: string;
+  setValue: (value: string) => void;
 }
 
 export default function Textarea({
@@ -19,8 +21,9 @@ export default function Textarea({
   max,
   placeholder,
   isThemeLight,
+  value,
+  setValue
 }: TextareaProps) {
-  const [value, setValue] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
   const background = useColorModeValue("white", "gray.800");
 

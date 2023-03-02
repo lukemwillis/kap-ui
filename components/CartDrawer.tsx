@@ -205,10 +205,9 @@ export default function CartDrawer() {
                     <span />
                     <Skeleton isLoaded={!!koinPrice}>
                       <Text fontSize="xl">
-                        {utils.formatUnits(
-                          parseInt(koinPrice || "0") * totalPrice,
-                          8
-                        )}{" "}
+                        Current Estimate:{" "}
+                        {(totalPrice * 100000000) /
+                          parseInt(koinPrice || "100000000")}{" "}
                         $KOIN
                       </Text>
                     </Skeleton>
