@@ -23,11 +23,12 @@ import {
 import Avatar from "../components/Avatar";
 import Textarea from "../components/Textarea";
 import SocialLinks from "../components/SocialLinks";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
 import { NameObject } from "../context/NameServiceProvider";
 import { ProfileObject, useProfile } from "../context/ProfileProvider";
+import { utils } from "koilib";
 
 interface ProfileFormProps {
   names: NameObject[];
@@ -39,6 +40,13 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [isThemeLight, setIsThemeLight] = useState(true);
   const popoverColor = useColorModeValue("gray.800", "white");
   const theme = localProfile?.theme || "fff";
+  const tokenId = useMemo(() => {
+    if (localProfile?.avatar_token_id) {
+      const buffer = utils.toUint8Array(localProfile.avatar_token_id);
+      return new TextDecoder().decode(buffer);
+    }
+    return "";
+  }, [localProfile?.avatar_token_id]);
 
   const socialLinkSetter = (key: string, value: string) => {
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
@@ -70,7 +78,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     } as ProfileObject);
   };
 
-  const avatarTokenSetter = (avatar_token_id: string) => {
+  const avatarTokenSetter = (token: string) => {
+    const buffer = new TextEncoder().encode(token);
+    const avatar_token_id = utils.toHexString(buffer);
     setLocalProfile({
       ...localProfile,
       avatar_token_id,
@@ -149,7 +159,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     />
                     <Input
                       placeholder="NFT Token Id"
-                      value={localProfile?.avatar_token_id}
+                      value={tokenId}
                       onChange={(e) => avatarTokenSetter(e.target.value)}
                       autoFocus
                       variant="outline"

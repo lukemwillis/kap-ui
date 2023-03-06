@@ -38,7 +38,10 @@ export const AccountProvider = ({
   const [isMKWSupported, setIsMKWSupported] = useState(true);
 
   const [address, setAddress] = useState<string | undefined>(undefined);
-  const [provider, setProvider] = useState<Provider>(new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!]));
+  const [walletUsed, setWalletUsed] = useState<string>("");
+  const [provider, setProvider] = useState<Provider>(
+    new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!])
+  );
   const [signer, setSigner] = useState<Signer | undefined>();
 
   const mkwRef = useRef<MyKoinosWallet>();
@@ -61,15 +64,21 @@ export const AccountProvider = ({
   }, []);
 
   useEffect(() => {
-    // TODO kondor updated?
-    // TODO MKW version
-    setProvider(kondor.provider as unknown as Provider);
-    if (address) {
-      setSigner(kondor.getSigner(address) as Signer);
+    if (walletUsed === "kondor") {
+      setProvider(kondor.provider as unknown as Provider);
+      if (address) {
+        setSigner(kondor.getSigner(address) as Signer);
+      }
+    } else if (walletUsed === "mkw" && mkwRef.current) {
+      setProvider(mkwRef.current.getProvider());
+      if (address) {
+        setSigner(mkwRef.current.getSigner(address));
+      }
     }
-  }, [address]);
+  }, [address, walletUsed]);
 
   useLocalStorage("ACCOUNT", address, setAddress);
+  useLocalStorage("WALLET", walletUsed, setWalletUsed);
 
   const connectKondor = async () => {
     if (isConnecting) return false;
@@ -84,6 +93,7 @@ export const AccountProvider = ({
     ]);
     if (address) {
       setAddress(address);
+      setWalletUsed("kondor");
     }
     setIsConnecting(false);
 
@@ -99,12 +109,14 @@ export const AccountProvider = ({
     try {
       await mkwRef.current.requestPermissions({
         accounts: ["getAccounts"],
-        provider: ["readContract"],
+        signer: ["prepareTransaction", "signAndSendTransaction"],
+        provider: ["readContract", "wait"],
       });
       const accounts = await mkwRef.current.getAccounts();
       address = accounts[0].address;
       if (address) {
         setAddress(address);
+        setWalletUsed("mkw");
       }
     } catch (e) {
       console.error(e);

@@ -39,7 +39,6 @@ enum SocialKeys {
   TELEGRAM = "telegram",
   ETH = "eth",
   BTC = "btc"
-  // TODO other?
 }
 
 interface SocialLinksProps {

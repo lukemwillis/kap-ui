@@ -5,7 +5,7 @@ import React, {
   useState,
   useEffect,
 } from "react";
-import { Contract } from "koilib";
+import { Contract, utils } from "koilib";
 import { useAccount } from "./AccountProvider";
 import profileAbiJson from "../contract/abi/profile-abi.json";
 import nftAbiJson from "../contract/abi/nft-abi.json";
@@ -87,10 +87,35 @@ export const ProfileProvider = ({
         const { result: nftResult } = await nftContract!.functions.uri({});
 
         if (nftResult?.value) {
-          const metadata = await fetch(
-            `${nftResult.value}/${profileResult.avatar_token_id}`
-          );
-          const { image } = await metadata.json();
+          const buffer = utils.toUint8Array(profileResult.avatar_token_id);
+          const tokenId = new TextDecoder().decode(buffer);
+          let uri = nftResult.value as string;
+          if (uri.startsWith("ipfs://")) {
+            const path = uri.indexOf("/", 7);
+            if (path > -1) {
+              uri =
+                "https://" +
+                uri.substring(7, path) +
+                ".ipfs.nftstorage.link" +
+                uri.substring(path);
+            } else {
+              uri = "https://" + uri.substring(7) + ".ipfs.nftstorage.link";
+            }
+          }
+          const metadata = await fetch(`${uri}/${tokenId}`);
+          let { image } = await metadata.json();
+          if (image.startsWith("ipfs://")) {
+            const path = image.indexOf("/", 7);
+            if (path > -1) {
+              image =
+                "https://" +
+                image.substring(7, path) +
+                ".ipfs.nftstorage.link" +
+                image.substring(path);
+            } else {
+              image = "https://" + image.substring(7) + ".ipfs.nftstorage.link";
+            }
+          }
           setAvatarSrc(image);
         }
       }
@@ -102,6 +127,7 @@ export const ProfileProvider = ({
         let result = false;
         try {
           setIsUpdating.on();
+          const mana = await provider!.getAccountRc(address!);
           const { transaction } =
             await profileContract!.functions.update_profile(
               {
@@ -109,8 +135,7 @@ export const ProfileProvider = ({
                 profile,
               },
               {
-                // TODO improve rclimit
-                rcLimit: "1000000000",
+                rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
               }
             );
           toast({
