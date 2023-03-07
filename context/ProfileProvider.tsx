@@ -89,34 +89,11 @@ export const ProfileProvider = ({
         if (nftResult?.value) {
           const buffer = utils.toUint8Array(profileResult.avatar_token_id);
           const tokenId = new TextDecoder().decode(buffer);
-          let uri = nftResult.value as string;
-          if (uri.startsWith("ipfs://")) {
-            const path = uri.indexOf("/", 7);
-            if (path > -1) {
-              uri =
-                "https://" +
-                uri.substring(7, path) +
-                ".ipfs.nftstorage.link" +
-                uri.substring(path);
-            } else {
-              uri = "https://" + uri.substring(7) + ".ipfs.nftstorage.link";
-            }
-          }
+          const uri = normalizeIpfsUris(nftResult.value as string);
           const metadata = await fetch(`${uri}/${tokenId}`);
-          let { image } = await metadata.json();
-          if (image.startsWith("ipfs://")) {
-            const path = image.indexOf("/", 7);
-            if (path > -1) {
-              image =
-                "https://" +
-                image.substring(7, path) +
-                ".ipfs.nftstorage.link" +
-                image.substring(path);
-            } else {
-              image = "https://" + image.substring(7) + ".ipfs.nftstorage.link";
-            }
-          }
-          setAvatarSrc(image);
+          const { image } = await metadata.json();
+          const imageSrc = normalizeIpfsUris(image);
+          setAvatarSrc(imageSrc);
         }
       }
     };
@@ -193,3 +170,20 @@ export const ProfileProvider = ({
     </ProfileContext.Provider>
   );
 };
+
+function normalizeIpfsUris(uri: string) {
+  let result = uri;
+  if (uri.startsWith("ipfs://")) {
+    const path = uri.indexOf("/", 7);
+    if (path > -1) {
+      result =
+        "https://" +
+        uri.substring(7, path) +
+        ".ipfs.nftstorage.link" +
+        uri.substring(path);
+    } else {
+      result = "https://" + uri.substring(7) + ".ipfs.nftstorage.link";
+    }
+  }
+  return result;
+}
