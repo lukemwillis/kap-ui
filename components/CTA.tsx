@@ -10,6 +10,7 @@ interface CTAProps {
   rightIcon?: ComponentType<IconProps>;
   secondary?: boolean;
   disabled?: boolean;
+  loading?: boolean;
 }
 export default React.forwardRef(function CTA(
   {
@@ -19,7 +20,8 @@ export default React.forwardRef(function CTA(
     leftIcon: LeftIcon,
     rightIcon: RightIcon,
     secondary,
-    disabled = false
+    disabled = false,
+    loading = false
   }: CTAProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
@@ -69,6 +71,7 @@ export default React.forwardRef(function CTA(
       }
       ref={ref}
       isDisabled={disabled}
+      isLoading={loading}
     >
       {label}
     </Button>

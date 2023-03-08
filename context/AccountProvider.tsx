@@ -118,10 +118,10 @@ export const AccountProvider = ({
         setAddress(address);
         setWalletUsed("mkw");
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
       setIsConnecting(false);
+    } catch (e) {
+      setIsConnecting(false);
+      throw e;
     }
     return !!address;
   };

@@ -74,7 +74,6 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         });
 
         try {
-          console.log(localProfile?.avatar_token_id);
           const { result: ownerResult } = await nftContract!.functions.owner_of(
             { token_id: `0x${localProfile.avatar_token_id}` }
           );
@@ -182,6 +181,13 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     if (profile) {
       setLocalProfile(profile);
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
+    } else {
+      setLocalProfile(undefined);
+      setIsThemeLight(true);
+      setLocalAvatarSrc("");
+      setAvatarContractError("");
+      setAvatarTokenError("");
+      setIsAvatarLoading(false);
     }
   }, [profile]);
 

@@ -153,6 +153,7 @@ export const ProfileProvider = ({
 
   useEffect(() => {
     if (address) {
+      setAvatarSrc("");
       fetchProfile();
     }
   }, [address]);

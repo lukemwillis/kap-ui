@@ -1,5 +1,5 @@
 import React, { useContext, createContext, useMemo } from "react";
-import { Contract } from "koilib";
+import { Contract, utils } from "koilib";
 import { useAccount } from "./AccountProvider";
 import namerserviceAbi from "../contract/abi/nameservice-abi.json";
 import { Abi } from "koilib/lib/interface";
@@ -152,17 +152,17 @@ export const NameServiceProvider = ({
         try {
           setIsRenewing.on();
           const mana = await provider!.getAccountRc(address!);
-              const { transaction } = await nameService!.functions.renew(
-                {
-                  token_id: name,
-                  duration_increments: years,
-                  payment_from: address,
-                  payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
-                },
-                {
-                  rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
-                },
-              );
+          const { transaction } = await nameService!.functions.renew(
+            {
+              name,
+              duration_increments: years,
+              payment_from: address,
+              payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
+            },
+            {
+              rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
+            }
+          );
           toast({
             title: `Name renewal transaction submitted`,
             description: `The transaction to renew your name is being processed, this may take some time.`,
@@ -200,17 +200,18 @@ export const NameServiceProvider = ({
         try {
           setIsTransferring.on();
           const mana = await provider!.getAccountRc(address!);
-              const { transaction } = await nameService!.functions.transfer(
-                {
-                  // TODO use domain
-                  name: `${name}.koin`,
-                  from: address,
-                  to
-                },
-                {
-                  rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
-                },
-              );
+          const buffer = new TextEncoder().encode(name);
+          const token_id = "0x" + utils.toHexString(buffer);
+          const { transaction } = await nameService!.functions.transfer(
+            {
+              token_id,
+              from: address,
+              to,
+            },
+            {
+              rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
+            }
+          );
           toast({
             title: `Transfer transaction submitted`,
             description: `The transaction to transfer your name is being processed, this may take some time.`,
@@ -244,7 +245,17 @@ export const NameServiceProvider = ({
         return result;
       },
     };
-  }, [address, clearItems, items, provider, setIsMinting, setIsRenewing, setIsTransferring, signer, toast]);
+  }, [
+    address,
+    clearItems,
+    items,
+    provider,
+    setIsMinting,
+    setIsRenewing,
+    setIsTransferring,
+    signer,
+    toast,
+  ]);
 
   return (
     <NameServiceContext.Provider
@@ -256,7 +267,7 @@ export const NameServiceProvider = ({
         renew,
         isRenewing,
         transfer,
-        isTransferring
+        isTransferring,
       }}
     >
       {children}

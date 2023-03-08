@@ -249,11 +249,17 @@ const Account: NextPage = () => {
               label={action === "renew" ? "Add Years" : "Transfer"}
               size="lg"
               disabled={action === "renew" ? renewYears < 1 : !transferAddress}
-              onClick={() =>
-                action === "renew"
-                  ? renew(selectedName, renewYears)
-                  : transfer(selectedName, transferAddress)
-              }
+              onClick={async () => {
+                if (action === "renew") {
+                  await renew(selectedName, renewYears)
+                  setRenewYears(0);
+                } else {
+                  await transfer(selectedName, transferAddress)
+                  setTransferAddress("");
+                }
+                onClose();
+              }}
+              loading={action === "renew" ? isRenewing : isTransferring}
             />
           </ModalFooter>
         </ModalContent>
