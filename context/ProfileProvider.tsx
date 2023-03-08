@@ -17,7 +17,7 @@ const profileAbi: Abi = {
   ...profileAbiJson,
 };
 
-const nftAbi: Abi = {
+export const nftAbi: Abi = {
   koilib_types: nftAbiJson.types,
   ...nftAbiJson,
 };
@@ -171,7 +171,7 @@ export const ProfileProvider = ({
   );
 };
 
-function normalizeIpfsUris(uri: string) {
+export function normalizeIpfsUris(uri: string) {
   let result = uri;
   if (uri.startsWith("ipfs://")) {
     const path = uri.indexOf("/", 7);

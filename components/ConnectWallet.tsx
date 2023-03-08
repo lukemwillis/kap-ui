@@ -30,17 +30,31 @@ export default function ConnectWallet({
       connected = await connectKondor();
     } else if (wallet === "MKW") {
       if (!isMKWSupported) {
-        // TODO LMW check for popup support
         toast({
           title: "Check browser settings",
           description:
             "MKW requires support for 'cross-site cookies'. Please check your browser settings if you want to connect with MKW.",
           status: "error",
+          duration: 10000,
           isClosable: true,
+          position: "bottom-left",
         });
         return;
       }
-      connected = await connectMKW();
+      try {
+        connected = await connectMKW();
+      } catch (e) {
+        toast({
+          title: "Check browser settings",
+          description:
+            "Have you set up MKW in this browser? MKW requires support for popups. Please check your browser settings if you want to connect with MKW.",
+          status: "error",
+          duration: 10000,
+          isClosable: true,
+          position: "bottom-left",
+        });
+        return;
+      }
     }
 
     if (!connected) {
@@ -50,7 +64,9 @@ export default function ConnectWallet({
           wallet === "Kondor" ? "installed" : "set up"
         } in this browser and try again.`,
         status: "error",
+        duration: 10000,
         isClosable: true,
+        position: "bottom-left",
       });
       return;
     }

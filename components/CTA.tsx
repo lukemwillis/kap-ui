@@ -9,6 +9,7 @@ interface CTAProps {
   leftIcon?: ComponentType<IconProps>;
   rightIcon?: ComponentType<IconProps>;
   secondary?: boolean;
+  disabled?: boolean;
 }
 export default React.forwardRef(function CTA(
   {
@@ -18,6 +19,7 @@ export default React.forwardRef(function CTA(
     leftIcon: LeftIcon,
     rightIcon: RightIcon,
     secondary,
+    disabled = false
   }: CTAProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
@@ -66,6 +68,7 @@ export default React.forwardRef(function CTA(
         )
       }
       ref={ref}
+      isDisabled={disabled}
     >
       {label}
     </Button>

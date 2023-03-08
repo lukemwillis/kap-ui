@@ -24,6 +24,10 @@ type NameServiceContextType = {
   getNames: () => Promise<{ names: NameObject[] } | undefined>;
   mint: () => Promise<boolean>;
   isMinting: boolean;
+  renew: (name: string, years: number) => Promise<boolean>;
+  isRenewing: boolean;
+  transfer: (name: string, to: string) => Promise<boolean>;
+  isTransferring: boolean;
 };
 
 export const NameServiceContext = createContext<NameServiceContextType>({
@@ -31,6 +35,10 @@ export const NameServiceContext = createContext<NameServiceContextType>({
   getNames: async () => undefined,
   mint: async () => false,
   isMinting: false,
+  renew: async () => false,
+  isRenewing: false,
+  transfer: async () => false,
+  isTransferring: false,
 });
 
 export const useNameService = () => useContext(NameServiceContext);
@@ -46,9 +54,11 @@ export const NameServiceProvider = ({
     clearItems,
   } = useCart();
   const [isMinting, setIsMinting] = useBoolean(false);
+  const [isRenewing, setIsRenewing] = useBoolean(false);
+  const [isTransferring, setIsTransferring] = useBoolean(false);
   const toast = useToast();
 
-  const { getName, getNames, mint } = useMemo(() => {
+  const { getName, getNames, mint, renew, transfer } = useMemo(() => {
     const nameService = new Contract({
       id: process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR,
       abi,
@@ -82,6 +92,7 @@ export const NameServiceProvider = ({
             Object.keys(items).map(async (name) => {
               const { operation } = await nameService!.functions.mint(
                 {
+                  // TODO use domain
                   name: `${name}.koin`,
                   duration_increments: items[name].years,
                   owner: address,
@@ -136,8 +147,104 @@ export const NameServiceProvider = ({
         }
         return result;
       },
+      renew: async (name: string, years: number) => {
+        let result = false;
+        try {
+          setIsRenewing.on();
+          const mana = await provider!.getAccountRc(address!);
+              const { transaction } = await nameService!.functions.renew(
+                {
+                  token_id: name,
+                  duration_increments: years,
+                  payment_from: address,
+                  payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
+                },
+                {
+                  rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
+                },
+              );
+          toast({
+            title: `Name renewal transaction submitted`,
+            description: `The transaction to renew your name is being processed, this may take some time.`,
+            status: "info",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+          await transaction!.wait();
+          toast({
+            title: `Name renewal transaction succeeded`,
+            description: `The transaction to renew your name succeeded! Have a great day!`,
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+          result = true;
+        } catch (e) {
+          toast({
+            title: `Name renewal transaction failed`,
+            description: `The transaction to renew your name failed with error message: ${e}`,
+            status: "error",
+            duration: 10000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        } finally {
+          setIsRenewing.off();
+        }
+        return result;
+      },
+      transfer: async (name: string, to: string) => {
+        let result = false;
+        try {
+          setIsTransferring.on();
+          const mana = await provider!.getAccountRc(address!);
+              const { transaction } = await nameService!.functions.transfer(
+                {
+                  // TODO use domain
+                  name: `${name}.koin`,
+                  from: address,
+                  to
+                },
+                {
+                  rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
+                },
+              );
+          toast({
+            title: `Transfer transaction submitted`,
+            description: `The transaction to transfer your name is being processed, this may take some time.`,
+            status: "info",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+          await transaction!.wait();
+          toast({
+            title: `Transfer transaction succeeded`,
+            description: `The transaction to transfer your name succeeded! Have a great day!`,
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+          result = true;
+        } catch (e) {
+          toast({
+            title: `Transfer transaction failed`,
+            description: `The transaction to transfer your name failed with error message: ${e}`,
+            status: "error",
+            duration: 10000,
+            isClosable: true,
+            position: "bottom-left",
+          });
+        } finally {
+          setIsTransferring.off();
+        }
+        return result;
+      },
     };
-  }, [address, clearItems, items, provider, setIsMinting, signer, toast]);
+  }, [address, clearItems, items, provider, setIsMinting, setIsRenewing, setIsTransferring, signer, toast]);
 
   return (
     <NameServiceContext.Provider
@@ -146,6 +253,10 @@ export const NameServiceProvider = ({
         getNames,
         mint,
         isMinting,
+        renew,
+        isRenewing,
+        transfer,
+        isTransferring
       }}
     >
       {children}

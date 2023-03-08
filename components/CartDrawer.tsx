@@ -135,10 +135,12 @@ export default function CartDrawer() {
                       {name}
                       <wbr />
                       <Text as="span" color={muted} wordBreak="keep-all">
+                        {/* TODO use domain */}
                         .koin
                       </Text>
                     </Text>
                     <IconButton
+                    // TODO use domain
                       aria-label={`Remove ${name}.koin from cart`}
                       variant="ghost"
                       size="sm"

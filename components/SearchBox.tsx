@@ -110,6 +110,7 @@ export default function SearchBox({
           width="auto"
         >
           <Flex gap="2" alignItems="center" paddingRight="2">
+            {/* TODO use domain */}
             <Text>.koin</Text>
             {inlineButton && query && process.env.NEXT_PUBLIC_IS_LIVE === "true" && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>

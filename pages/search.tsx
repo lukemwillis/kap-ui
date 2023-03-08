@@ -3,6 +3,7 @@ import {
   Box,
   Flex,
   Heading,
+  Link,
   Spinner,
   Text,
   useBoolean,
@@ -61,6 +62,7 @@ const Search: NextPage = () => {
     if (parsed !== query) {
       setQuery(parsed);
 
+      // TODO use domain
       getName!(`${parsed}.koin`).then((result) => {
         setName(result);
         setReady.on();
@@ -120,6 +122,7 @@ const Search: NextPage = () => {
                     display="inline"
                     wordBreak="keep-all"
                   >
+                    {/* TODO use domain */}
                     .koin
                   </Text>
                 </>
@@ -171,8 +174,8 @@ const Search: NextPage = () => {
                   $KAP Airdrop Eligible
                 </Heading>
                 <Text>
-                  Every dollar you spend on .koin names now will earn you $KAP
-                  tokens later.
+                  Buying .koin names now will earn you $KAP tokens later.
+                  Details to be announced.
                 </Text>
               </>
             )}
@@ -246,10 +249,16 @@ const Search: NextPage = () => {
                 display="inline"
                 wordBreak="keep-all"
               >
-                .koin
+                .{name.domain}
               </Text>
             </Heading>
-            <Text>You might be able to get it on Kollection</Text>
+            <Text>
+              Search for another name or check if this one is available on{" "}
+              <Link
+                href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
+              ></Link>
+              Kollection.
+            </Text>
           </Flex>
         </Flex>
         <Flex gap="4" justifyContent="center">

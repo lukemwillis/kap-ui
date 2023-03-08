@@ -110,7 +110,7 @@ export const AccountProvider = ({
       await mkwRef.current.requestPermissions({
         accounts: ["getAccounts"],
         signer: ["prepareTransaction", "signAndSendTransaction"],
-        provider: ["readContract", "wait"],
+        provider: ["readContract", "wait", "getAccountRc"],
       });
       const accounts = await mkwRef.current.getAccounts();
       address = accounts[0].address;

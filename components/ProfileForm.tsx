@@ -16,6 +16,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
+  Spinner,
   Stack,
   Text,
   useColorModeValue,
@@ -27,14 +28,21 @@ import { useEffect, useMemo, useState } from "react";
 import { FaCamera, FaPencilAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
 import { NameObject } from "../context/NameServiceProvider";
-import { ProfileObject, useProfile } from "../context/ProfileProvider";
-import { utils } from "koilib";
+import {
+  nftAbi,
+  normalizeIpfsUris,
+  ProfileObject,
+  useProfile,
+} from "../context/ProfileProvider";
+import { Contract, utils } from "koilib";
+import { useAccount } from "../context/AccountProvider";
 
 interface ProfileFormProps {
   names: NameObject[];
 }
 
 export default function ProfileForm({ names }: ProfileFormProps) {
+  const { address, provider } = useAccount();
   const { profile, updateProfile, isUpdating } = useProfile();
   const [localProfile, setLocalProfile] = useState(profile);
   const [isThemeLight, setIsThemeLight] = useState(true);
@@ -47,6 +55,81 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     }
     return "";
   }, [localProfile?.avatar_token_id]);
+  const [localAvatarSrc, setLocalAvatarSrc] = useState("");
+  const [isAvatarLoading, setIsAvatarLoading] = useState(false);
+
+  const [avatarContractError, setAvatarContractError] = useState("");
+  const [avatarTokenError, setAvatarTokenError] = useState("");
+  const [bioHasError, setBioHasError] = useState(false);
+  const [themeHasError, setThemeHasError] = useState(false);
+
+  useEffect(() => {
+    const fetchAvatarSrc = async () => {
+      if (localProfile?.avatar_contract_id && localProfile.avatar_token_id) {
+        setIsAvatarLoading(true);
+        const nftContract = new Contract({
+          id: localProfile.avatar_contract_id,
+          abi: nftAbi,
+          provider,
+        });
+
+        try {
+          console.log(localProfile?.avatar_token_id);
+          const { result: ownerResult } = await nftContract!.functions.owner_of(
+            { token_id: `0x${localProfile.avatar_token_id}` }
+          );
+
+          setAvatarContractError("");
+
+          if (ownerResult?.value !== address) {
+            setAvatarTokenError("You don't own that NFT");
+            return;
+          } else {
+            setAvatarTokenError("");
+          }
+        } catch (e) {
+          if (e instanceof Error) {
+            try {
+              const response = JSON.parse(e.message);
+              if (response.error) {
+                setAvatarContractError(response.error);
+              } else {
+                setAvatarContractError(e.message);
+              }
+            } catch (_) {
+              setAvatarContractError(e.message);
+            }
+          } else {
+            setAvatarContractError(e as string);
+          }
+          return;
+        }
+
+        const { result: uriResult } = await nftContract!.functions.uri({});
+
+        if (uriResult?.value) {
+          const buffer = utils.toUint8Array(localProfile.avatar_token_id);
+          const tokenId = new TextDecoder().decode(buffer);
+          const uri = normalizeIpfsUris(uriResult.value as string);
+          try {
+            const metadata = await fetch(`${uri}/${tokenId}`);
+            const { image } = await metadata.json();
+            const imageSrc = normalizeIpfsUris(image);
+            setLocalAvatarSrc(imageSrc);
+            setIsAvatarLoading(false);
+          } catch (e) {
+            setAvatarTokenError("Could not find NFT image");
+          }
+        }
+      }
+    };
+    fetchAvatarSrc();
+  }, [
+    localProfile?.avatar_contract_id,
+    localProfile?.avatar_token_id,
+    address,
+    provider,
+  ]);
 
   const socialLinkSetter = (key: string, value: string) => {
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
@@ -88,6 +171,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   };
 
   const bioSetter = (bio: string) => {
+    setBioHasError(bio.length > 160);
     setLocalProfile({
       ...localProfile,
       bio,
@@ -113,10 +197,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
       <CardBody>
         <Stack alignItems="center" maxWidth="30em" margin="0 auto" gap="2">
           <Box position="relative">
-            {/* TODO Loading, show selected NFT */}
-            <Avatar size="12em" />
+            <Avatar size="12em" src={localAvatarSrc} />
             <Box
-              background={`#${theme}`}
+              background={(!!avatarContractError || !!avatarTokenError) ? 'red.500' : `#${theme}`}
+              color={(!!avatarContractError || !!avatarTokenError) ? 'white' : 'inherit'}
               borderColor={`#${theme}`}
               borderWidth="4px"
               position="absolute"
@@ -151,7 +235,8 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                   <Stack>
                     <Input
                       placeholder="NFT Contract Address"
-                      value={localProfile?.avatar_contract_id}
+                      isInvalid={!!avatarContractError}
+                      value={localProfile?.avatar_contract_id || ""}
                       onChange={(e) => avatarContractSetter(e.target.value)}
                       autoFocus
                       variant="outline"
@@ -159,12 +244,28 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     />
                     <Input
                       placeholder="NFT Token Id"
+                      isInvalid={!!avatarTokenError}
                       value={tokenId}
                       onChange={(e) => avatarTokenSetter(e.target.value)}
                       autoFocus
                       variant="outline"
                       size="lg"
                     />
+                    {avatarContractError || avatarTokenError ? (
+                      <Card bg="red.500" color="white" padding="3">
+                        {avatarContractError || avatarTokenError}
+                      </Card>
+                    ) : isAvatarLoading ? (
+                      <Flex
+                        alignItems="center"
+                        justifyContent="center"
+                        padding="2"
+                      >
+                        <Spinner />
+                      </Flex>
+                    ) : (
+                      <></>
+                    )}
                   </Stack>
                 </PopoverContent>
               </Popover>
@@ -216,6 +317,8 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           <ColorPicker
             value={theme}
             setValue={themeSetter}
+            hasError={themeHasError}
+            setHasError={setThemeHasError}
             background={isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"}
             _hover={{
               background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200",
@@ -230,6 +333,13 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           <Button
             onClick={() => updateProfile(localProfile!)}
             isLoading={isUpdating}
+            isDisabled={
+              themeHasError ||
+              bioHasError ||
+              !!avatarContractError ||
+              !!avatarTokenError ||
+              isAvatarLoading
+            }
             variant="solid"
             background={isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"}
             _hover={{
