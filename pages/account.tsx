@@ -49,8 +49,12 @@ import { useEffect, useState } from "react";
 import { useNameService, NameObject } from "../context/NameServiceProvider";
 import CTA from "../components/CTA";
 import { calculatePrice } from "../context/CartProvider";
+import { useRouter } from "next/router";
+import { useAccount } from "../context/AccountProvider";
 
 const Account: NextPage = () => {
+  const { push } = useRouter();
+  const { address } = useAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedName, selectName] = useState("");
   const [selectedExpiry, selectExpiry] = useState("");
@@ -64,10 +68,16 @@ const Account: NextPage = () => {
     useNameService();
   const [names, setNames] = useState<NameObject[]>([]);
   useEffect(() => {
-    getNames().then((result) => {
-      setNames(result?.names || []);
-    });
-  });
+    if (address) {
+      getNames().then((result) => {
+        if (result?.names && result.names.length > 0) {
+          setNames(result.names);
+        } else {
+          push("/");
+        }
+      });
+    }
+  }, [address, getNames, push]);
 
   const openRenew = (name: string, expiry: string) => {
     setAction("renew");
@@ -251,13 +261,15 @@ const Account: NextPage = () => {
               disabled={action === "renew" ? renewYears < 1 : !transferAddress}
               onClick={async () => {
                 if (action === "renew") {
-                  await renew(selectedName, renewYears)
+                  await renew(selectedName, renewYears);
                   setRenewYears(0);
                 } else {
-                  await transfer(selectedName, transferAddress)
+                  await transfer(selectedName, transferAddress);
                   setTransferAddress("");
                 }
                 onClose();
+                const updatedNames = await getNames();
+                setNames(updatedNames?.names || []);
               }}
               loading={action === "renew" ? isRenewing : isTransferring}
             />

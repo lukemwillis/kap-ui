@@ -28,12 +28,12 @@ export type LinkObject = {
 };
 
 export type ProfileObject = {
-  avatar_contract_id: string;
-  avatar_token_id: string;
-  name: string;
-  bio: string;
-  theme: string;
-  links: LinkObject[];
+  avatar_contract_id?: string;
+  avatar_token_id?: string;
+  name?: string;
+  bio?: string;
+  theme?: string;
+  links?: LinkObject[];
 };
 
 type ProfileContextType = {
@@ -74,7 +74,7 @@ export const ProfileProvider = ({
         await profileContract!.functions.get_profile<ProfileObject>({
           address,
         });
-      setProfile(profileResult);
+      setProfile(profileResult || {});
 
       if (profileResult?.avatar_contract_id && profileResult.avatar_token_id) {
         const nftContract = new Contract({

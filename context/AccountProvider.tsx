@@ -17,14 +17,12 @@ type AccountContextType = {
   connectMKW: () => Promise<boolean>;
   provider?: Provider;
   signer?: Signer;
-  isMKWSupported: boolean;
 };
 
 export const AccountContext = createContext<AccountContextType>({
   isConnecting: false,
   connectKondor: async () => false,
   connectMKW: async () => false,
-  isMKWSupported: true,
 });
 
 export const useAccount = () => useContext(AccountContext);
@@ -35,7 +33,6 @@ export const AccountProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isMKWSupported, setIsMKWSupported] = useState(true);
 
   const [address, setAddress] = useState<string | undefined>(undefined);
   const [walletUsed, setWalletUsed] = useState<string>("");
@@ -51,13 +48,6 @@ export const AccountProvider = ({
       "https://mykw.vercel.app/embed/wallet-connector"
     );
 
-    const setup = async () => {
-      const mkwSupport = await mkwRef.current!.connect();
-      setIsMKWSupported(mkwSupport);
-    };
-
-    setup();
-
     return () => {
       mkwRef.current!.close();
     };
@@ -67,12 +57,15 @@ export const AccountProvider = ({
     if (walletUsed === "kondor") {
       setProvider(kondor.provider as unknown as Provider);
       if (address) {
-        setSigner(kondor.getSigner(address) as Signer);
+        // TODO koilib bug
+        const s = kondor.getSigner(address) as Signer;
+        s.provider = kondor.provider as unknown as Provider;
+        setSigner(s);
       }
     } else if (walletUsed === "mkw" && mkwRef.current) {
       setProvider(mkwRef.current.getProvider());
       if (address) {
-        setSigner(mkwRef.current.getSigner(address));
+        setSigner(mkwRef.current.getSigner(address) as unknown as Signer);
       }
     }
   }, [address, walletUsed]);
@@ -101,22 +94,24 @@ export const AccountProvider = ({
   };
 
   const connectMKW = async () => {
-    if (!mkwRef.current || !isMKWSupported || isConnecting) return false;
+    if (!mkwRef.current || isConnecting) return false;
 
     let address;
 
     setIsConnecting(true);
     try {
-      await mkwRef.current.requestPermissions({
-        accounts: ["getAccounts"],
-        signer: ["prepareTransaction", "signAndSendTransaction"],
-        provider: ["readContract", "wait", "getAccountRc"],
-      });
-      const accounts = await mkwRef.current.getAccounts();
-      address = accounts[0].address;
-      if (address) {
-        setAddress(address);
-        setWalletUsed("mkw");
+      if (await mkwRef.current!.connect()) {
+        await mkwRef.current.requestPermissions({
+          accounts: ["getAccounts"],
+          signer: ["prepareTransaction", "signAndSendTransaction"],
+          provider: ["readContract", "wait", "getAccountRc"],
+        });
+        const accounts = await mkwRef.current.getAccounts();
+        address = accounts[0].address;
+        if (address) {
+          setAddress(address);
+          setWalletUsed("mkw");
+        }
       }
       setIsConnecting(false);
     } catch (e) {
@@ -133,7 +128,6 @@ export const AccountProvider = ({
         isConnecting,
         connectKondor,
         connectMKW,
-        isMKWSupported,
         provider,
         signer,
       }}

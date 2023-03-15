@@ -109,7 +109,7 @@ export const NameServiceProvider = ({
           const mana = await provider!.getAccountRc(address!);
           const tx = await signer!.prepareTransaction({
             header: {
-              rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
+              rc_limit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,
             },
             operations,
           });

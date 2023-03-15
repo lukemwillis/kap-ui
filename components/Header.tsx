@@ -30,10 +30,10 @@ export default function Header() {
       ) : (
         <span />
       )}
-      <HStack>
+      <Flex gap="2" alignItems="center">
         {hasItems && <CartDrawer />}
         <AccountConnector sitePreferences={<SitePreferences />} />
-      </HStack>
+      </Flex>
     </Flex>
   );
 }

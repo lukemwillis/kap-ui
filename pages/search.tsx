@@ -104,15 +104,58 @@ const Search: NextPage = () => {
             direction="column"
             textAlign={{ base: "center", md: "left" }}
           >
-            <Text>It&apos;s available!</Text>
-            <Heading
-              size="3xl"
-              overflowWrap="anywhere"
-              marginBottom="0.3em"
-              wordBreak="break-all"
-            >
-              <Shiny color={accentColor} size="0.5em">
-                <>
+            {query.length <= 10 ||
+            process.env.NEXT_PUBLIC_FREE_LAUNCHED === "true" ? (
+              <>
+                <Text>It&apos;s available!</Text>
+                <Heading
+                  size="3xl"
+                  overflowWrap="anywhere"
+                  marginBottom="0.3em"
+                  wordBreak="break-all"
+                >
+                  <Shiny color={accentColor} size="0.5em">
+                    <>
+                      {query}
+                      <wbr />
+                      <Text
+                        as="span"
+                        color={foreground}
+                        marginStart="0"
+                        display="inline"
+                        wordBreak="keep-all"
+                      >
+                        {/* TODO use domain */}
+                        .koin
+                      </Text>
+                    </>
+                  </Shiny>
+                </Heading>
+                <CTA
+                  size="lg"
+                  onClick={() => {
+                    if (!isInCart) upsertItem({ name: query, years: 1 });
+                    onCartOpen();
+                  }}
+                  label={isInCart ? "Go to cart" : "Claim your name"}
+                  secondary={isInCart}
+                />
+                <Box marginTop="0.5em" marginBottom="1em">
+                  <Price query={query} />
+                </Box>
+                <Text>
+                  This includes your NFT account name, simple account privacy
+                  and security features, and free access to Koinos dApps.
+                </Text>
+              </>
+            ) : (
+              <>
+                <Heading
+                  size="3xl"
+                  overflowWrap="anywhere"
+                  marginBottom="0.3em"
+                  wordBreak="break-all"
+                >
                   {query}
                   <wbr />
                   <Text
@@ -125,25 +168,23 @@ const Search: NextPage = () => {
                     {/* TODO use domain */}
                     .koin
                   </Text>
-                </>
-              </Shiny>
-            </Heading>
-            <CTA
-              size="lg"
-              onClick={() => {
-                if (!isInCart) upsertItem({ name: query, years: 1 });
-                onCartOpen();
-              }}
-              label={isInCart ? "Go to cart" : "Claim your name"}
-              secondary={isInCart}
-            />
-            <Box marginTop="0.5em" marginBottom="1em">
-              <Price query={query} />
-            </Box>
-            <Text>
-              This includes your NFT account name, simple account privacy and
-              security features, and free access to Koinos dApps.
-            </Text>
+                </Heading>
+                <CTA
+                  size="lg"
+                  onClick={() => {}}
+                  label="Coming soon"
+                  secondary
+                  disabled
+                />
+                <Box marginTop="0.5em" marginBottom="1em">
+                  <Price query={query} />
+                </Box>
+                <Text>
+                  Free names will launch later this year. If you&apos;d like to
+                  start using KAP now, please select a shorter name.
+                </Text>
+              </>
+            )}
           </Flex>
           <Flex
             background={background}

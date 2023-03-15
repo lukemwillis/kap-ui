@@ -2,6 +2,7 @@ import { Image, SkeletonCircle } from "@chakra-ui/react";
 import { createAvatar } from "@dicebear/avatars";
 import * as identiconStyle from "@dicebear/avatars-identicon-sprites";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import { useAccount } from "../context/AccountProvider";
 import { useProfile } from "../context/ProfileProvider";
 
@@ -10,36 +11,30 @@ interface AvatarProps {
   size: string;
 }
 
-export default function Avatar({ src, size }: AvatarProps) {
+function Avatar({ src, size }: AvatarProps) {
   const { address } = useAccount();
   const { avatarSrc } = useProfile();
-  const [loading, setLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    if (src || avatarSrc) {
-      setLoading(true);
+    if (hasError) {
+      setHasError(false);
     }
-  }, [src, avatarSrc, setLoading])
+  }, [src, avatarSrc, setHasError, hasError]);
 
-  if (src || avatarSrc) {
+  if (!hasError && (src || avatarSrc)) {
     return (
-      <SkeletonCircle
-        height={size}
+      <Image
+        fallback={<SkeletonCircle height={size} width={size} flexShrink="0" />}
+        src={src || avatarSrc}
         width={size}
-        isLoaded={!loading}
-        flexShrink="0"
-      >
-        <Image
-          src={src || avatarSrc}
-          width={size}
-          height={size}
-          borderRadius="50%"
-          borderWidth="1px"
-          overflow="hidden"
-          alt="KAP Account Avatar"
-          onLoad={() => setLoading(false)}
-        />
-      </SkeletonCircle>
+        height={size}
+        borderRadius="50%"
+        borderWidth="1px"
+        overflow="hidden"
+        alt="KAP Account Avatar"
+        onError={() => setHasError(true)}
+      />
     );
   } else {
     const identicon = createAvatar(identiconStyle, { seed: address });
@@ -60,3 +55,7 @@ export default function Avatar({ src, size }: AvatarProps) {
     );
   }
 }
+
+export default dynamic(() => Promise.resolve(Avatar), {
+  ssr: false,
+});

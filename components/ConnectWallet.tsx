@@ -16,7 +16,7 @@ export default function ConnectWallet({
   onConnect,
   onClick,
 }: ConnectWalletProps) {
-  const { address, connectKondor, connectMKW, isMKWSupported } = useAccount();
+  const { address, connectKondor, connectMKW } = useAccount();
   const toast = useToast();
 
   const connectCallback = async (wallet: "Kondor" | "MKW") => {
@@ -29,25 +29,13 @@ export default function ConnectWallet({
     if (wallet === "Kondor") {
       connected = await connectKondor();
     } else if (wallet === "MKW") {
-      if (!isMKWSupported) {
-        toast({
-          title: "Check browser settings",
-          description:
-            "MKW requires support for 'cross-site cookies'. Please check your browser settings if you want to connect with MKW.",
-          status: "error",
-          duration: 10000,
-          isClosable: true,
-          position: "bottom-left",
-        });
-        return;
-      }
       try {
         connected = await connectMKW();
       } catch (e) {
         toast({
           title: "Check browser settings",
           description:
-            "Have you set up MKW in this browser? MKW requires support for popups. Please check your browser settings if you want to connect with MKW.",
+            "Have you set up MKW in this browser? MKW requires support for popups and cross-site cookies. Please check your browser settings if you want to connect with MKW.",
           status: "error",
           duration: 10000,
           isClosable: true,
