@@ -50,7 +50,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const popoverColor = useColorModeValue("gray.800", "white");
   const theme = localProfile?.theme || "fff";
   const tokenId = useMemo(() => {
-    if (localProfile?.avatar_token_id) {
+    if (
+      localProfile?.avatar_token_id &&
+      localProfile?.avatar_token_id !== "0x"
+    ) {
       const buffer = utils.toUint8Array(localProfile.avatar_token_id);
       return new TextDecoder().decode(buffer);
     }
