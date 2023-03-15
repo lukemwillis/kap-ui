@@ -50,10 +50,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const popoverColor = useColorModeValue("gray.800", "white");
   const theme = localProfile?.theme || "fff";
   const tokenId = useMemo(() => {
-    if (
-      localProfile?.avatar_token_id &&
-      localProfile?.avatar_token_id !== "0x"
-    ) {
+    if (localProfile?.avatar_token_id) {
       const buffer = utils.toUint8Array(localProfile.avatar_token_id);
       return new TextDecoder().decode(buffer);
     }
@@ -190,7 +187,11 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
   useEffect(() => {
     if (profile) {
-      setLocalProfile(profile);
+      setLocalProfile({
+        ...profile,
+        avatar_token_id:
+          profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
+      });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
       setLocalAvatarSrc("");
       setAvatarContractError("");
