@@ -55,7 +55,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
       localProfile?.avatar_token_id &&
       localProfile.avatar_token_id !== "0x"
     ) {
-      const buffer = utils.toUint8Array(localProfile.avatar_token_id);
+      const buffer = utils.toUint8Array(localProfile.avatar_token_id.substring(2));
       return new TextDecoder().decode(buffer);
     }
     return "";
@@ -81,7 +81,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
         try {
           const { result: ownerResult } = await nftContract!.functions.owner_of(
-            { token_id: `0x${localProfile.avatar_token_id}` }
+            { token_id: localProfile.avatar_token_id }
           );
 
           setAvatarContractError("");
@@ -113,7 +113,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         const { result: uriResult } = await nftContract!.functions.uri({});
 
         if (uriResult?.value) {
-          const buffer = utils.toUint8Array(localProfile.avatar_token_id);
+          const buffer = utils.toUint8Array(localProfile.avatar_token_id.substring(2));
           const tokenId = new TextDecoder().decode(buffer);
           const uri = normalizeIpfsUris(uriResult.value as string);
           try {
@@ -172,7 +172,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
   const avatarTokenSetter = (token: string) => {
     const buffer = new TextEncoder().encode(token);
-    const avatar_token_id = utils.toHexString(buffer);
+    const avatar_token_id = `0x${utils.toHexString(buffer)}`;
     setLocalProfile({
       ...localProfile,
       avatar_token_id,
