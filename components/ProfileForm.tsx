@@ -401,7 +401,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               _placeholder={{
                 color: isThemeLight ? "gray.600" : "gray.300",
               }}
-              disabled={isUpdating}
+              isDisabled={isUpdating}
             />
             <Button
               onClick={async () => {
