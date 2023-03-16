@@ -201,7 +201,14 @@ const Account: NextPage = () => {
         </Table>
       </Card>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setRenewYears(0);
+          setTransferAddress("");
+          onClose();
+        }}
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
