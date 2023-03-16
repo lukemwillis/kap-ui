@@ -37,6 +37,7 @@ import {
 } from "../context/ProfileProvider";
 import { Contract, utils } from "koilib";
 import { useAccount } from "../context/AccountProvider";
+import { ChevronDownIcon, StarIcon } from "@chakra-ui/icons";
 
 interface ProfileFormProps {
   names: NameObject[];
@@ -302,32 +303,60 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                 </Text>
               ) : (
                 <>
-                  <Text fontSize="4xl" lineHeight="1">
-                    {localProfile?.name || "Pick a name"}
-                  </Text>
                   <Menu placement="bottom">
                     <MenuButton
-                      as={IconButton}
-                      icon={<FaPencilAlt />}
+                      as={Button}
                       aria-label="Change Primary Account Name"
-                      variant="ghost"
+                      variant="solid"
+                      size="lg"
+                      paddingInlineEnd="1"
+                      paddingInlineStart="4"
+                      fontSize="4xl"
                       color={isThemeLight ? "gray.800" : "white"}
-                    />
+                      background={
+                        isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"
+                      }
+                      _hover={{
+                        background: isThemeLight
+                          ? "blackAlpha.200"
+                          : "whiteAlpha.200",
+                      }}
+                      _active={{
+                        background: isThemeLight
+                          ? "blackAlpha.200"
+                          : "whiteAlpha.200",
+                      }}
+                    >
+                      {localProfile?.name || "Pick a name"}
+                      <ChevronDownIcon />
+                    </MenuButton>
                     <MenuList
                       fontSize="lg"
                       color={popoverColor}
                       maxWidth="100vw"
                     >
-                      {names.map(({ name, domain }) => (
-                        <MenuItem
-                          key={`${name}.${domain}`}
-                          onClick={() => nameSetter(`${name}.${domain}`)}
-                        >
-                          <Text overflowWrap="break-word" maxWidth="100%">
-                            {name}.{domain}
-                          </Text>
-                        </MenuItem>
-                      ))}
+                      {names
+                        .map(({ name, domain }) => `${name}.${domain}`)
+                        .sort()
+                        .map((name) => (
+                          <MenuItem
+                            key={name}
+                            onClick={() => nameSetter(name)}
+                            icon={
+                              name === localProfile?.name ? (
+                                <StarIcon mb="1" />
+                              ) : (
+                                <span
+                                  style={{ display: "block", width: "1em" }}
+                                />
+                              )
+                            }
+                          >
+                            <Text overflowWrap="break-word" maxWidth="100%">
+                              {name}
+                            </Text>
+                          </MenuItem>
+                        ))}
                     </MenuList>
                   </Menu>
                 </>

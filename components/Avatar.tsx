@@ -47,7 +47,6 @@ function Avatar({ src, size }: AvatarProps) {
           width: size,
           height: size,
           borderRadius: "50%",
-          borderWidth: "1px",
           overflow: "hidden",
           flexShrink: "0",
           background: "white"

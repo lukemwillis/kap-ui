@@ -117,71 +117,79 @@ const Account: NextPage = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {names.map(({ name, domain, expiration }) => (
-              <Tr key={`${name}.${domain}`}>
-                <Td>
-                  <Text fontSize="xl" wordBreak="break-all">
-                    {name}
-                    <wbr />
-                    <Text as="span" color={muted} wordBreak="keep-all">
-                      .{domain}
+            {names
+              .sort((a, b) => {
+                if (a.name < b.name) return -1;
+                if (a.name > b.name) return 1;
+                if (a.domain < b.domain) return -1;
+                if (a.domain > b.domain) return 1;
+                return 0;
+              })
+              .map(({ name, domain, expiration }) => (
+                <Tr key={`${name}.${domain}`}>
+                  <Td>
+                    <Text fontSize="xl" wordBreak="break-all">
+                      {name}
+                      <wbr />
+                      <Text as="span" color={muted} wordBreak="keep-all">
+                        .{domain}
+                      </Text>
                     </Text>
-                  </Text>
-                </Td>
-                <Td whiteSpace={{ base: "normal", md: "nowrap" }}>
-                  <Text color={muted}>
-                    {new Date(parseInt(expiration)).toLocaleDateString(
-                      undefined,
-                      { day: "numeric", month: "long", year: "numeric" }
-                    )}
-                  </Text>
-                </Td>
-                <Td paddingInline={{ base: "4", md: "6" }}>
-                  <Menu placement="bottom-end">
-                    {isMenuIcon ? (
-                      <MenuButton
-                        as={IconButton}
-                        icon={<FaEllipsisV />}
-                        aria-label="Manage"
-                        variant="ghost"
-                      />
-                    ) : (
-                      <MenuButton
-                        as={Button}
-                        rightIcon={<ChevronDownIcon />}
-                        variant="outline"
-                      >
-                        Manage
-                      </MenuButton>
-                    )}
-                    <MenuList fontSize="lg">
-                      <MenuItem
-                        icon={<FaCalendarPlus />}
-                        onClick={() =>
-                          openRenew(`${name}.${domain}`, expiration)
-                        }
-                      >
-                        Add Years
-                      </MenuItem>
-                      <MenuItem
-                        icon={<FaPaperPlane />}
-                        onClick={() => openTransfer(`${name}.${domain}`)}
-                      >
-                        Transfer
-                      </MenuItem>
-                      <MenuItem
-                        icon={<FaExternalLinkAlt />}
-                        as="a"
-                        href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name}.${domain}/sell`}
-                        target="_blank"
-                      >
-                        List For Sale
-                      </MenuItem>
-                    </MenuList>
-                  </Menu>
-                </Td>
-              </Tr>
-            ))}
+                  </Td>
+                  <Td whiteSpace={{ base: "normal", md: "nowrap" }}>
+                    <Text color={muted}>
+                      {new Date(parseInt(expiration)).toLocaleDateString(
+                        undefined,
+                        { day: "numeric", month: "long", year: "numeric" }
+                      )}
+                    </Text>
+                  </Td>
+                  <Td paddingInline={{ base: "4", md: "6" }}>
+                    <Menu placement="bottom-end">
+                      {isMenuIcon ? (
+                        <MenuButton
+                          as={IconButton}
+                          icon={<FaEllipsisV />}
+                          aria-label="Manage"
+                          variant="ghost"
+                        />
+                      ) : (
+                        <MenuButton
+                          as={Button}
+                          rightIcon={<ChevronDownIcon />}
+                          variant="outline"
+                        >
+                          Manage
+                        </MenuButton>
+                      )}
+                      <MenuList fontSize="lg">
+                        <MenuItem
+                          icon={<FaCalendarPlus />}
+                          onClick={() =>
+                            openRenew(`${name}.${domain}`, expiration)
+                          }
+                        >
+                          Add Years
+                        </MenuItem>
+                        <MenuItem
+                          icon={<FaPaperPlane />}
+                          onClick={() => openTransfer(`${name}.${domain}`)}
+                        >
+                          Transfer
+                        </MenuItem>
+                        <MenuItem
+                          icon={<FaExternalLinkAlt />}
+                          as="a"
+                          href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name}.${domain}/sell`}
+                          target="_blank"
+                        >
+                          List For Sale
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Td>
+                </Tr>
+              ))}
           </Tbody>
           <Tfoot>
             <Tr>

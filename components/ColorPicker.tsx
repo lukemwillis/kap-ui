@@ -1,4 +1,6 @@
 import {
+  Box,
+  Card,
   Input,
   InputGroup,
   InputLeftElement,
@@ -7,9 +9,11 @@ import {
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
+  Stack,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { HexColorPicker } from "react-colorful";
 
 interface ColorPickerProps {
@@ -28,7 +32,11 @@ export default function ColorPicker({
   setHasError,
   ...inputProps
 }: ColorPickerProps & InputProps) {
+  const initialFocusRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState(value);
+  const [inputHasFocus, setInputHasFocus] = useState(false);
+  const [popoverHasFocus, setPopoverHasFocus] = useState(false);
+
   useEffect(() => {
     setInput(value);
   }, [value]);
@@ -44,35 +52,50 @@ export default function ColorPicker({
   };
 
   return (
-    <Tooltip
-      hasArrow
-      label="Invalid color code"
-      isOpen={hasError}
-      isDisabled={!hasError}
-      bg="red.500"
-      color="white"
+    <Popover
+      initialFocusRef={initialFocusRef}
+      isOpen={popoverHasFocus || inputHasFocus}
+      closeOnBlur={false}
     >
-      <Popover>
-        <PopoverTrigger>
-          <InputGroup width="10em">
-            <Input
-              variant="filled"
-              placeholder="Theme Color"
-              value={input}
-              onChange={handleInputChange}
-              isInvalid={hasError}
-              paddingStart="7"
-              {...inputProps}
+      <PopoverTrigger>
+        <InputGroup width="10em">
+          <Input
+            variant="filled"
+            placeholder="Theme Color"
+            value={input}
+            onChange={handleInputChange}
+            isInvalid={hasError}
+            paddingStart="7"
+            ref={initialFocusRef}
+            onFocus={() => setInputHasFocus(true)}
+            onBlur={() => setInputHasFocus(false)}
+            {...inputProps}
+          />
+          <InputLeftElement pointerEvents="none">#</InputLeftElement>
+        </InputGroup>
+      </PopoverTrigger>
+      <PopoverContent
+        width="unset"
+        onFocus={() => setPopoverHasFocus(true)}
+        onBlur={() => setPopoverHasFocus(false)}
+      >
+        <PopoverBody padding="2">
+          <Stack>
+            <HexColorPicker
+              color={`#${value}`}
+              onChange={(color) => {
+                setHasError(false);
+                setValue(color.substring(1));
+              }}
             />
-            <InputLeftElement pointerEvents="none">#</InputLeftElement>
-          </InputGroup>
-        </PopoverTrigger>
-        <PopoverContent width="unset">
-          <PopoverBody padding="2">
-            <HexColorPicker color={`#${value}`} onChange={(color) => setValue(color.substring(1))} />
-          </PopoverBody>
-        </PopoverContent>
-      </Popover>
-    </Tooltip>
+            {hasError && (
+              <Card bg="red.500" color="white" padding="3">
+                Invalid color code
+              </Card>
+            )}
+          </Stack>
+        </PopoverBody>
+      </PopoverContent>
+    </Popover>
   );
 }
