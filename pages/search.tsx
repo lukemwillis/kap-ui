@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Flex,
   Heading,
   Link,
@@ -280,6 +281,7 @@ const Search: NextPage = () => {
               overflowWrap="anywhere"
               marginBottom="0.3em"
               wordBreak="break-all"
+              mb="0"
             >
               <NotAllowedIcon color={background} mb="1" /> {query}
               <wbr />
@@ -293,13 +295,20 @@ const Search: NextPage = () => {
                 .{name.domain}
               </Text>
             </Heading>
-            <Text>
-              Search for another name or check if this one is available on{" "}
-              <Link
-                href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
-              ></Link>
-              Kollection.
+            <Text mb="3">
+              Expires{" "}
+              {new Date(parseInt(name.expiration)).toLocaleDateString(
+                undefined,
+                { day: "numeric", month: "long", year: "numeric" }
+              )}
             </Text>
+              <Button
+                as={Link}
+                target="_blank"
+                href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
+              >
+                View on Kollection
+              </Button>
           </Flex>
         </Flex>
         <Flex gap="4" justifyContent="center">
