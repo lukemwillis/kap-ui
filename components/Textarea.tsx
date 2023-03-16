@@ -5,7 +5,7 @@ import {
   Textarea as Txa,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 interface TextareaProps {
   label: string;
@@ -24,18 +24,20 @@ export default function Textarea({
   isThemeLight,
   value,
   setValue,
-  disabled = false
+  disabled = false,
 }: TextareaProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
-  const background = useColorModeValue("white", "gray.800");
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
     if (ref && ref.current) {
       ref.current.style.height = "0";
       ref.current.style.height = `${ref.current.scrollHeight}px`;
     }
-    setValue(e.target.value);
-  };
+  }, [value]);
 
   return (
     <InputGroup>
