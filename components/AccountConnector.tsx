@@ -113,7 +113,9 @@ export default function AccountConnector({
                     </Text>
                     <IconButton
                       aria-label={hasCopied ? "Copied!" : "Copy"}
-                      onClick={onCopy}
+                      onClick={() => {
+                        onCopy();
+                      }}
                       size="sm"
                       variant="ghost"
                       color="gray.500"
