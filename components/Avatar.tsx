@@ -50,6 +50,7 @@ function Avatar({ src, size }: AvatarProps) {
           borderWidth: "1px",
           overflow: "hidden",
           flexShrink: "0",
+          background: "white"
         }}
       />
     );

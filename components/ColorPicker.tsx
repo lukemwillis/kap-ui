@@ -3,9 +3,14 @@ import {
   InputGroup,
   InputLeftElement,
   InputProps,
+  Popover,
+  PopoverBody,
+  PopoverContent,
+  PopoverTrigger,
   Tooltip,
 } from "@chakra-ui/react";
 import { ChangeEvent, useEffect, useState } from "react";
+import { HexColorPicker } from "react-colorful";
 
 interface ColorPickerProps {
   value: string;
@@ -47,18 +52,27 @@ export default function ColorPicker({
       bg="red.500"
       color="white"
     >
-      <InputGroup width="10em">
-        <Input
-          variant="filled"
-          placeholder="Theme Color"
-          value={input}
-          onChange={handleInputChange}
-          isInvalid={hasError}
-          paddingStart="7"
-          {...inputProps}
-        />
-        <InputLeftElement pointerEvents="none">#</InputLeftElement>
-      </InputGroup>
+      <Popover>
+        <PopoverTrigger>
+          <InputGroup width="10em">
+            <Input
+              variant="filled"
+              placeholder="Theme Color"
+              value={input}
+              onChange={handleInputChange}
+              isInvalid={hasError}
+              paddingStart="7"
+              {...inputProps}
+            />
+            <InputLeftElement pointerEvents="none">#</InputLeftElement>
+          </InputGroup>
+        </PopoverTrigger>
+        <PopoverContent width="unset">
+          <PopoverBody padding="2">
+            <HexColorPicker color={`#${value}`} onChange={(color) => setValue(color.substring(1))} />
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
     </Tooltip>
   );
 }
