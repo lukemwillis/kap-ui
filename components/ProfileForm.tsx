@@ -254,6 +254,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                           ? "blackAlpha.200"
                           : "whiteAlpha.200",
                       }}
+                      isDisabled={isUpdating}
                     />
                   </PopoverTrigger>
                   <PopoverContent color={popoverColor} padding={2}>
@@ -326,6 +327,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                           ? "blackAlpha.200"
                           : "whiteAlpha.200",
                       }}
+                      isDisabled={isUpdating}
                     >
                       {localProfile?.name || "Pick a name"}
                       <ChevronDownIcon />
@@ -369,11 +371,13 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               isThemeLight={isThemeLight}
               value={localProfile?.bio || ""}
               setValue={bioSetter}
+              disabled={isUpdating}
             />
             <SocialLinks
               values={localProfile?.links || []}
               setValue={socialLinkSetter}
               isThemeLight={isThemeLight}
+              disabled={isUpdating}
             />
           </Stack>
         </CardBody>
@@ -394,6 +398,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               _placeholder={{
                 color: isThemeLight ? "gray.600" : "gray.300",
               }}
+              disabled={isUpdating}
             />
             <Button
               onClick={async () => {

@@ -45,6 +45,7 @@ interface SocialLinksProps {
   values: LinkObject[];
   setValue: (key: string, val: string) => void;
   isThemeLight: boolean;
+  disabled?: boolean;
 }
 
 const LABELS = {
@@ -75,6 +76,7 @@ export default function SocialLinks({
   values,
   setValue,
   isThemeLight,
+  disabled = false
 }: SocialLinksProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [lastKey, setLastKey] = useState("");
@@ -113,6 +115,7 @@ export default function SocialLinks({
                     ? "blackAlpha.200"
                     : "whiteAlpha.200",
                 }}
+                isDisabled={disabled}
               />
             </PopoverTrigger>
             <PopoverContent color={popoverColor} padding={2}>
@@ -147,6 +150,7 @@ export default function SocialLinks({
               _active={{
                 background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200",
               }}
+              isDisabled={disabled}
             />
           ) : (
             <MenuButton

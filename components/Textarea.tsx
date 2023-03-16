@@ -14,6 +14,7 @@ interface TextareaProps {
   isThemeLight: boolean;
   value: string;
   setValue: (value: string) => void;
+  disabled?: boolean;
 }
 
 export default function Textarea({
@@ -22,7 +23,8 @@ export default function Textarea({
   placeholder,
   isThemeLight,
   value,
-  setValue
+  setValue,
+  disabled = false
 }: TextareaProps) {
   const ref = useRef<HTMLTextAreaElement>(null);
   const background = useColorModeValue("white", "gray.800");
@@ -60,6 +62,7 @@ export default function Textarea({
         _placeholder={{
           color: isThemeLight ? "gray.600" : "gray.300",
         }}
+        isDisabled={disabled}
       />
       <InputLeftElement pointerEvents="none">{label}</InputLeftElement>
       {value.length > 0 && (
