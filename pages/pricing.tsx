@@ -121,7 +121,7 @@ const Pricing: NextPage = () => {
         <Flex flexWrap="wrap" gap="4">
           <Box flexBasis={{ base: "100%", md: "2" }} flexGrow="2">
             <Heading>
-              FREE Account NFTs <Badge fontSize="0.6em">MOST POPULAR</Badge>
+              FREE Account NFTs <Badge fontSize="0.6em">{process.env.NEXT_PUBLIC_FREE_LAUNCHED === "true" ? "MOST POPULAR" : "COMING SOON"}</Badge>
             </Heading>
             <Text>
               No cost to mint. No gas fees. Register your name once and own it

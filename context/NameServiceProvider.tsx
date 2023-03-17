@@ -97,7 +97,7 @@ export const NameServiceProvider = ({
                   duration_increments: items[name].years,
                   owner: address,
                   payment_from: address,
-                  payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
+                  payment_token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
                 },
                 {
                   onlyOperation: true,
@@ -157,7 +157,7 @@ export const NameServiceProvider = ({
               name,
               duration_increments: years,
               payment_from: address,
-              payment_token_address: process.env.PUBLIC_NEXT_KOIN_ADDR,
+              payment_token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
             },
             {
               rcLimit: `${Math.min(parseInt(mana || "0"), 10_0000_0000)}`,

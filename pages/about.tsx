@@ -140,6 +140,10 @@ const About: NextPage = () => {
               </ListItem>
               <ListItem>
                 <ListIcon as={ChevronRightIcon} mb="1" />
+                Support customizable KAP social profiles with NFT avatars
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
                 Whitelist NFT purchasers for $KAP airdrop
               </ListItem>
             </List>
@@ -165,15 +169,15 @@ const About: NextPage = () => {
             <List>
               <ListItem>
                 <ListIcon as={ChevronRightIcon} mb="1" />
-                Integrate with existing wallets and block explorers
+                Integrate with Kollection NFT Marketplace
+              </ListItem>
+              <ListItem>
+                <ListIcon as={ChevronRightIcon} mb="1" />
+                Integrate profiles with existing wallets and block explorers
               </ListItem>
               <ListItem>
                 <ListIcon as={ChevronRightIcon} mb="1" />
                 Create integration tools for dApps
-              </ListItem>
-              <ListItem>
-                <ListIcon as={ChevronRightIcon} mb="1" />
-                Set up KAP social profiles with NFT avatars
               </ListItem>
             </List>
           </Box>
