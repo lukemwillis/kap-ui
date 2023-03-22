@@ -329,38 +329,44 @@ const About: NextPage = () => {
               Anyone can own a KAP account. We&apos;ll start by offering premium
               KAP accounts which will be purchaseable with $KOIN. Later in the
               year, we&apos;ll release the free tier of KAP accounts, meaning
-              you won&apos;t need any cryptocurrency to get a KAP account, or
-              even use the blockchain!
+              you won&apos;t need any cryptocurrency to get a KAP account or
+              even to use the blockchain!
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem borderWidth="0">
             <AccordionButton paddingStart="0" paddingEnd="0">
               <Box flex="1" textAlign="left">
                 <Heading as="h3" size="lg">
-                  How do I “own” my name?
+                  Why would I want to &quot;own&quot; my name?
                 </Heading>
               </Box>
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel>
-              When you purchase a name, KAP will mint an NFT with your chosen
-              username and issue it to your wallet address. By owning the NFT,
-              you own your name.
+              For the same reason you would want a good email address or
+              username. Your KAP name will be portable across dApps built on
+              Koinos. When you purchase a name, KAP will mint an NFT with your
+              chosen username and issue it to your wallet address. By owning the
+              NFT, you own your name. No one can take it away from you, so you
+              can use it with confidence online.
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem borderWidth="0" _last={{ borderWidth: 0 }}>
             <AccordionButton paddingStart="0" paddingEnd="0">
               <Box flex="1" textAlign="left">
                 <Heading as="h3" size="lg">
-                  Can I own more than one name?
+                  Why would I want to own more than one name?
                 </Heading>
               </Box>
               <AccordionIcon />
             </AccordionButton>
             <AccordionPanel>
-              Absolutely. You can have as many names as you want. If you have
-              more than one KAP NFT in a single wallet, you simply need to
-              select your primary name in the KAP account manager page.
+              You may want to use multiple identities depending on which
+              community you&apos;re interacting with. You can keep your
+              identities in different wallets or switch out your preferred name
+              whenever you want. Some people may choose to speculate on the
+              future value of KAP names, but Top Level Accounts, Inc. makes no
+              guarantees on their speculative value.
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
