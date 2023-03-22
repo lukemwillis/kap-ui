@@ -213,7 +213,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
       });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
-      setValue(`https://kap.plus/${profile?.name}`);
+      setValue(`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`);
       setLocalAvatarSrc("");
       setAvatarContractError("");
       setAvatarTokenError("");
@@ -266,9 +266,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     <Card variant="outline" padding="2">
                       <Link
                         target="_blank"
-                        href={`https://kap.plus/${profile?.name}`}
+                        href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`}
                       >
-                        https://kap.plus/{profile?.name} <ExternalLinkIcon mb="1" />
+                        {process.env.NEXT_PUBLIC_KAP_PLUS_URL}{profile?.name} <ExternalLinkIcon mb="1" />
                       </Link>
                     </Card>
                     <Text>
