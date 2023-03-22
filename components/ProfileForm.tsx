@@ -80,7 +80,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [themeHasError, setThemeHasError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { onCopy, setValue } = useClipboard(
-    `https://kap.plus/${profile?.name}`
+    `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`
   );
 
   useEffect(() => {
