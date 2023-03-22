@@ -27,8 +27,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { useState } from "react";
+import { LinkObject } from "../context/ProfileProvider";
 
-enum SocialKeys {
+export enum SocialKeys {
   WEBSITE = "website",
   EMAIL = "email",
   GITHUB = "github",
@@ -37,17 +38,14 @@ enum SocialKeys {
   DISCORD = "discord",
   TELEGRAM = "telegram",
   ETH = "eth",
-  BTC = "btc",
+  BTC = "btc"
 }
 
-type SocialLinksType = {
-  [key in SocialKeys]?: string;
-};
-
 interface SocialLinksProps {
-  values: SocialLinksType;
-  setValue: (key: SocialKeys, val: string) => void;
+  values: LinkObject[];
+  setValue: (key: string, val: string) => void;
   isThemeLight: boolean;
+  disabled?: boolean;
 }
 
 const LABELS = {
@@ -62,7 +60,7 @@ const LABELS = {
   [SocialKeys.BTC]: "Bitcoin Address",
 };
 
-const ICONS = {
+export const ICONS = {
   [SocialKeys.WEBSITE]: <FaGlobe />,
   [SocialKeys.EMAIL]: <EmailIcon />,
   [SocialKeys.GITHUB]: <FaGithub />,
@@ -78,15 +76,15 @@ export default function SocialLinks({
   values,
   setValue,
   isThemeLight,
+  disabled = false
 }: SocialLinksProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [lastKey, setLastKey] = useState("");
   const popoverColor = useColorModeValue("gray.800", "white");
   return (
     <Flex gap="2" flexWrap="wrap" justifyContent="center" maxWidth="20em">
-      {Object.values(SocialKeys)
-        .filter((key) => typeof values[key as SocialKeys] !== "undefined")
-        .map((key) => (
+      {values
+        .map(({ key, value }) => (
           <Popover
             key={key}
             onOpen={() => {
@@ -117,13 +115,14 @@ export default function SocialLinks({
                     ? "blackAlpha.200"
                     : "whiteAlpha.200",
                 }}
+                isDisabled={disabled}
               />
             </PopoverTrigger>
             <PopoverContent color={popoverColor} padding={2}>
               <InputGroup>
                 <Input
                   placeholder={LABELS[key as SocialKeys]}
-                  value={values[key]}
+                  value={value}
                   onChange={(e) => setValue(key, e.target.value)}
                   autoFocus
                   variant="outline"
@@ -151,6 +150,7 @@ export default function SocialLinks({
               _active={{
                 background: isThemeLight ? "blackAlpha.200" : "whiteAlpha.200",
               }}
+              isDisabled={disabled}
             />
           ) : (
             <MenuButton
@@ -170,7 +170,7 @@ export default function SocialLinks({
           )}
           <MenuList color={popoverColor} fontSize="lg">
             {Object.values(SocialKeys)
-              .filter((key) => typeof values[key as SocialKeys] === "undefined")
+              .filter((item) => values.every(({ key }) => item !== key))
               .map((key) => (
                 <MenuItem
                   onClick={() => {

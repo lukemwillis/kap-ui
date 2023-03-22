@@ -17,16 +17,12 @@ type AccountContextType = {
   connectMKW: () => Promise<boolean>;
   provider?: Provider;
   signer?: Signer;
-  isMKWSupported: boolean;
-  primaryUsername?: string;
-  primaryAvatarSrc?: string;
 };
 
 export const AccountContext = createContext<AccountContextType>({
   isConnecting: false,
   connectKondor: async () => false,
   connectMKW: async () => false,
-  isMKWSupported: true,
 });
 
 export const useAccount = () => useContext(AccountContext);
@@ -37,16 +33,12 @@ export const AccountProvider = ({
   children: React.ReactNode;
 }): JSX.Element => {
   const [isConnecting, setIsConnecting] = useState(false);
-  const [isMKWSupported, setIsMKWSupported] = useState(true);
 
   const [address, setAddress] = useState<string | undefined>(undefined);
-  const [primaryUsername, setPrimaryUsername] = useState<string | undefined>(
-    undefined
+  const [walletUsed, setWalletUsed] = useState<string>("");
+  const [provider, setProvider] = useState<Provider>(
+    new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!])
   );
-  const [primaryAvatarSrc, setPrimaryAvatarSrc] = useState<string | undefined>(
-    undefined
-  );
-  const [provider, setProvider] = useState<Provider>(new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!]));
   const [signer, setSigner] = useState<Signer | undefined>();
 
   const mkwRef = useRef<MyKoinosWallet>();
@@ -56,36 +48,34 @@ export const AccountProvider = ({
       "https://mykw.vercel.app/embed/wallet-connector"
     );
 
-    const setup = async () => {
-      const mkwSupport = await mkwRef.current!.connect();
-      setIsMKWSupported(mkwSupport);
-    };
-
-    setup();
-
     return () => {
       mkwRef.current!.close();
     };
   }, []);
 
   useEffect(() => {
-    // TODO not this
-    if (address === "1Phen7sf6kjAgJ3jwiheWW6SFDumDoWgUf") {
-      setPrimaryUsername("luke.koin");
-      setPrimaryAvatarSrc(
-        "https://bafybeial7korh5zldyo7qmz4kkeeo5tt7tybhd7jiorz2nx7iwvpzeadhi.ipfs.nftstorage.link/assets/01.png"
-      );
+    if (walletUsed === "kondor") {
+      setProvider(kondor.provider as unknown as Provider);
+      if (address) {
+        // TODO koilib bug
+        const s = kondor.getSigner(address) as Signer;
+        s.provider = kondor.provider as unknown as Provider;
+        setSigner(s);
+      }
+    } else if (walletUsed === "mkw" && mkwRef.current) {
+      mkwRef.current!.connect().then(async (isConnected) => {
+        if (isConnected) {
+          setProvider(mkwRef.current!.getProvider());
+          if (address) {
+            setSigner(mkwRef.current!.getSigner(address) as unknown as Signer);
+          }
+        }
+      });
     }
-
-    // TODO kondor updated?
-    // TODO MKW version
-    setProvider(kondor.provider as unknown as Provider);
-    if (address) {
-      setSigner(kondor.getSigner(address) as Signer);
-    }
-  }, [address]);
+  }, [address, walletUsed]);
 
   useLocalStorage("ACCOUNT", address, setAddress);
+  useLocalStorage("WALLET", walletUsed, setWalletUsed);
 
   const connectKondor = async () => {
     if (isConnecting) return false;
@@ -99,9 +89,8 @@ export const AccountProvider = ({
       ),
     ]);
     if (address) {
-      setPrimaryUsername("");
-      setPrimaryAvatarSrc("");
       setAddress(address);
+      setWalletUsed("kondor");
     }
     setIsConnecting(false);
 
@@ -109,27 +98,29 @@ export const AccountProvider = ({
   };
 
   const connectMKW = async () => {
-    if (!mkwRef.current || !isMKWSupported || isConnecting) return false;
+    if (!mkwRef.current || isConnecting) return false;
 
     let address;
 
     setIsConnecting(true);
     try {
-      await mkwRef.current.requestPermissions({
-        accounts: ["getAccounts"],
-        provider: ["readContract"],
-      });
-      const accounts = await mkwRef.current.getAccounts();
-      address = accounts[0].address;
-      if (address) {
-        setPrimaryUsername("");
-        setPrimaryAvatarSrc("");
-        setAddress(address);
+      if (await mkwRef.current!.connect()) {
+        await mkwRef.current.requestPermissions({
+          accounts: ["getAccounts"],
+          signer: ["prepareTransaction", "signAndSendTransaction"],
+          provider: ["readContract", "wait", "getAccountRc"],
+        });
+        const accounts = await mkwRef.current.getAccounts();
+        address = accounts[0].address;
+        if (address) {
+          setAddress(address);
+          setWalletUsed("mkw");
+        }
       }
-    } catch (e) {
-      console.error(e);
-    } finally {
       setIsConnecting(false);
+    } catch (e) {
+      setIsConnecting(false);
+      throw e;
     }
     return !!address;
   };
@@ -141,9 +132,6 @@ export const AccountProvider = ({
         isConnecting,
         connectKondor,
         connectMKW,
-        isMKWSupported,
-        primaryUsername,
-        primaryAvatarSrc,
         provider,
         signer,
       }}

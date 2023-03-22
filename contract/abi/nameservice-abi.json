@@ -2,7 +2,7 @@
     "methods": {
         "name": {
             "argument": "nameservice.name_arguments",
-            "return": "nameservice.name_result",
+            "return": "nameservice.string_object",
             "description": "Returns the token's name",
             "entry_point": 2191741823,
             "read_only": true
@@ -16,21 +16,21 @@
         },
         "symbol": {
             "argument": "nameservice.symbol_arguments",
-            "return": "nameservice.symbol_result",
+            "return": "nameservice.string_object",
             "description": "Returns the token's symbol",
             "entry_point": 3077209249,
             "read_only": true
         },
         "uri": {
             "argument": "nameservice.uri_arguments",
-            "return": "nameservice.uri_result",
+            "return": "nameservice.string_object",
             "description": "Returns the token's uri",
             "entry_point": 1894111158,
             "read_only": true
         },
         "total_supply": {
             "argument": "nameservice.total_supply_arguments",
-            "return": "nameservice.total_supply_result",
+            "return": "nameservice.uint64_object",
             "description": "Gets the total number of minted tokens",
             "entry_point": 2967091508,
             "read_only": true
@@ -44,42 +44,49 @@
         },
         "set_royalties": {
             "argument": "nameservice.set_royalties_arguments",
-            "return": "nameservice.set_royalties_result",
+            "return": "nameservice.empty_object",
             "description": "Unsupported",
             "entry_point": 995865963,
             "read_only": false
         },
         "owner": {
             "argument": "nameservice.owner_arguments",
-            "return": "nameservice.owner_result",
+            "return": "nameservice.bytes_address_object",
             "description": "Returns collection owner",
             "entry_point": 1276127593,
             "read_only": true
         },
         "transfer_ownership": {
             "argument": "nameservice.transfer_ownership_arguments",
-            "return": "nameservice.transfer_ownership_result",
-            "description": "Unsupported",
+            "return": "nameservice.empty_object",
+            "description": "Transfer ownership of the contract",
             "entry_point": 961275650,
             "read_only": false
         },
         "balance_of": {
             "argument": "nameservice.balance_of_arguments",
-            "return": "nameservice.balance_of_result",
+            "return": "nameservice.uint64_object",
             "description": "Gets the balance of an owner",
             "entry_point": 1550980247,
             "read_only": true
         },
+        "owner_of": {
+            "argument": "nameservice.owner_of_arguments",
+            "return": "nameservice.bytes_address_object",
+            "description": "Gets the owner of a name",
+            "entry_point": 3982608455,
+            "read_only": true
+        },
         "get_approved": {
             "argument": "nameservice.get_approved_arguments",
-            "return": "nameservice.get_approved_result",
+            "return": "nameservice.bytes_address_object",
             "description": "Gets approved address for a token",
             "entry_point": 1282609184,
             "read_only": true
         },
         "is_approved_for_all": {
             "argument": "nameservice.is_approved_for_all_arguments",
-            "return": "nameservice.is_approved_for_all_result",
+            "return": "nameservice.bool_object",
             "description": "Checks if an operator is approved by an owner",
             "entry_point": 3886779621,
             "read_only": true
@@ -91,6 +98,13 @@
             "entry_point": 3698268091,
             "read_only": false
         },
+        "burn": {
+            "argument": "nameservice.burn_arguments",
+            "return": "nameservice.empty_object",
+            "description": "Burn a name or TLA",
+            "entry_point": 2241834181,
+            "read_only": false
+        },
         "transfer": {
             "argument": "nameservice.transfer_arguments",
             "return": "nameservice.empty_object",
@@ -100,23 +114,16 @@
         },
         "approve": {
             "argument": "nameservice.approve_arguments",
-            "return": "nameservice.approve_result",
+            "return": "nameservice.empty_object",
             "description": "Approves an address to transfer a token",
             "entry_point": 1960973952,
             "read_only": false
         },
         "set_approval_for_all": {
             "argument": "nameservice.set_approval_for_all_arguments",
-            "return": "nameservice.set_approval_for_all_result",
+            "return": "nameservice.empty_object",
             "description": "Approves or revokes an address to operate on all tokens owned by caller",
             "entry_point": 541336086,
-            "read_only": false
-        },
-        "burn": {
-            "argument": "nameservice.burn_arguments",
-            "return": "nameservice.empty_object",
-            "description": "Burn a name or TLA",
-            "entry_point": 2241834181,
             "read_only": false
         },
         "renew": {
@@ -162,49 +169,14 @@
                     "name_arguments": {
                         "fields": {}
                     },
-                    "name_result": {
-                        "fields": {
-                            "value": {
-                                "type": "string",
-                                "id": 1
-                            }
-                        }
-                    },
                     "symbol_arguments": {
                         "fields": {}
-                    },
-                    "symbol_result": {
-                        "fields": {
-                            "value": {
-                                "type": "string",
-                                "id": 1
-                            }
-                        }
                     },
                     "uri_arguments": {
                         "fields": {}
                     },
-                    "uri_result": {
-                        "fields": {
-                            "value": {
-                                "type": "string",
-                                "id": 1
-                            }
-                        }
-                    },
                     "total_supply_arguments": {
                         "fields": {}
-                    },
-                    "total_supply_result": {
-                        "fields": {
-                            "value": {
-                                "type": "uint64",
-                                "id": 1,
-                                "options": {
-                                    "jstype": "JS_STRING"
-                                }
-                            }
-                        }
                     },
                     "royalties_arguments": {
                         "fields": {}
@@ -227,27 +199,8 @@
                             }
                         }
                     },
-                    "set_royalties_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bool",
-                                "id": 1
-                            }
-                        }
-                    },
                     "owner_arguments": {
                         "fields": {}
-                    },
-                    "owner_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bytes",
-                                "id": 1,
-                                "options": {
-                                    "(koinos.btype)": "ADDRESS"
-                                }
-                            }
-                        }
                     },
                     "transfer_ownership_arguments": {
                         "fields": {
@@ -257,14 +210,6 @@
                                 "options": {
                                     "(koinos.btype)": "ADDRESS"
                                 }
-                            }
-                        }
-                    },
-                    "transfer_ownership_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bool",
-                                "id": 1
                             }
                         }
                     },
@@ -279,32 +224,24 @@
                             }
                         }
                     },
-                    "balance_of_result": {
+                    "owner_of_arguments": {
                         "fields": {
-                            "value": {
-                                "type": "uint64",
+                            "token_id": {
+                                "type": "bytes",
                                 "id": 1,
                                 "options": {
-                                    "jstype": "JS_STRING"
+                                    "(koinos.btype)": "HEX"
                                 }
                             }
                         }
                     },
                     "get_approved_arguments": {
                         "fields": {
-                            "name": {
-                                "type": "string",
-                                "id": 1
-                            }
-                        }
-                    },
-                    "get_approved_result": {
-                        "fields": {
-                            "value": {
+                            "token_id": {
                                 "type": "bytes",
                                 "id": 1,
                                 "options": {
-                                    "(koinos.btype)": "ADDRESS"
+                                    "(koinos.btype)": "HEX"
                                 }
                             }
                         }
@@ -324,14 +261,6 @@
                                 "options": {
                                     "(koinos.btype)": "ADDRESS"
                                 }
-                            }
-                        }
-                    },
-                    "is_approved_for_all_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bool",
-                                "id": 1
                             }
                         }
                     },
@@ -368,17 +297,45 @@
                             }
                         }
                     },
+                    "burn_arguments": {
+                        "fields": {
+                            "from": {
+                                "type": "bytes",
+                                "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
+                                }
+                            },
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 2,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
+                            }
+                        }
+                    },
                     "transfer_arguments": {
                         "fields": {
-                            "name": {
-                                "type": "string",
-                                "id": 1
+                            "from": {
+                                "type": "bytes",
+                                "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
+                                }
                             },
                             "to": {
                                 "type": "bytes",
                                 "id": 2,
                                 "options": {
                                     "(koinos.btype)": "ADDRESS"
+                                }
+                            },
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 3,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
                                 }
                             }
                         }
@@ -399,17 +356,12 @@
                                     "(koinos.btype)": "ADDRESS"
                                 }
                             },
-                            "name": {
-                                "type": "string",
-                                "id": 3
-                            }
-                        }
-                    },
-                    "approve_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bool",
-                                "id": 1
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 3,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
                             }
                         }
                     },
@@ -432,22 +384,6 @@
                             "approved": {
                                 "type": "bool",
                                 "id": 3
-                            }
-                        }
-                    },
-                    "set_approval_for_all_result": {
-                        "fields": {
-                            "value": {
-                                "type": "bool",
-                                "id": 1
-                            }
-                        }
-                    },
-                    "burn_arguments": {
-                        "fields": {
-                            "name": {
-                                "type": "string",
-                                "id": 1
                             }
                         }
                     },
@@ -499,8 +435,11 @@
                                 "id": 2
                             },
                             "limit": {
-                                "type": "uint32",
-                                "id": 3
+                                "type": "uint64",
+                                "id": 3,
+                                "options": {
+                                    "jstype": "JS_STRING"
+                                }
                             },
                             "descending": {
                                 "type": "bool",
@@ -551,9 +490,30 @@
                                     "(koinos.btype)": "ADDRESS"
                                 }
                             },
-                            "name": {
-                                "type": "string",
-                                "id": 2
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 2,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
+                            }
+                        }
+                    },
+                    "burn_event": {
+                        "fields": {
+                            "from": {
+                                "type": "bytes",
+                                "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
+                                }
+                            },
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 2,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
                             }
                         }
                     },
@@ -573,9 +533,12 @@
                                     "(koinos.btype)": "ADDRESS"
                                 }
                             },
-                            "name": {
-                                "type": "string",
-                                "id": 3
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 3,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
                             }
                         }
                     },
@@ -617,22 +580,52 @@
                                     "(koinos.btype)": "ADDRESS"
                                 }
                             },
-                            "name": {
-                                "type": "string",
-                                "id": 3
+                            "token_id": {
+                                "type": "bytes",
+                                "id": 3,
+                                "options": {
+                                    "(koinos.btype)": "HEX"
+                                }
                             }
                         }
                     },
                     "empty_object": {
                         "fields": {}
                     },
-                    "balance_object": {
+                    "string_object": {
+                        "fields": {
+                            "value": {
+                                "type": "string",
+                                "id": 1
+                            }
+                        }
+                    },
+                    "uint64_object": {
                         "fields": {
                             "value": {
                                 "type": "uint64",
                                 "id": 1,
                                 "options": {
                                     "jstype": "JS_STRING"
+                                }
+                            }
+                        }
+                    },
+                    "bool_object": {
+                        "fields": {
+                            "value": {
+                                "type": "bool",
+                                "id": 1
+                            }
+                        }
+                    },
+                    "bytes_address_object": {
+                        "fields": {
+                            "value": {
+                                "type": "bytes",
+                                "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
                                 }
                             }
                         }
@@ -660,6 +653,24 @@
                             "address": {
                                 "type": "bytes",
                                 "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
+                                }
+                            }
+                        }
+                    },
+                    "operator_approval_key": {
+                        "fields": {
+                            "approver": {
+                                "type": "bytes",
+                                "id": 1,
+                                "options": {
+                                    "(koinos.btype)": "ADDRESS"
+                                }
+                            },
+                            "operator": {
+                                "type": "bytes",
+                                "id": 2,
                                 "options": {
                                     "(koinos.btype)": "ADDRESS"
                                 }

@@ -5,13 +5,16 @@ import {
   Textarea as Txa,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 interface TextareaProps {
   label: string;
   max: number;
   placeholder: string;
   isThemeLight: boolean;
+  value: string;
+  setValue: (value: string) => void;
+  disabled?: boolean;
 }
 
 export default function Textarea({
@@ -19,18 +22,22 @@ export default function Textarea({
   max,
   placeholder,
   isThemeLight,
+  value,
+  setValue,
+  disabled = false,
 }: TextareaProps) {
-  const [value, setValue] = useState("");
   const ref = useRef<HTMLTextAreaElement>(null);
-  const background = useColorModeValue("white", "gray.800");
 
   const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+  };
+
+  useEffect(() => {
     if (ref && ref.current) {
       ref.current.style.height = "0";
       ref.current.style.height = `${ref.current.scrollHeight}px`;
     }
-    setValue(e.target.value);
-  };
+  }, [value]);
 
   return (
     <InputGroup>
@@ -57,6 +64,7 @@ export default function Textarea({
         _placeholder={{
           color: isThemeLight ? "gray.600" : "gray.300",
         }}
+        isDisabled={disabled}
       />
       <InputLeftElement pointerEvents="none">{label}</InputLeftElement>
       {value.length > 0 && (

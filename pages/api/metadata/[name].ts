@@ -12,7 +12,8 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
         .json({
             name,
             description: "It's a KAP name.",
-            image: `https://kap.domains/api/svg/${name}`
+            // TODO env var
+            image: `https://test.kap.domains/api/svg/${name}`
         });
     } else {
       res.status(404).json({ error: `Name '${name}' not found` });

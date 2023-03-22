@@ -16,14 +16,19 @@ import {
   keyframes,
   Progress,
   Select,
+  Skeleton,
   Stack,
   Text,
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { utils } from "koilib";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import { useAccount } from "../context/AccountProvider";
 import { useCart } from "../context/CartProvider";
 import { useNameService } from "../context/NameServiceProvider";
+import { useUsdOracle } from "../context/UsdOracleProvider";
 import ConnectWallet from "./ConnectWallet";
 import CTA from "./CTA";
 import Cart from "./icons/Cart";
@@ -37,11 +42,18 @@ export default function CartDrawer() {
     onCartOpen,
     onCartClose,
   } = useCart();
-  const { mint, isLoading } = useNameService();
+  const { mint, isMinting } = useNameService();
+  const { getLatestKoinPrice } = useUsdOracle();
   const { address } = useAccount();
+  const { push } = useRouter();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
   const floatingBorder = useColorModeValue("white", "gray.800");
+
+  const [koinPrice, setKoinPrice] = useState("");
+  useEffect(() => {
+    getLatestKoinPrice().then((result) => setKoinPrice(result?.price || ""));
+  }, [getLatestKoinPrice]);
 
   const pulse = keyframes`
     30% { transform: scale(1.1); }
@@ -123,10 +135,12 @@ export default function CartDrawer() {
                       {name}
                       <wbr />
                       <Text as="span" color={muted} wordBreak="keep-all">
+                        {/* TODO use domain */}
                         .koin
                       </Text>
                     </Text>
                     <IconButton
+                    // TODO use domain
                       aria-label={`Remove ${name}.koin from cart`}
                       variant="ghost"
                       size="sm"
@@ -189,7 +203,18 @@ export default function CartDrawer() {
                       {totalPrice === 0 ? "FREE" : `$${totalPrice}`}
                     </Text>
                   </Flex>
-                  {isLoading ? (
+                  <Flex justifyContent="space-between" alignItems="center">
+                    <span />
+                    <Skeleton isLoaded={!!koinPrice}>
+                      <Text fontSize="xl">
+                        Current Estimate:{" "}
+                        {(totalPrice * 100000000) /
+                          parseInt(koinPrice || "100000000")}{" "}
+                        $KOIN
+                      </Text>
+                    </Skeleton>
+                  </Flex>
+                  {isMinting ? (
                     <Progress
                       isIndeterminate
                       height={12}
@@ -197,11 +222,21 @@ export default function CartDrawer() {
                       colorScheme="gray"
                     />
                   ) : (
-                    <CTA label="Checkout" size="lg" onClick={mint} />
+                    <CTA
+                      label="Checkout"
+                      size="lg"
+                      onClick={() =>
+                        mint().then((res) => {
+                          if (res) {
+                            push("/account");
+                          }
+                        })
+                      }
+                    />
                   )}
                   <Text color={muted}>
                     Once you sign with your wallet, your selected NFTs will be
-                    minted and you will be charged {/* TODO price */} X $KOIN.
+                    minted and you will be charged the total $KOIN amount.
                   </Text>
                 </>
               ) : (

@@ -1,53 +1,61 @@
 import { Image, SkeletonCircle } from "@chakra-ui/react";
 import { createAvatar } from "@dicebear/avatars";
 import * as identiconStyle from "@dicebear/avatars-identicon-sprites";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
+import { useAccount } from "../context/AccountProvider";
+import { useProfile } from "../context/ProfileProvider";
 
 interface AvatarProps {
   src?: string;
-  address?: string;
   size: string;
 }
 
-export default function Avatar({ src, address, size }: AvatarProps) {
-  const [loading, setLoading] = useState(true);
+function Avatar({ src, size }: AvatarProps) {
+  const { address } = useAccount();
+  const { avatarSrc } = useProfile();
+  const [hasError, setHasError] = useState(false);
 
-  if (src) {
+  useEffect(() => {
+    if (hasError) {
+      setHasError(false);
+    }
+  }, [src, avatarSrc, setHasError, hasError]);
+
+  if (!hasError && (src || avatarSrc)) {
     return (
-      <SkeletonCircle
-        height={size}
+      <Image
+        fallback={<SkeletonCircle height={size} width={size} flexShrink="0" />}
+        src={src || avatarSrc}
         width={size}
-        isLoaded={!loading}
-        flexShrink="0"
-      >
-        <Image
-          src={src}
-          width={size}
-          height={size}
-          borderRadius="50%"
-          borderWidth="1px"
-          overflow="hidden"
-          alt="KAP Account Avatar"
-          onLoad={() => setLoading(false)}
-        />
-      </SkeletonCircle>
+        height={size}
+        borderRadius="50%"
+        borderWidth="1px"
+        overflow="hidden"
+        alt="KAP Account Avatar"
+        onError={() => setHasError(true)}
+      />
     );
   } else {
     const identicon = createAvatar(identiconStyle, { seed: address });
 
     return (
-      <span
+      <div
         dangerouslySetInnerHTML={{ __html: identicon }}
         style={{
           display: "block",
           width: size,
           height: size,
           borderRadius: "50%",
-          borderWidth: "1px",
           overflow: "hidden",
           flexShrink: "0",
+          background: "white"
         }}
       />
     );
   }
 }
+
+export default dynamic(() => Promise.resolve(Avatar), {
+  ssr: false,
+});

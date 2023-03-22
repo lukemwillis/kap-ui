@@ -2646,10 +2646,21 @@ koilib@^5.0.0:
     multibase "^4.0.6"
     protobufjs "^7.0.0"
 
-koilib@^5.2.2, koilib@^5.2.3:
+koilib@^5.2.3:
   version "5.3.1"
   resolved "https://registry.yarnpkg.com/koilib/-/koilib-5.3.1.tgz#262d5fef33cc5a005bc715f1e048c3b8566475c2"
   integrity sha512-yOeSFhO7pGZTHJL8ENUz8AhAAZy2ZsGFOmPWNNZK8Lgj1Cu9qFNomPjqmLa0vcAF6x00AZ/PzyBLHTleGsfTqg==
+  dependencies:
+    "@noble/hashes" "^1.1.2"
+    "@noble/secp256k1" "^1.6.3"
+    cross-fetch "^3.1.5"
+    multibase "^4.0.6"
+    protobufjs "^7.0.0"
+
+koilib@^5.4.0:
+  version "5.4.0"
+  resolved "https://registry.yarnpkg.com/koilib/-/koilib-5.4.0.tgz#a434378f46509f2624179a59e62da975e5969b85"
+  integrity sha512-oxoEV04ihmWqXFdExhNstM0eF5BQfX3gcyFrD0wr5wAB/zJjzw85XbKRl9wKctBH9vl2ftNImwISCD6Ctoz+dw==
   dependencies:
     "@noble/hashes" "^1.1.2"
     "@noble/secp256k1" "^1.6.3"
@@ -3050,6 +3061,11 @@ react-clientside-effect@^1.2.6:
   integrity sha512-XGGGRQAKY+q25Lz9a/4EPqom7WRjz3z9R2k4jhVKA/puQFH/5Nt27vFZYql4m4NVNdUvX8PS3O7r/Zzm7cjUlg==
   dependencies:
     "@babel/runtime" "^7.12.13"
+
+react-colorful@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/react-colorful/-/react-colorful-5.6.1.tgz#7dc2aed2d7c72fac89694e834d179e32f3da563b"
+  integrity sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==
 
 react-dom@18.2.0:
   version "18.2.0"
