@@ -63,10 +63,14 @@ export const AccountProvider = ({
         setSigner(s);
       }
     } else if (walletUsed === "mkw" && mkwRef.current) {
-      setProvider(mkwRef.current.getProvider());
-      if (address) {
-        setSigner(mkwRef.current.getSigner(address) as unknown as Signer);
-      }
+      mkwRef.current!.connect().then(async (isConnected) => {
+        if (isConnected) {
+          setProvider(mkwRef.current!.getProvider());
+          if (address) {
+            setSigner(mkwRef.current!.getSigner(address) as unknown as Signer);
+          }
+        }
+      });
     }
   }, [address, walletUsed]);
 
