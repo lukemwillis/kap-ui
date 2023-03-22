@@ -20,6 +20,7 @@ export type NameObject = {
 };
 
 type NameServiceContextType = {
+  getOwner: (name: string) => Promise<{ value: string } | undefined>;
   getName: (name: string) => Promise<NameObject | undefined>;
   getNames: () => Promise<{ names: NameObject[] } | undefined>;
   mint: () => Promise<boolean>;
@@ -31,6 +32,7 @@ type NameServiceContextType = {
 };
 
 export const NameServiceContext = createContext<NameServiceContextType>({
+  getOwner: async () => undefined,
   getName: async () => undefined,
   getNames: async () => undefined,
   mint: async () => false,
@@ -58,7 +60,7 @@ export const NameServiceProvider = ({
   const [isTransferring, setIsTransferring] = useBoolean(false);
   const toast = useToast();
 
-  const { getName, getNames, mint, renew, transfer } = useMemo(() => {
+  const { getOwner, getName, getNames, mint, renew, transfer } = useMemo(() => {
     const nameService = new Contract({
       id: process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR,
       abi,
@@ -67,6 +69,14 @@ export const NameServiceProvider = ({
     });
 
     return {
+      getOwner: async (name: string) => {
+        const buffer = new TextEncoder().encode(name);
+        const token_id = "0x" + utils.toHexString(buffer);
+        const { result } = await nameService!.functions.owner_of<{ value: string }>({
+          token_id
+        });
+        return result;
+      },
       getName: async (name: string) => {
         const { result } = await nameService!.functions.get_name<NameObject>({
           name,
@@ -260,6 +270,7 @@ export const NameServiceProvider = ({
   return (
     <NameServiceContext.Provider
       value={{
+        getOwner,
         getName,
         getNames,
         mint,

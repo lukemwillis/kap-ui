@@ -24,6 +24,7 @@ import { NameObject, useNameService } from "../context/NameServiceProvider";
 import { useEffect, useState } from "react";
 import SearchBox from "../components/SearchBox";
 import { NotAllowedIcon } from "@chakra-ui/icons";
+import Profile from "../components/Profile";
 
 const Search: NextPage = () => {
   const {
@@ -47,7 +48,6 @@ const Search: NextPage = () => {
 
   useEffect(() => {
     if (typeof q !== "string") {
-      replace("/");
       return;
     }
 
@@ -319,6 +319,7 @@ const Search: NextPage = () => {
             autoFocus
           />
         </Flex>
+        <Profile name={`${name.name}.${name.domain}`} />
       </Flex>
     );
   }

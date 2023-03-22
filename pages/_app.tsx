@@ -42,7 +42,7 @@ function MyApp({ Component, pageProps }: AppProps) {
                   gap={{ base: 4, md: 8 }}
                   margin="auto"
                   maxWidth="1024px"
-                  minHeight="100%"
+                  minHeight={{ base: "calc(100% + 3em)", md: "calc(100% + 4em)" }}
                   direction="column"
                 >
                   <Header />

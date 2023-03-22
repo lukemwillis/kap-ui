@@ -9,24 +9,27 @@ import {
   Heading,
   IconButton,
   Input,
+  Link,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
   Popover,
+  PopoverBody,
   PopoverContent,
   PopoverTrigger,
   Skeleton,
   Spinner,
   Stack,
   Text,
+  useClipboard,
   useColorModeValue,
 } from "@chakra-ui/react";
 import Avatar from "../components/Avatar";
 import Textarea from "../components/Textarea";
 import SocialLinks from "../components/SocialLinks";
 import { useEffect, useMemo, useState } from "react";
-import { FaCamera, FaPencilAlt } from "react-icons/fa";
+import { FaCamera, FaPencilAlt, FaShare, FaShareAlt } from "react-icons/fa";
 import ColorPicker from "./ColorPicker";
 import { NameObject } from "../context/NameServiceProvider";
 import {
@@ -37,7 +40,13 @@ import {
 } from "../context/ProfileProvider";
 import { Contract, utils } from "koilib";
 import { useAccount } from "../context/AccountProvider";
-import { ChevronDownIcon, StarIcon } from "@chakra-ui/icons";
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  CopyIcon,
+  ExternalLinkIcon,
+  StarIcon,
+} from "@chakra-ui/icons";
 
 interface ProfileFormProps {
   names: NameObject[];
@@ -55,7 +64,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
       localProfile?.avatar_token_id &&
       localProfile.avatar_token_id !== "0x"
     ) {
-      const buffer = utils.toUint8Array(localProfile.avatar_token_id.substring(2));
+      const buffer = utils.toUint8Array(
+        localProfile.avatar_token_id.substring(2)
+      );
       return new TextDecoder().decode(buffer);
     }
     return "";
@@ -68,6 +79,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [bioHasError, setBioHasError] = useState(false);
   const [themeHasError, setThemeHasError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
+  const { onCopy, setValue } = useClipboard(
+    `https://kap.plus/${profile?.name}`
+  );
 
   useEffect(() => {
     const fetchAvatarSrc = async () => {
@@ -113,7 +127,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         const { result: uriResult } = await nftContract!.functions.uri({});
 
         if (uriResult?.value) {
-          const buffer = utils.toUint8Array(localProfile.avatar_token_id.substring(2));
+          const buffer = utils.toUint8Array(
+            localProfile.avatar_token_id.substring(2)
+          );
           const tokenId = new TextDecoder().decode(buffer);
           const uri = normalizeIpfsUris(uriResult.value as string);
           try {
@@ -197,6 +213,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
       });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
+      setValue(`https://kap.plus/${profile?.name}`);
       setLocalAvatarSrc("");
       setAvatarContractError("");
       setAvatarTokenError("");
@@ -212,7 +229,57 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         color={isThemeLight ? "gray.800" : "white"}
       >
         <CardHeader>
-          <Heading fontSize="2xl">Your Profile</Heading>
+          <Flex justifyContent="space-between" width="100%" gap="2">
+            <Heading fontSize="2xl">Your Profile</Heading>
+
+            {profile?.name && (
+              <Popover
+                placement="bottom-start"
+                onOpen={() => {
+                  onCopy();
+                }}
+              >
+                <PopoverTrigger>
+                  <Button
+                    variant="solid"
+                    background={
+                      isThemeLight ? "blackAlpha.300" : "whiteAlpha.300"
+                    }
+                    _hover={{
+                      background: isThemeLight
+                        ? "blackAlpha.200"
+                        : "whiteAlpha.200",
+                    }}
+                    _active={{
+                      background: isThemeLight
+                        ? "blackAlpha.200"
+                        : "whiteAlpha.200",
+                    }}
+                    rightIcon={<FaShare />}
+                    isDisabled={hasChanges}
+                  >
+                    Share
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent>
+                  <PopoverBody>
+                    <Card variant="outline" padding="2">
+                      <Link
+                        target="_blank"
+                        href={`https://kap.plus/${profile?.name}`}
+                      >
+                        https://kap.plus/{profile?.name} <ExternalLinkIcon mb="1" />
+                      </Link>
+                    </Card>
+                    <Text>
+                      Link copied to your clipboard! Click to view your public
+                      profile.
+                    </Text>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            )}
+          </Flex>
         </CardHeader>
         <CardBody>
           <Stack alignItems="center" maxWidth="30em" margin="0 auto" gap="2">

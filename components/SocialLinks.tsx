@@ -29,7 +29,7 @@ import {
 import { useState } from "react";
 import { LinkObject } from "../context/ProfileProvider";
 
-enum SocialKeys {
+export enum SocialKeys {
   WEBSITE = "website",
   EMAIL = "email",
   GITHUB = "github",
@@ -60,7 +60,7 @@ const LABELS = {
   [SocialKeys.BTC]: "Bitcoin Address",
 };
 
-const ICONS = {
+export const ICONS = {
   [SocialKeys.WEBSITE]: <FaGlobe />,
   [SocialKeys.EMAIL]: <EmailIcon />,
   [SocialKeys.GITHUB]: <FaGithub />,
