@@ -32,6 +32,7 @@ import { useUsdOracle } from "../context/UsdOracleProvider";
 import ConnectWallet from "./ConnectWallet";
 import CTA from "./CTA";
 import Cart from "./icons/Cart";
+import SearchBox from "./SearchBox";
 
 export default function CartDrawer() {
   const {
@@ -123,7 +124,8 @@ export default function CartDrawer() {
           <DrawerCloseButton />
           <DrawerHeader>Your Cart</DrawerHeader>
           <DrawerBody>
-            <Flex direction="column">
+            <Flex direction="column" gap="5">
+              <SearchBox placeholder="Find another name" onSearch={onCartClose} inlineButton />
               {itemNames.map((name) => (
                 <Box key={name}>
                   <Flex
@@ -188,7 +190,7 @@ export default function CartDrawer() {
                       </>
                     )}
                   </Flex>
-                  <Divider marginTop="6" marginBottom="5" />
+                  <Divider marginTop="6" />
                 </Box>
               ))}
             </Flex>
