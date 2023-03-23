@@ -15,6 +15,7 @@ import {
   MenuItem,
   MenuList,
   Popover,
+  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
@@ -160,6 +161,14 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     } as ProfileObject);
     setHasChanges(true);
   };
+  const socialLinkRemover = (key: string) => {
+    const links = localProfile?.links?.filter((link) => link.key !== key) || [];
+    setLocalProfile({
+      ...localProfile,
+      links,
+    } as ProfileObject);
+    setHasChanges(true);
+  };
 
   const themeSetter = (theme: string) => {
     setLocalProfile({
@@ -234,7 +243,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
             {profile?.name && (
               <Popover
-                placement="bottom-start"
+                placement="bottom-end"
                 onOpen={() => {
                   onCopy();
                 }}
@@ -268,7 +277,8 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                         target="_blank"
                         href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`}
                       >
-                        {process.env.NEXT_PUBLIC_KAP_PLUS_URL}{profile?.name} <ExternalLinkIcon mb="1" />
+                        {process.env.NEXT_PUBLIC_KAP_PLUS_URL}
+                        {profile?.name} <ExternalLinkIcon mb="1" />
                       </Link>
                     </Card>
                     <Text>
@@ -328,6 +338,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     />
                   </PopoverTrigger>
                   <PopoverContent color={popoverColor} padding={2}>
+                    <PopoverArrow />
                     <Stack>
                       <Input
                         placeholder="NFT Contract Address"
@@ -448,6 +459,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               setValue={socialLinkSetter}
               isThemeLight={isThemeLight}
               disabled={isUpdating}
+              removeValue={socialLinkRemover}
             />
           </Stack>
         </CardBody>

@@ -56,6 +56,7 @@ export default function ColorPicker({
       initialFocusRef={initialFocusRef}
       isOpen={popoverHasFocus || inputHasFocus}
       closeOnBlur={false}
+      placement="top-start"
     >
       <PopoverTrigger>
         <InputGroup width="10em">

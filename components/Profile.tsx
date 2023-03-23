@@ -168,36 +168,7 @@ export default function Profile({ name }: ProfileProps) {
               maxWidth="20em"
             >
               {profile?.links?.map(({ key, value }) => {
-                let link;
-                switch (key) {
-                  case SocialKeys.BTC:
-                    link = `https://blockstream.info/address/${value}`;
-                    break;
-                  case SocialKeys.ETH:
-                    link = `https://etherscan.io/address/${value}`;
-                    break;
-                  case SocialKeys.EMAIL:
-                    link = `mailto:${value}`;
-                    break;
-                  case SocialKeys.WEBSITE:
-                    link = `https://${value}`;
-                    break;
-                  case SocialKeys.GITHUB:
-                    link = `https://github.com/${value}`;
-                    break;
-                  case SocialKeys.REDDIT:
-                    link = `https://reddit.com/u/${value}`;
-                    break;
-                  case SocialKeys.DISCORD:
-                    link = `https://discord.com/users/${value}`;
-                    break;
-                  case SocialKeys.TELEGRAM:
-                    link = `https://t.me/${value}`;
-                    break;
-                  case SocialKeys.TWITTER:
-                    link = `https://twitter.com/${value}`;
-                    break;
-                }
+                const link = getLink(key, value);
                 return (
                   <IconButton
                     as={Link}
@@ -246,4 +217,27 @@ function isThemeColorLight(hexcolor: string) {
   const b = parseInt(bs, 16);
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128;
+}
+
+export function getLink(key: string, value: string) {
+  switch (key) {
+    case SocialKeys.BTC:
+      return `https://blockstream.info/address/${value}`;
+    case SocialKeys.ETH:
+      return `https://etherscan.io/address/${value}`;
+    case SocialKeys.EMAIL:
+      return `mailto:${value}`;
+    case SocialKeys.WEBSITE:
+      return `https://${value}`;
+    case SocialKeys.GITHUB:
+      return `https://github.com/${value}`;
+    case SocialKeys.REDDIT:
+      return `https://reddit.com/u/${value}`;
+    case SocialKeys.DISCORD:
+      return `https://discord.com/users/${value}`;
+    case SocialKeys.TELEGRAM:
+      return `https://t.me/${value}`;
+    case SocialKeys.TWITTER:
+      return `https://twitter.com/${value}`;
+  }
 }
