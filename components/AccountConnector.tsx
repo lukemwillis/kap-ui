@@ -6,16 +6,16 @@ import {
   PopoverTrigger,
   Stack,
   Text,
-  useToast,
   StackDivider,
   IconButton,
   Flex,
   useDisclosure,
   useClipboard,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
-import { CheckIcon, CopyIcon } from "@chakra-ui/icons";
+import { CheckIcon, CopyIcon, WarningIcon } from "@chakra-ui/icons";
 import { ReactElement, useRef } from "react";
 import Avatar from "./Avatar";
 import Link from "next/link";
@@ -23,6 +23,8 @@ import SearchBox from "./SearchBox";
 import ConnectWallet from "./ConnectWallet";
 import { useProfile } from "../context/ProfileProvider";
 import { useNameService } from "../context/NameServiceProvider";
+import CTA from "./CTA";
+import { useRouter } from "next/router";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -33,6 +35,7 @@ export default function AccountConnector({
   onConnect,
   sitePreferences,
 }: ConnectorProps) {
+  const router = useRouter();
   const { address, isConnecting } = useAccount();
   const { names } = useNameService();
   const { profile } = useProfile();
@@ -59,7 +62,19 @@ export default function AccountConnector({
         >
           {address && !isConnecting ? (
             <Flex gap="2" alignItems="center">
-              <Avatar size="2.6em" />
+              <Box position="relative">
+                <Avatar size="2.6em" />
+                {names.length > 0 &&
+                  !profile?.name &&
+                  router.route !== "/account" && (
+                    <WarningIcon
+                      color="brand.orange"
+                      position="absolute"
+                      top="-1"
+                      right="-1"
+                    />
+                  )}
+              </Box>
               <Stack alignItems="start" lineHeight="1">
                 {profile?.name && <Text fontSize="1.2em">{profile.name}</Text>}
                 <Text
@@ -90,14 +105,16 @@ export default function AccountConnector({
                       <Text fontSize="1.5em" lineHeight="1">
                         {profile.name}
                       </Text>
-                    ) : names.length === 0 && (
-                      <SearchBox
-                        placeholder="Pick a username..."
-                        buttonLabel="Search"
-                        inlineButton
-                        onSearch={onClose}
-                        inputRef={inputRef}
-                      />
+                    ) : (
+                      names.length === 0 && (
+                        <SearchBox
+                          placeholder="Pick a username..."
+                          buttonLabel="Search"
+                          inlineButton
+                          onSearch={onClose}
+                          inputRef={inputRef}
+                        />
+                      )
                     ))}
                   <Flex
                     borderColor="gray.500"
@@ -125,9 +142,17 @@ export default function AccountConnector({
                   </Flex>
                   {names.length > 0 && (
                     <Link href="/account">
-                      <Button variant="outline" onClick={onClose}>
-                        Manage KAP Account
-                      </Button>
+                      {profile?.name ? (
+                        <Button variant="outline" onClick={onClose}>
+                          Manage KAP Account
+                        </Button>
+                      ) : (
+                        <CTA
+                          size="md"
+                          onClick={onClose}
+                          label="Set Up Your KAP Account"
+                        />
+                      )}
                     </Link>
                   )}
                 </Flex>
