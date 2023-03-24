@@ -1,4 +1,10 @@
-import React, { useContext, createContext, useMemo } from "react";
+import React, {
+  useContext,
+  createContext,
+  useMemo,
+  useEffect,
+  useState,
+} from "react";
 import { Contract, utils } from "koilib";
 import { useAccount } from "./AccountProvider";
 import namerserviceAbi from "../contract/abi/nameservice-abi.json";
@@ -22,25 +28,27 @@ export type NameObject = {
 type NameServiceContextType = {
   getOwner: (name: string) => Promise<{ value: string } | undefined>;
   getName: (name: string) => Promise<NameObject | undefined>;
-  getNames: () => Promise<{ names: NameObject[] } | undefined>;
+  fetchNames: () => Promise<void>;
   mint: () => Promise<boolean>;
   isMinting: boolean;
   renew: (name: string, years: number) => Promise<boolean>;
   isRenewing: boolean;
   transfer: (name: string, to: string) => Promise<boolean>;
   isTransferring: boolean;
+  names: NameObject[];
 };
 
 export const NameServiceContext = createContext<NameServiceContextType>({
   getOwner: async () => undefined,
   getName: async () => undefined,
-  getNames: async () => undefined,
+  fetchNames: async () => undefined,
   mint: async () => false,
   isMinting: false,
   renew: async () => false,
   isRenewing: false,
   transfer: async () => false,
   isTransferring: false,
+  names: [],
 });
 
 export const useNameService = () => useContext(NameServiceContext);
@@ -60,7 +68,7 @@ export const NameServiceProvider = ({
   const [isTransferring, setIsTransferring] = useBoolean(false);
   const toast = useToast();
 
-  const { getOwner, getName, getNames, mint, renew, transfer } = useMemo(() => {
+  const { getOwner, getName, fetchNames, mint, renew, transfer } = useMemo(() => {
     const nameService = new Contract({
       id: process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR,
       abi,
@@ -72,8 +80,10 @@ export const NameServiceProvider = ({
       getOwner: async (name: string) => {
         const buffer = new TextEncoder().encode(name);
         const token_id = "0x" + utils.toHexString(buffer);
-        const { result } = await nameService!.functions.owner_of<{ value: string }>({
-          token_id
+        const { result } = await nameService!.functions.owner_of<{
+          value: string;
+        }>({
+          token_id,
         });
         return result;
       },
@@ -83,7 +93,7 @@ export const NameServiceProvider = ({
         });
         return result;
       },
-      getNames: async () => {
+      fetchNames: async () => {
         const { result } = await nameService!.functions.get_names<{
           names: NameObject[];
         }>({
@@ -92,7 +102,10 @@ export const NameServiceProvider = ({
           descending: false,
           limit: 100,
         });
-        return result;
+        
+        if (result?.names && result.names.length > 0) {
+          setNames(result.names);
+        }
       },
       mint: async () => {
         let result = false;
@@ -267,12 +280,20 @@ export const NameServiceProvider = ({
     toast,
   ]);
 
+  const [names, setNames] = useState<NameObject[]>([]);
+  useEffect(() => {
+    if (address) {
+      fetchNames();
+    }
+  }, [address, fetchNames]);
+
   return (
     <NameServiceContext.Provider
       value={{
+        names,
         getOwner,
         getName,
-        getNames,
+        fetchNames,
         mint,
         isMinting,
         renew,

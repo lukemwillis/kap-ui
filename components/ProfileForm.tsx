@@ -15,6 +15,7 @@ import {
   MenuItem,
   MenuList,
   Popover,
+  PopoverArrow,
   PopoverBody,
   PopoverContent,
   PopoverTrigger,
@@ -78,9 +79,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [avatarTokenError, setAvatarTokenError] = useState("");
   const [bioHasError, setBioHasError] = useState(false);
   const [themeHasError, setThemeHasError] = useState(false);
+  const [socialLinksHaveError, setSocialLinksHaveError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { onCopy, setValue } = useClipboard(
-    `https://kap.plus/${profile?.name}`
+    `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`
   );
 
   useEffect(() => {
@@ -153,10 +155,19 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   ]);
 
   const socialLinkSetter = (key: string, value: string) => {
+    setSocialLinksHaveError(value.length === 0);
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
     setLocalProfile({
       ...localProfile,
       links: [...links, { key, value }],
+    } as ProfileObject);
+    setHasChanges(true);
+  };
+  const socialLinkRemover = (key: string) => {
+    const links = localProfile?.links?.filter((link) => link.key !== key) || [];
+    setLocalProfile({
+      ...localProfile,
+      links,
     } as ProfileObject);
     setHasChanges(true);
   };
@@ -213,11 +224,15 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
       });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
-      setValue(`https://kap.plus/${profile?.name}`);
+      setValue(`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`);
       setLocalAvatarSrc("");
       setAvatarContractError("");
       setAvatarTokenError("");
       setIsAvatarLoading(false);
+      setBioHasError(false);
+      setThemeHasError(false);
+      setSocialLinksHaveError(false);
+      setHasChanges(false);
     }
   }, [profile]);
 
@@ -234,7 +249,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
             {profile?.name && (
               <Popover
-                placement="bottom-start"
+                placement="bottom-end"
                 onOpen={() => {
                   onCopy();
                 }}
@@ -261,14 +276,15 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     Share
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent color={popoverColor}>
                   <PopoverBody>
                     <Card variant="outline" padding="2">
                       <Link
                         target="_blank"
-                        href={`https://kap.plus/${profile?.name}`}
+                        href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`}
                       >
-                        https://kap.plus/{profile?.name} <ExternalLinkIcon mb="1" />
+                        {process.env.NEXT_PUBLIC_KAP_PLUS_URL}
+                        {profile?.name} <ExternalLinkIcon mb="1" />
                       </Link>
                     </Card>
                     <Text>
@@ -328,6 +344,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     />
                   </PopoverTrigger>
                   <PopoverContent color={popoverColor} padding={2}>
+                    <PopoverArrow />
                     <Stack>
                       <Input
                         placeholder="NFT Contract Address"
@@ -448,6 +465,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               setValue={socialLinkSetter}
               isThemeLight={isThemeLight}
               disabled={isUpdating}
+              removeValue={socialLinkRemover}
             />
           </Stack>
         </CardBody>
@@ -478,6 +496,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               isLoading={isUpdating}
               isDisabled={
                 !hasChanges ||
+                socialLinksHaveError ||
                 themeHasError ||
                 bioHasError ||
                 !!avatarContractError ||

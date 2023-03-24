@@ -102,7 +102,6 @@ export const ProfileProvider = ({
       fetchProfile,
       updateProfile: async (profile: ProfileObject) => {
         let result = false;
-        console.log(profile)
         try {
           setIsUpdating.on();
           const mana = await provider!.getAccountRc(address!);
