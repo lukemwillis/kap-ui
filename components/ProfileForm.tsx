@@ -79,6 +79,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [avatarTokenError, setAvatarTokenError] = useState("");
   const [bioHasError, setBioHasError] = useState(false);
   const [themeHasError, setThemeHasError] = useState(false);
+  const [socialLinksHaveError, setSocialLinksHaveError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { onCopy, setValue } = useClipboard(
     `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`
@@ -154,6 +155,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   ]);
 
   const socialLinkSetter = (key: string, value: string) => {
+    setSocialLinksHaveError(value.length === 0);
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
     setLocalProfile({
       ...localProfile,
@@ -227,6 +229,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
       setAvatarContractError("");
       setAvatarTokenError("");
       setIsAvatarLoading(false);
+      setBioHasError(false);
+      setThemeHasError(false);
+      setSocialLinksHaveError(false);
+      setHasChanges(false);
     }
   }, [profile]);
 
@@ -270,7 +276,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     Share
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent>
+                <PopoverContent color={popoverColor}>
                   <PopoverBody>
                     <Card variant="outline" padding="2">
                       <Link
@@ -490,6 +496,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               isLoading={isUpdating}
               isDisabled={
                 !hasChanges ||
+                socialLinksHaveError ||
                 themeHasError ||
                 bioHasError ||
                 !!avatarContractError ||

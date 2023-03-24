@@ -22,6 +22,7 @@ import Link from "next/link";
 import SearchBox from "./SearchBox";
 import ConnectWallet from "./ConnectWallet";
 import { useProfile } from "../context/ProfileProvider";
+import { useNameService } from "../context/NameServiceProvider";
 
 interface ConnectorProps {
   onConnect?: () => void;
@@ -33,6 +34,7 @@ export default function AccountConnector({
   sitePreferences,
 }: ConnectorProps) {
   const { address, isConnecting } = useAccount();
+  const { names } = useNameService();
   const { profile } = useProfile();
   const { onOpen, onClose, isOpen } = useDisclosure();
   const { onCopy, hasCopied } = useClipboard(address || "");
@@ -59,9 +61,7 @@ export default function AccountConnector({
             <Flex gap="2" alignItems="center">
               <Avatar size="2.6em" />
               <Stack alignItems="start" lineHeight="1">
-                {profile?.name && (
-                  <Text fontSize="1.2em">{profile.name}</Text>
-                )}
+                {profile?.name && <Text fontSize="1.2em">{profile.name}</Text>}
                 <Text
                   fontSize={profile?.name ? "0.9em" : "1.3em"}
                   color="gray.500"
@@ -90,7 +90,7 @@ export default function AccountConnector({
                       <Text fontSize="1.5em" lineHeight="1">
                         {profile.name}
                       </Text>
-                    ) : (
+                    ) : names.length === 0 && (
                       <SearchBox
                         placeholder="Pick a username..."
                         buttonLabel="Search"
@@ -123,7 +123,7 @@ export default function AccountConnector({
                       {hasCopied ? <CheckIcon /> : <CopyIcon />}
                     </IconButton>
                   </Flex>
-                  {profile?.name && (
+                  {names.length > 0 && (
                     <Link href="/account">
                       <Button variant="outline" onClick={onClose}>
                         Manage KAP Account

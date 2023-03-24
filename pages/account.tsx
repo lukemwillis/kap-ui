@@ -1,4 +1,4 @@
-import { ChevronDownIcon, StarIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import {
   Button,
   Card,
@@ -43,17 +43,14 @@ import {
   FaEllipsisV,
   FaExternalLinkAlt,
   FaPaperPlane,
-  FaTag,
 } from "react-icons/fa";
-import { useEffect, useState } from "react";
-import { useNameService, NameObject } from "../context/NameServiceProvider";
+import { useState } from "react";
+import { useNameService } from "../context/NameServiceProvider";
 import CTA from "../components/CTA";
 import { calculatePrice } from "../context/CartProvider";
-import { useRouter } from "next/router";
 import { useAccount } from "../context/AccountProvider";
 
 const Account: NextPage = () => {
-  const { push } = useRouter();
   const { address } = useAccount();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedName, selectName] = useState("");
@@ -62,22 +59,10 @@ const Account: NextPage = () => {
   const [transferAddress, setTransferAddress] = useState("");
   const [renewYears, setRenewYears] = useState(0);
 
-  const isMenuIcon = useBreakpointValue({ base: true, md: false });
+  const isMobile = useBreakpointValue({ base: true, md: false });
   const muted = useColorModeValue("gray.600", "gray.400");
-  const { getNames, renew, isRenewing, transfer, isTransferring } =
+  const { names, fetchNames, renew, isRenewing, transfer, isTransferring } =
     useNameService();
-  const [names, setNames] = useState<NameObject[]>([]);
-  useEffect(() => {
-    if (address) {
-      getNames().then((result) => {
-        if (result?.names && result.names.length > 0) {
-          setNames(result.names);
-        } else {
-          push("/");
-        }
-      });
-    }
-  }, [address, getNames, push]);
 
   const openRenew = (name: string, expiry: string) => {
     setAction("renew");
@@ -92,6 +77,40 @@ const Account: NextPage = () => {
     onOpen();
   };
 
+  if (!address) {
+    return (
+      <Flex
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        direction="column"
+        gap="8"
+      >
+        <Text>Connect your wallet to manage your account</Text>
+      </Flex>
+    );
+  }
+
+  if (names.length === 0) {
+    return (
+      <Flex
+        width="100%"
+        alignItems="center"
+        justifyContent="center"
+        direction="column"
+        gap="8"
+      >
+        <Text>You need a username to set up your profile</Text>
+        <SearchBox
+          placeholder="Find a username..."
+          buttonLabel="Search"
+          inlineButton={isMobile}
+          autoFocus
+        />
+      </Flex>
+    );
+  }
+
   return (
     <Flex direction="column" width="100%" gap={{ base: "4", md: "8" }}>
       <ProfileForm names={names} />
@@ -99,7 +118,7 @@ const Account: NextPage = () => {
         <SearchBox
           placeholder="Find a new username..."
           buttonLabel="Search"
-          inlineButton={useBreakpointValue({ base: true, md: false })}
+          inlineButton={isMobile}
           autoFocus={false}
           secondaryCTA
         />
@@ -146,7 +165,7 @@ const Account: NextPage = () => {
                   </Td>
                   <Td paddingInline={{ base: "4", md: "6" }}>
                     <Menu placement="bottom-end">
-                      {isMenuIcon ? (
+                      {isMobile ? (
                         <MenuButton
                           as={IconButton}
                           icon={<FaEllipsisV />}
@@ -283,8 +302,7 @@ const Account: NextPage = () => {
                   setTransferAddress("");
                 }
                 onClose();
-                const updatedNames = await getNames();
-                setNames(updatedNames?.names || []);
+                fetchNames();
               }}
               loading={action === "renew" ? isRenewing : isTransferring}
             />
