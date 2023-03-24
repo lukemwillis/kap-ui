@@ -64,6 +64,7 @@ export default function AccountConnector({
             <Flex gap="2" alignItems="center">
               <Box position="relative">
                 <Avatar size="2.6em" />
+                {/* TODO show badge if any will expire soon */}
                 {names.length > 0 &&
                   !profile?.name &&
                   router.route !== "/account" && (
@@ -142,6 +143,7 @@ export default function AccountConnector({
                   </Flex>
                   {names.length > 0 && (
                     <Link href="/account">
+                      {/* TODO change CTA if names will expire soon */}
                       {profile?.name ? (
                         <Button variant="outline" onClick={onClose}>
                           Manage KAP Account

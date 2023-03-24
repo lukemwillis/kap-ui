@@ -1,5 +1,6 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, WarningTwoIcon } from "@chakra-ui/icons";
 import {
+  Badge,
   Button,
   Card,
   CardHeader,
@@ -30,6 +31,7 @@ import {
   Tfoot,
   Th,
   Thead,
+  Tooltip,
   Tr,
   useBreakpointValue,
   useColorModeValue,
@@ -159,7 +161,7 @@ const Account: NextPage = () => {
                   if (a.domain > b.domain) return 1;
                   return 0;
                 })
-                .map(({ name, domain, expiration }) => (
+                .map(({ name, domain, expiration, grace_period_end }) => (
                   <Tr key={`${name}.${domain}`}>
                     <Td>
                       <Text fontSize="xl" wordBreak="break-all">
@@ -177,6 +179,29 @@ const Account: NextPage = () => {
                           { day: "numeric", month: "long", year: "numeric" }
                         )}
                       </Text>
+                      {parseInt(expiration) - Date.now() <
+                        1000 * 60 * 60 * 24 * 30 && (
+                        <Tooltip
+                          hasArrow
+                          label={`You have until ${new Date(
+                            parseInt(grace_period_end)
+                          ).toLocaleDateString(undefined, {
+                            day: "numeric",
+                            month: "long",
+                            year: "numeric",
+                          })} to renew this name.`}
+                        >
+                          {parseInt(expiration) < Date.now() ? (
+                            <Badge colorScheme="red">
+                              <WarningTwoIcon /> Expired
+                            </Badge>
+                          ) : (
+                            <Badge colorScheme="yellow">
+                              <WarningTwoIcon /> Expiring Soon
+                            </Badge>
+                          )}
+                        </Tooltip>
+                      )}
                     </Td>
                     <Td paddingInline={{ base: "4", md: "6" }}>
                       <Menu placement="bottom-end">

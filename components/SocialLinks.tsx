@@ -114,8 +114,10 @@ export default function SocialLinks({
           <Box key={key}>
             <Popover
               onOpen={() => {
-                setLastKey(key);
-                onOpen();
+                if (!error) {
+                  setLastKey(key);
+                  onOpen();
+                }
               }}
               onClose={() => {
                 if (value.length === 0) {
