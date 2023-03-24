@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
+    "@types/gtag.js": "^0.0.12",
     "@types/node": "18.7.18",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",

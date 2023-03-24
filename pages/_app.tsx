@@ -12,8 +12,23 @@ import { NameServiceProvider } from "../context/NameServiceProvider";
 import { UsdOracleProvider } from "../context/UsdOracleProvider";
 import { ProfileProvider } from "../context/ProfileProvider";
 import Script from "next/script";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  useEffect(() => {
+    const handleRouteChange = (url: URL) => {
+      window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+        page_path: url,
+      });
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+  
   return (
     <>
       <ChakraProvider theme={theme}>
@@ -72,7 +87,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+            page_path: window.location.pathname
+          });
         `}
       </Script>
     </>
