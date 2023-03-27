@@ -1,5 +1,5 @@
 export function pageView() {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
       page_path: window.location.pathname,
     });
@@ -14,7 +14,7 @@ export function event(
     | Gtag.EventParams
     | undefined
 ) {
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && typeof window.gtag === "function") {
     window.gtag("event", eventName, eventParams);
   }
 }
