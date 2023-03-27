@@ -52,6 +52,7 @@ import CTA from "../components/CTA";
 import { calculatePrice } from "../context/CartProvider";
 import { useAccount } from "../context/AccountProvider";
 import Head from "next/head";
+import { pageView } from "../utils/ga";
 
 const Account: NextPage = () => {
   const { address } = useAccount();
@@ -81,9 +82,7 @@ const Account: NextPage = () => {
   };
 
   useEffect(() => {
-    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
-      page_path: window.location.pathname,
-    });
+    pageView();
   });
 
   if (!address) {

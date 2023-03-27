@@ -48,6 +48,7 @@ import {
   ExternalLinkIcon,
   StarIcon,
 } from "@chakra-ui/icons";
+import { event } from "../utils/ga";
 
 interface ProfileFormProps {
   names: NameObject[];
@@ -251,7 +252,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               <Popover
                 placement="bottom-end"
                 onOpen={() => {
-                  window.gtag("event", "share", {
+                  event("share", {
                     item_id: profile?.name,
                   });
                   onCopy();

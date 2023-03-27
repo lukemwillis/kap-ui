@@ -9,6 +9,7 @@ import * as kondor from "../node_modules/kondor-js/lib/browser";
 import MyKoinosWallet from "@roamin/my-koinos-wallet-sdk";
 import useLocalStorage from "./useLocalStorage";
 import { Provider, Signer } from "koilib";
+import { event } from "../utils/ga";
 
 type AccountContextType = {
   address?: string;
@@ -91,7 +92,7 @@ export const AccountProvider = ({
     if (address) {
       setAddress(address);
       setWalletUsed("kondor");
-      window.gtag("event", "login", {
+      event("login", {
         method: "kondor",
       });
     }
@@ -118,7 +119,7 @@ export const AccountProvider = ({
         if (address) {
           setAddress(address);
           setWalletUsed("mkw");
-          window.gtag("event", "login", {
+          event("login", {
             method: "mkw",
           });
         }

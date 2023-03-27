@@ -22,12 +22,11 @@ import { useEffect } from "react";
 import Free from "../components/icons/Free";
 import Name from "../components/icons/Name";
 import Security from "../components/icons/Security";
+import { pageView } from "../utils/ga";
 
 const About: NextPage = () => {
   useEffect(() => {
-    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
-      page_path: window.location.pathname,
-    });
+    pageView();
   });
 
   return (

@@ -11,6 +11,7 @@ import namerserviceAbi from "../contract/abi/nameservice-abi.json";
 import { Abi } from "koilib/lib/interface";
 import { useCart } from "./CartProvider";
 import { useBoolean, useToast } from "@chakra-ui/react";
+import { event } from "../utils/ga";
 
 const abi: Abi = {
   koilib_types: namerserviceAbi.types,
@@ -109,7 +110,7 @@ export const NameServiceProvider = ({
           }
         },
         mint: async () => {
-          window.gtag("event", "begin_checkout", {
+          event("begin_checkout", {
             currency: "USD",
             value: totalPrice,
             items: Object.keys(items).map((name) => ({
@@ -164,7 +165,7 @@ export const NameServiceProvider = ({
               isClosable: true,
               position: "bottom-left",
             });
-            window.gtag("event", "purchase", {
+            event("purchase", {
               transaction_id: transaction.id,
               currency: "USD",
               value: totalPrice,

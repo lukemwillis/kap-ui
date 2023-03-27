@@ -16,12 +16,11 @@ import { useEffect } from "react";
 import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
+import { pageView } from "../utils/ga";
 
 const Pricing: NextPage = () => {
   useEffect(() => {
-    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
-      page_path: window.location.pathname,
-    });
+    pageView();
   });
 
   return (

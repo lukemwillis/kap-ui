@@ -26,6 +26,7 @@ import SearchBox from "../components/SearchBox";
 import { NotAllowedIcon } from "@chakra-ui/icons";
 import Profile from "../components/Profile";
 import Head from "next/head";
+import { event, pageView } from "../utils/ga";
 
 const Search: NextPage = () => {
   const {
@@ -49,12 +50,10 @@ const Search: NextPage = () => {
 
   useEffect(() => {
     if (ready) {
-      window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
-        page_path: window.location.pathname,
-      });
+      pageView();
 
       const price = !name ? calculatePrice(query.length, 1) : 0;
-      window.gtag("event", "view_item", {
+      event("view_item", {
         currency: "USD",
         value: price,
         items: {
@@ -83,7 +82,7 @@ const Search: NextPage = () => {
     if (parsed !== query) {
       setQuery(parsed);
 
-      window.gtag("event", "search", {
+      event("search", {
         search_term: parsed,
       });
 

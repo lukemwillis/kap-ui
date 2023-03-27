@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useEffect,
 } from "react";
+import { event } from "../utils/ga";
 import useLocalStorage from "./useLocalStorage";
 
 type State = {
@@ -101,7 +102,7 @@ export const CartProvider = ({
       },
       upsertItem: (params: UpsertParams) => {
         const price = calculatePrice(params.name.length, params.years);
-        window.gtag("event", "add_to_cart", {
+        event("add_to_cart", {
           currency: "USD",
           value: price,
           items: {
@@ -113,7 +114,7 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
-        window.gtag("event", "add_to_cart", {
+        event("add_to_cart", {
           currency: "USD",
           value: state.items[params.name].price,
           items: {
@@ -136,7 +137,7 @@ export const CartProvider = ({
 
   useEffect(() => {
     if (isCartOpen) {
-      window.gtag("event", "view_cart", {
+      event("view_cart", {
         currency: "USD",
         value: state.totalPrice,
         items: Object.keys(state.items).map((name) => ({
