@@ -46,7 +46,7 @@ import {
   FaExternalLinkAlt,
   FaPaperPlane,
 } from "react-icons/fa";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNameService } from "../context/NameServiceProvider";
 import CTA from "../components/CTA";
 import { calculatePrice } from "../context/CartProvider";
@@ -79,6 +79,12 @@ const Account: NextPage = () => {
     selectName(name);
     onOpen();
   };
+
+  useEffect(() => {
+    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+      page_path: window.location.pathname,
+    });
+  });
 
   if (!address) {
     return (

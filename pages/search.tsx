@@ -48,6 +48,14 @@ const Search: NextPage = () => {
   const isMobile = useBreakpointValue({ base: true, md: false });
 
   useEffect(() => {
+    if (ready) {
+      window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+        page_path: window.location.pathname,
+      });
+    }
+  }, [ready]);
+
+  useEffect(() => {
     if (typeof q !== "string") {
       return;
     }

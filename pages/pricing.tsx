@@ -12,11 +12,18 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
 import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
 
 const Pricing: NextPage = () => {
+  useEffect(() => {
+    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+      page_path: window.location.pathname,
+    });
+  });
+
   return (
     <>
       <Head>

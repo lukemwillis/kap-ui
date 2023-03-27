@@ -4,8 +4,15 @@ import Logo from "../components/Logo";
 import SearchBox from "../components/SearchBox";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
 import Head from "next/head";
+import { useEffect } from "react";
 
 const Home: NextPage = () => {
+  useEffect(() => {
+    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+      page_path: window.location.pathname,
+    });
+  });
+
   return (
     <>
       <Head>

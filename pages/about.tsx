@@ -18,11 +18,18 @@ import {
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
+import { useEffect } from "react";
 import Free from "../components/icons/Free";
 import Name from "../components/icons/Name";
 import Security from "../components/icons/Security";
 
 const About: NextPage = () => {
+  useEffect(() => {
+    window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
+      page_path: window.location.pathname,
+    });
+  });
+
   return (
     <>
       <Head>
