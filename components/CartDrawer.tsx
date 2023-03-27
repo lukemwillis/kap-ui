@@ -125,7 +125,11 @@ export default function CartDrawer() {
           <DrawerHeader>Your Cart</DrawerHeader>
           <DrawerBody>
             <Flex direction="column" gap="5">
-              <SearchBox placeholder="Find another name" onSearch={onCartClose} inlineButton />
+              <SearchBox
+                placeholder="Find another name"
+                onSearch={onCartClose}
+                inlineButton
+              />
               {itemNames.map((name) => (
                 <Box key={name}>
                   <Flex
@@ -142,7 +146,7 @@ export default function CartDrawer() {
                       </Text>
                     </Text>
                     <IconButton
-                    // TODO use domain
+                      // TODO use domain
                       aria-label={`Remove ${name}.koin from cart`}
                       variant="ghost"
                       size="sm"

@@ -91,6 +91,9 @@ export const AccountProvider = ({
     if (address) {
       setAddress(address);
       setWalletUsed("kondor");
+      window.gtag("event", "login", {
+        method: "kondor",
+      });
     }
     setIsConnecting(false);
 
@@ -115,6 +118,9 @@ export const AccountProvider = ({
         if (address) {
           setAddress(address);
           setWalletUsed("mkw");
+          window.gtag("event", "login", {
+            method: "mkw",
+          });
         }
       }
       setIsConnecting(false);

@@ -251,6 +251,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               <Popover
                 placement="bottom-end"
                 onOpen={() => {
+                  window.gtag("event", "share", {
+                    item_id: profile?.name,
+                  });
                   onCopy();
                 }}
               >

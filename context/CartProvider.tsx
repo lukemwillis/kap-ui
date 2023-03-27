@@ -1,5 +1,11 @@
 import { useDisclosure } from "@chakra-ui/react";
-import React, { useContext, createContext, useReducer, useMemo } from "react";
+import React, {
+  useContext,
+  createContext,
+  useReducer,
+  useMemo,
+  useEffect,
+} from "react";
 import useLocalStorage from "./useLocalStorage";
 
 type State = {
@@ -53,6 +59,7 @@ export const CartProvider = ({
     onOpen: onCartOpen,
     onClose: onCartClose,
   } = useDisclosure();
+
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
       switch (action.type) {
@@ -61,10 +68,7 @@ export const CartProvider = ({
         }
         case ActionTypes.UPSERT: {
           const name = action.params.name.toLowerCase();
-          const price = calculatePrice(
-            name.length,
-            action.params.years
-          );
+          const price = calculatePrice(name.length, action.params.years);
           return {
             items: {
               ...state.items,
@@ -96,9 +100,29 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.LOAD, state });
       },
       upsertItem: (params: UpsertParams) => {
+        const price = calculatePrice(params.name.length, params.years);
+        window.gtag("event", "add_to_cart", {
+          currency: "USD",
+          value: price,
+          items: {
+            item_name: `${params.name.toLowerCase()}.koin`,
+            price: price / params.years,
+            quantity: params.years,
+          },
+        });
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
+        window.gtag("event", "add_to_cart", {
+          currency: "USD",
+          value: state.items[params.name].price,
+          items: {
+            item_name: `${params.name.toLowerCase()}.koin`,
+            value:
+              state.items[params.name].price / state.items[params.name].years,
+            quantity: state.items[params.name].years,
+          },
+        });
         dispatch({ type: ActionTypes.REMOVE, params });
       },
       clearItems: () => {
@@ -109,6 +133,20 @@ export const CartProvider = ({
   );
 
   useLocalStorage("CART", state, actions.loadState);
+
+  useEffect(() => {
+    if (isCartOpen) {
+      window.gtag("event", "view_cart", {
+        currency: "USD",
+        value: state.totalPrice,
+        items: Object.keys(state.items).map((name) => ({
+          item_name: `${name}.koin`,
+          price: state.items[name].price / state.items[name].years,
+          quantity: state.items[name].years,
+        })),
+      });
+    }
+  }, [isCartOpen]);
 
   return (
     <CartContext.Provider

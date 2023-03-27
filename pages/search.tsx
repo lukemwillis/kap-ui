@@ -18,7 +18,7 @@ import CTA from "../components/CTA";
 import Price from "../components/Price";
 import PricingExplainer from "../components/PricingExplainer";
 import Shiny from "../components/Shiny";
-import { useCart } from "../context/CartProvider";
+import { calculatePrice, useCart } from "../context/CartProvider";
 import Infinite from "../components/icons/Infinite";
 import { NameObject, useNameService } from "../context/NameServiceProvider";
 import { useEffect, useState } from "react";
@@ -52,6 +52,17 @@ const Search: NextPage = () => {
       window.gtag("config", process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS || "", {
         page_path: window.location.pathname,
       });
+
+      const price = !name ? calculatePrice(query.length, 1) : 0;
+      window.gtag("event", "view_item", {
+        currency: "USD",
+        value: price,
+        items: {
+          item_name: `${query}.koin`,
+          price: price,
+          quantity: 1,
+        },
+      });
     }
   }, [ready]);
 
@@ -71,6 +82,10 @@ const Search: NextPage = () => {
 
     if (parsed !== query) {
       setQuery(parsed);
+
+      window.gtag("event", "search", {
+        search_term: parsed,
+      });
 
       // TODO use domain
       getName!(`${parsed}.koin`).then((result) => {
