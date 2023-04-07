@@ -6,8 +6,10 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import Head from "next/head";
 import { useEffect } from "react";
 import { pageView } from "../utils/ga";
+import { useAccount } from "../context/AccountProvider";
 
 const Home: NextPage = () => {
+  const { hasPressBadge } = useAccount();
   useEffect(() => {
     pageView()
   });
@@ -25,7 +27,7 @@ const Home: NextPage = () => {
         gap="8"
       >
         <Logo size={{ base: "80px", md: "128px" }} />
-        {process.env.NEXT_PUBLIC_IS_LIVE === "true" ? (
+        {(process.env.NEXT_PUBLIC_IS_LIVE === "true" || hasPressBadge) ? (
           <SearchBox
             placeholder="Pick your username..."
             buttonLabel="Search Account Name"

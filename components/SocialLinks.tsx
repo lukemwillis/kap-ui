@@ -187,6 +187,7 @@ export default function SocialLinks({
                         onClose();
                         setLastKey("");
                         removeValue(key);
+                        setError("");
                       }}
                     />
                   </Flex>

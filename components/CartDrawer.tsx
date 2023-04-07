@@ -214,8 +214,10 @@ export default function CartDrawer() {
                     <Skeleton isLoaded={!!koinPrice}>
                       <Text fontSize="xl">
                         Current Estimate:{" "}
-                        {(totalPrice * 100000000) /
-                          parseInt(koinPrice || "100000000")}{" "}
+                        {(
+                          (totalPrice * 100000000) /
+                          parseInt(koinPrice || "100000000")
+                        ).toFixed(2)}{" "}
                         $KOIN
                       </Text>
                     </Skeleton>

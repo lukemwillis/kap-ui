@@ -114,7 +114,7 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
-        event("add_to_cart", {
+        event("remove_from_cart", {
           currency: "USD",
           value: state.items[params.name].price,
           items: {

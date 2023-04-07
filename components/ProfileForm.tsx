@@ -165,6 +165,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     setHasChanges(true);
   };
   const socialLinkRemover = (key: string) => {
+    setSocialLinksHaveError(false);
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
     setLocalProfile({
       ...localProfile,
