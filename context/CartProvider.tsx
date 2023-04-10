@@ -114,14 +114,14 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
+        const item = state.items[params.name.toLowerCase()];
         event("remove_from_cart", {
           currency: "USD",
-          value: state.items[params.name].price,
+          value: item.price,
           items: {
             item_name: `${params.name.toLowerCase()}.koin`,
-            value:
-              state.items[params.name].price / state.items[params.name].years,
-            quantity: state.items[params.name].years,
+            value: item.price / item.years,
+            quantity: item.years,
           },
         });
         dispatch({ type: ActionTypes.REMOVE, params });

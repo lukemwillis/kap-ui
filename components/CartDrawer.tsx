@@ -45,7 +45,7 @@ export default function CartDrawer() {
   } = useCart();
   const { mint, isMinting } = useNameService();
   const { getLatestKoinPrice } = useUsdOracle();
-  const { address } = useAccount();
+  const { address, hasPressBadge } = useAccount();
   const { push } = useRouter();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
@@ -194,6 +194,12 @@ export default function CartDrawer() {
                       </>
                     )}
                   </Flex>
+                  {hasPressBadge && items[name].years >= 3 && (
+                    <Flex direction="column" alignItems="center" textAlign="center" justifyContent="center" marginTop="3">
+                      <Text fontSize="lg">First year free!</Text>
+                      <Text>Press Badge discount taken at checkout</Text>
+                    </Flex>
+                  )}
                   <Divider marginTop="6" />
                 </Box>
               ))}
