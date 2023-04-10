@@ -47,6 +47,7 @@ const Search: NextPage = () => {
   const [name, setName] = useState<NameObject>();
   const [ready, setReady] = useBoolean(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (ready) {
@@ -66,6 +67,9 @@ const Search: NextPage = () => {
   }, [ready]);
 
   useEffect(() => {
+    setError("");
+    setReady.off();
+    
     if (typeof q !== "string") {
       return;
     }
@@ -77,6 +81,32 @@ const Search: NextPage = () => {
     if (parsed.length === 0) {
       replace("/");
       return;
+    }
+    let lastHyphen = -1;
+    for (let i = 0; i < parsed.length; i++) {
+      const code = parsed.charCodeAt(i);
+      console.log({ parsed, i, code });
+      if (code == 0x2d) {
+        if (i == 0 || i == parsed.length - 1) {
+          setError("Query cannot start or end with a hyphen");
+          setReady.on();
+          return;
+        } else if (lastHyphen == i - 1) {
+          setError("Query cannot have consecutive hyphens");
+          setReady.on();
+          return;
+        } else {
+          lastHyphen = i;
+        }
+      } else if (
+        code < 0x30 ||
+        (code > 0x39 && code < 0x61) ||
+        (code > 0x7a && code < 0xa1)
+      ) {
+        setError("Query contains a disallowed character: " + parsed.charAt(i));
+        setReady.on();
+        return;
+      }
     }
 
     if (parsed !== query) {
@@ -110,6 +140,31 @@ const Search: NextPage = () => {
           gap="8"
         >
           <Spinner size="xl" />
+        </Flex>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Head>
+          <title>Name not allowed | KAP</title>
+        </Head>
+        <Flex
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+          direction="column"
+          gap="8"
+        >
+          <Text>{error}</Text>
+          <SearchBox
+            placeholder="Find a username..."
+            buttonLabel="Search"
+            inlineButton={isMobile}
+            autoFocus
+          />
         </Flex>
       </>
     );
