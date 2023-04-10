@@ -114,7 +114,7 @@ export default function SearchBox({
           <Flex gap="2" alignItems="center" paddingRight="2">
             {/* TODO use domain */}
             <Text>.koin</Text>
-            {inlineButton && query && (process.env.NEXT_PUBLIC_IS_LIVE === "true" || hasPressBadge) && (
+            {inlineButton && query && (parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
                 <CTA
                   size="sm"
@@ -128,7 +128,7 @@ export default function SearchBox({
         </InputRightElement>
       </InputGroup>
       {!inlineButton &&
-        ((process.env.NEXT_PUBLIC_IS_LIVE === "true" || hasPressBadge) ? (
+        ((parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) ? (
           <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
             <CTA
               size="lg"

@@ -101,7 +101,7 @@ export default function AccountConnector({
                 <Flex direction="column" alignItems="center" gap="4">
                   <Avatar size="8em" />
 
-                  {(process.env.NEXT_PUBLIC_IS_LIVE === "true" || hasPressBadge) &&
+                  {(parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) &&
                     (profile?.name ? (
                       <Text fontSize="1.5em" lineHeight="1">
                         {profile.name}

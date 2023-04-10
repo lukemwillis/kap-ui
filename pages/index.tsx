@@ -7,11 +7,12 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { pageView } from "../utils/ga";
 import { useAccount } from "../context/AccountProvider";
+import Countdown from "react-countdown";
 
 const Home: NextPage = () => {
   const { hasPressBadge } = useAccount();
   useEffect(() => {
-    pageView()
+    pageView();
   });
 
   return (
@@ -27,14 +28,17 @@ const Home: NextPage = () => {
         gap="8"
       >
         <Logo size={{ base: "80px", md: "128px" }} />
-        {(process.env.NEXT_PUBLIC_IS_LIVE === "true" || hasPressBadge) ? (
+        {parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() ||
+        hasPressBadge ? (
           <SearchBox
             placeholder="Pick your username..."
             buttonLabel="Search Account Name"
           />
         ) : (
           <>
-            <Heading>Coming Q2 2023</Heading>
+            <Heading fontSize="5xl" fontFamily="monospace">
+              <Countdown date={parseInt(process.env.NEXT_PUBLIC_LIVE!)} />
+            </Heading>
             <Link
               href="https://kap-domains-bucket.s3.us-east-1.amazonaws.com/kap-whitepaper.pdf"
               target="_blank"
