@@ -8,9 +8,10 @@ interface PriceProps {
 
 export default function Price({ query, years }: PriceProps) {
   if (query.length === 0) return <></>;
+  
   const encoder = new TextEncoder();
   const length = encoder.encode(query).length;
-  
+
   return (
     <Text>
       <Text as="span" fontSize="2xl" verticalAlign="middle">
