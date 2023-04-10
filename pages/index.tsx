@@ -36,7 +36,7 @@ const Home: NextPage = () => {
           />
         ) : (
           <>
-            <Heading fontSize="5xl" fontFamily="monospace">
+            <Heading fontSize={{ base: "4xl", md: "6xl" }} fontFamily="monospace">
               <Countdown date={parseInt(process.env.NEXT_PUBLIC_LIVE!)} />
             </Heading>
             <Link
