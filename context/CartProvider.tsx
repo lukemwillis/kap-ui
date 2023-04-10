@@ -1,5 +1,12 @@
 import { useDisclosure } from "@chakra-ui/react";
-import React, { useContext, createContext, useReducer, useMemo } from "react";
+import React, {
+  useContext,
+  createContext,
+  useReducer,
+  useMemo,
+  useEffect,
+} from "react";
+import { event } from "../utils/ga";
 import useLocalStorage from "./useLocalStorage";
 
 type State = {
@@ -53,6 +60,7 @@ export const CartProvider = ({
     onOpen: onCartOpen,
     onClose: onCartClose,
   } = useDisclosure();
+
   const [state, dispatch] = useReducer(
     (state: State, action: Action) => {
       switch (action.type) {
@@ -61,10 +69,7 @@ export const CartProvider = ({
         }
         case ActionTypes.UPSERT: {
           const name = action.params.name.toLowerCase();
-          const price = calculatePrice(
-            name.length,
-            action.params.years
-          );
+          const price = calculatePrice(name, action.params.years);
           return {
             items: {
               ...state.items,
@@ -96,9 +101,29 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.LOAD, state });
       },
       upsertItem: (params: UpsertParams) => {
+        const price = calculatePrice(params.name, params.years);
+        event("add_to_cart", {
+          currency: "USD",
+          value: price,
+          items: {
+            item_name: `${params.name.toLowerCase()}.koin`,
+            price: price / params.years,
+            quantity: params.years,
+          },
+        });
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
+        const item = state.items[params.name.toLowerCase()];
+        event("remove_from_cart", {
+          currency: "USD",
+          value: item.price,
+          items: {
+            item_name: `${params.name.toLowerCase()}.koin`,
+            value: item.price / item.years,
+            quantity: item.years,
+          },
+        });
         dispatch({ type: ActionTypes.REMOVE, params });
       },
       clearItems: () => {
@@ -109,6 +134,20 @@ export const CartProvider = ({
   );
 
   useLocalStorage("CART", state, actions.loadState);
+
+  useEffect(() => {
+    if (isCartOpen) {
+      event("view_cart", {
+        currency: "USD",
+        value: state.totalPrice,
+        items: Object.keys(state.items).map((name) => ({
+          item_name: `${name}.koin`,
+          price: state.items[name].price / state.items[name].years,
+          quantity: state.items[name].years,
+        })),
+      });
+    }
+  }, [isCartOpen]);
 
   return (
     <CartContext.Provider
@@ -127,7 +166,9 @@ export const CartProvider = ({
   );
 };
 
-export const calculatePrice = (length: number, years = 1) => {
+export const calculatePrice = (name: string, years = 1) => {
+  const encoder = new TextEncoder();
+  const length = encoder.encode(name).length;
   if (length === 1) {
     return 1000 * years;
   }

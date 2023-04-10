@@ -8,7 +8,9 @@ import React, {
 import * as kondor from "../node_modules/kondor-js/lib/browser";
 import MyKoinosWallet from "@roamin/my-koinos-wallet-sdk";
 import useLocalStorage from "./useLocalStorage";
-import { Provider, Signer } from "koilib";
+import { Contract, Provider, Signer } from "koilib";
+import { event } from "../utils/ga";
+import { nftAbi } from "./ProfileProvider";
 
 type AccountContextType = {
   address?: string;
@@ -17,12 +19,14 @@ type AccountContextType = {
   connectMKW: () => Promise<boolean>;
   provider?: Provider;
   signer?: Signer;
+  hasPressBadge: boolean;
 };
 
 export const AccountContext = createContext<AccountContextType>({
   isConnecting: false,
   connectKondor: async () => false,
   connectMKW: async () => false,
+  hasPressBadge: false,
 });
 
 export const useAccount = () => useContext(AccountContext);
@@ -40,6 +44,7 @@ export const AccountProvider = ({
     new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!])
   );
   const [signer, setSigner] = useState<Signer | undefined>();
+  const [hasPressBadge, setHasPressBadge] = useState(false);
 
   const mkwRef = useRef<MyKoinosWallet>();
 
@@ -72,6 +77,20 @@ export const AccountProvider = ({
         }
       });
     }
+
+    if (address) {
+      const pressBadgeContract = new Contract({
+        id: process.env.NEXT_PUBLIC_PRESS_BADGE_ADDR,
+        abi: nftAbi,
+        provider,
+      });
+
+      pressBadgeContract!.functions.balance_of({
+        owner: address,
+      }).then(({ result }) => {
+        setHasPressBadge((result?.value as number) > 0);
+      });
+    }
   }, [address, walletUsed]);
 
   useLocalStorage("ACCOUNT", address, setAddress);
@@ -91,6 +110,9 @@ export const AccountProvider = ({
     if (address) {
       setAddress(address);
       setWalletUsed("kondor");
+      event("login", {
+        method: "kondor",
+      });
     }
     setIsConnecting(false);
 
@@ -115,6 +137,9 @@ export const AccountProvider = ({
         if (address) {
           setAddress(address);
           setWalletUsed("mkw");
+          event("login", {
+            method: "mkw",
+          });
         }
       }
       setIsConnecting(false);
@@ -134,6 +159,7 @@ export const AccountProvider = ({
         connectMKW,
         provider,
         signer,
+        hasPressBadge
       }}
     >
       {children}

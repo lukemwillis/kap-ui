@@ -20,6 +20,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { SearchIcon } from "@chakra-ui/icons";
 import CTA from "./CTA";
+import { useAccount } from "../context/AccountProvider";
 
 interface SearchBoxProps {
   placeholder?: string;
@@ -44,6 +45,7 @@ export default function SearchBox({
   autoFocus = true,
   secondaryCTA,
 }: SearchBoxProps) {
+  const { hasPressBadge } = useAccount();
   const [query, internalSetQuery] = useState(value);
   const altRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
@@ -112,7 +114,7 @@ export default function SearchBox({
           <Flex gap="2" alignItems="center" paddingRight="2">
             {/* TODO use domain */}
             <Text>.koin</Text>
-            {inlineButton && query && process.env.NEXT_PUBLIC_IS_LIVE === "true" && (
+            {inlineButton && query && (parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) && (
               <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
                 <CTA
                   size="sm"
@@ -126,7 +128,7 @@ export default function SearchBox({
         </InputRightElement>
       </InputGroup>
       {!inlineButton &&
-        (process.env.NEXT_PUBLIC_IS_LIVE === "true" ? (
+        ((parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) ? (
           <Link href={query.length > 0 ? `/search?q=${query}` : "#"}>
             <CTA
               size="lg"

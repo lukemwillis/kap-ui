@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps }: AppProps) {
               <NameServiceProvider>
                 <ProfileProvider>
                   <Head>
-                    <title>KAP</title>
                     <meta
                       name="viewport"
                       content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0"
@@ -72,7 +71,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           function gtag(){window.dataLayer.push(arguments);}
           gtag('js', new Date());
 
-          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}');
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}', {
+            page_path: window.location.pathname
+          });
         `}
       </Script>
     </>

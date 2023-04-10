@@ -48,6 +48,7 @@ import {
   ExternalLinkIcon,
   StarIcon,
 } from "@chakra-ui/icons";
+import { event } from "../utils/ga";
 
 interface ProfileFormProps {
   names: NameObject[];
@@ -164,6 +165,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
     setHasChanges(true);
   };
   const socialLinkRemover = (key: string) => {
+    setSocialLinksHaveError(false);
     const links = localProfile?.links?.filter((link) => link.key !== key) || [];
     setLocalProfile({
       ...localProfile,
@@ -251,6 +253,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
               <Popover
                 placement="bottom-end"
                 onOpen={() => {
+                  event("share", {
+                    item_id: profile?.name,
+                  });
                   onCopy();
                 }}
               >

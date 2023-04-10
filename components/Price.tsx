@@ -7,13 +7,15 @@ interface PriceProps {
 }
 
 export default function Price({ query, years }: PriceProps) {
-  const length = query.length;
+  if (query.length === 0) return <></>;
+  
+  const encoder = new TextEncoder();
+  const length = encoder.encode(query).length;
 
-  if (length === 0) return <></>;
   return (
     <Text>
       <Text as="span" fontSize="2xl" verticalAlign="middle">
-        {length > 10 ? "FREE FOREVER" : `$${calculatePrice(length, years)}`}
+        {length > 10 ? "FREE FOREVER" : `$${calculatePrice(query, years)}`}
       </Text>
       {!years && length < 11 && (
         <Text as="span" fontSize="lg" verticalAlign="middle">

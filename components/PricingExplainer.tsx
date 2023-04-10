@@ -22,19 +22,23 @@ const NUMBERS = "1234567890";
 export default function PricingExplainer({
   initialQuery,
 }: PricingExplainerProps) {
+  const encoder = new TextEncoder();
   const [query, setQuery] = useState(initialQuery);
+  const length = Math.min(encoder.encode(query).length, 11);
+
   useEffect(() => {
     setQuery(initialQuery);
   }, [initialQuery, setQuery]);
 
   const onSliderChange = (val: number) => {
+    let newQuery;
     if (initialQuery.length > val) {
-      setQuery(initialQuery.substring(0, val));
+      newQuery = [...initialQuery].slice(0, val).join("");
     } else {
-      setQuery(initialQuery + NUMBERS.substring(0, val - initialQuery.length));
+      newQuery = initialQuery + NUMBERS.substring(0, val - Math.min(encoder.encode(initialQuery).length, 11));
     }
+    setQuery(newQuery);
   };
-  const length = Math.min(query.length, 11);
 
   return (
     <Flex

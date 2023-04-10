@@ -45,7 +45,7 @@ export default function CartDrawer() {
   } = useCart();
   const { mint, isMinting } = useNameService();
   const { getLatestKoinPrice } = useUsdOracle();
-  const { address } = useAccount();
+  const { address, hasPressBadge } = useAccount();
   const { push } = useRouter();
   const muted = useColorModeValue("gray.600", "gray.400");
   const isMobile = useBreakpointValue({ base: true, sm: false });
@@ -125,7 +125,11 @@ export default function CartDrawer() {
           <DrawerHeader>Your Cart</DrawerHeader>
           <DrawerBody>
             <Flex direction="column" gap="5">
-              <SearchBox placeholder="Find another name" onSearch={onCartClose} inlineButton />
+              <SearchBox
+                placeholder="Find another name"
+                onSearch={onCartClose}
+                inlineButton
+              />
               {itemNames.map((name) => (
                 <Box key={name}>
                   <Flex
@@ -142,7 +146,7 @@ export default function CartDrawer() {
                       </Text>
                     </Text>
                     <IconButton
-                    // TODO use domain
+                      // TODO use domain
                       aria-label={`Remove ${name}.koin from cart`}
                       variant="ghost"
                       size="sm"
@@ -190,6 +194,12 @@ export default function CartDrawer() {
                       </>
                     )}
                   </Flex>
+                  {hasPressBadge && items[name].years >= 3 && (
+                    <Flex direction="column" alignItems="center" textAlign="center" justifyContent="center" marginTop="3">
+                      <Text fontSize="lg">First year free!</Text>
+                      <Text>Press Badge discount taken at checkout</Text>
+                    </Flex>
+                  )}
                   <Divider marginTop="6" />
                 </Box>
               ))}
@@ -210,8 +220,10 @@ export default function CartDrawer() {
                     <Skeleton isLoaded={!!koinPrice}>
                       <Text fontSize="xl">
                         Current Estimate:{" "}
-                        {(totalPrice * 100000000) /
-                          parseInt(koinPrice || "100000000")}{" "}
+                        {(
+                          (totalPrice * 100000000) /
+                          parseInt(koinPrice || "100000000")
+                        ).toFixed(2)}{" "}
                         $KOIN
                       </Text>
                     </Skeleton>
