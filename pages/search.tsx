@@ -67,9 +67,6 @@ const Search: NextPage = () => {
   }, [ready]);
 
   useEffect(() => {
-    setError("");
-    setReady.off();
-    
     if (typeof q !== "string") {
       return;
     }
@@ -110,6 +107,8 @@ const Search: NextPage = () => {
     }
 
     if (parsed !== query) {
+      setError("");
+      setReady.off();
       setQuery(parsed);
 
       event("search", {
