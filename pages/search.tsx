@@ -52,7 +52,7 @@ const Search: NextPage = () => {
     if (ready) {
       pageView();
 
-      const price = !name ? calculatePrice(query.length, 1) : 0;
+      const price = !name ? calculatePrice(query, 1) : 0;
       event("view_item", {
         currency: "USD",
         value: price,
@@ -340,13 +340,15 @@ const Search: NextPage = () => {
                   { day: "numeric", month: "long", year: "numeric" }
                 )}
               </Text>
-              <Button
-                as={Link}
-                target="_blank"
-                href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
-              >
-                View on Kollection
-              </Button>
+              {process.env.NEXT_PUBLIC_KOLLECTION_IS_LIVE === "true" && (
+                <Button
+                  as={Link}
+                  target="_blank"
+                  href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
+                >
+                  View on Kollection
+                </Button>
+              )}
             </Flex>
           </Flex>
           <Flex gap="4" justifyContent="center">

@@ -241,14 +241,17 @@ const Account: NextPage = () => {
                           >
                             Transfer
                           </MenuItem>
-                          <MenuItem
-                            icon={<FaExternalLinkAlt />}
-                            as="a"
-                            href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name}.${domain}/sell`}
-                            target="_blank"
-                          >
-                            List For Sale
-                          </MenuItem>
+                          {process.env.NEXT_PUBLIC_KOLLECTION_IS_LIVE ===
+                            "true" && (
+                            <MenuItem
+                              icon={<FaExternalLinkAlt />}
+                              as="a"
+                              href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name}.${domain}/sell`}
+                              target="_blank"
+                            >
+                              List For Sale
+                            </MenuItem>
+                          )}
                         </MenuList>
                       </Menu>
                     </Td>
@@ -304,7 +307,7 @@ const Account: NextPage = () => {
                   </NumberInput>
                   <Text>
                     Total years cannot exceed 10. You will be charged $
-                    {calculatePrice(selectedName.length - 5, renewYears) || 0}.
+                    {calculatePrice(selectedName.substring(0, selectedName.length - 5), renewYears) || 0}.
                     The new expiration date for {selectedName} will be{" "}
                     {new Date(
                       parseInt(selectedExpiry) +

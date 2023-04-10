@@ -69,7 +69,7 @@ export const CartProvider = ({
         }
         case ActionTypes.UPSERT: {
           const name = action.params.name.toLowerCase();
-          const price = calculatePrice(name.length, action.params.years);
+          const price = calculatePrice(name, action.params.years);
           return {
             items: {
               ...state.items,
@@ -101,7 +101,7 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.LOAD, state });
       },
       upsertItem: (params: UpsertParams) => {
-        const price = calculatePrice(params.name.length, params.years);
+        const price = calculatePrice(params.name, params.years);
         event("add_to_cart", {
           currency: "USD",
           value: price,
@@ -166,7 +166,9 @@ export const CartProvider = ({
   );
 };
 
-export const calculatePrice = (length: number, years = 1) => {
+export const calculatePrice = (name: string, years = 1) => {
+  const encoder = new TextEncoder();
+  const length = encoder.encode(name).length;
   if (length === 1) {
     return 1000 * years;
   }
