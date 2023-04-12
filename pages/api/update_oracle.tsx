@@ -35,6 +35,9 @@ export default function updateOracle(_: NextApiRequest, res: NextApiResponse) {
       usdOracle!.functions.set_latest_price<{}>({
         token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
         price,
+      }, {
+        payer: process.env.CRON_PAYER,
+        rcLimit: "200000000"
       });
 
       res.status(200).json({ success: true });
