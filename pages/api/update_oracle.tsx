@@ -24,7 +24,7 @@ export default function updateOracle(_: NextApiRequest, res: NextApiResponse) {
       const provider = new Provider([process.env.NEXT_PUBLIC_KOINOS_RPC_URL!]);
       const signer = Signer.fromWif(process.env.ORACLE_OPERATOR_WIF!);
       signer.provider = provider;
-      
+
       const usdOracle = new Contract({
         id: process.env.NEXT_PUBLIC_USD_ORACLE_ADDR,
         abi,
@@ -32,15 +32,22 @@ export default function updateOracle(_: NextApiRequest, res: NextApiResponse) {
         signer,
       });
 
-      usdOracle!.functions.set_latest_price<{}>({
-        token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
-        price,
-      }, {
-        payer: process.env.CRON_PAYER,
-        rcLimit: "200000000"
-      });
-
-      res.status(200).json({ success: true });
+      usdOracle!.functions
+        .set_latest_price<{}>(
+          {
+            token_address: process.env.NEXT_PUBLIC_KOIN_ADDR,
+            price,
+          },
+          {
+            payer: process.env.CRON_PAYER,
+            rcLimit: "200000000",
+          }
+        )
+        .then(({ transaction }) => {
+          transaction?.wait().then(() => {
+            res.status(200).json({ success: true });
+          });
+        });
     })
     .catch((err) => {
       console.error(err);
