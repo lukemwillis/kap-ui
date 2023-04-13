@@ -130,7 +130,7 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.CLEAR });
       },
     }),
-    [dispatch]
+    [dispatch, state.items]
   );
 
   useLocalStorage("CART", state, actions.loadState);

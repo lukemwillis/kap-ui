@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Contract, utils } from "koilib";
 import { useAccount } from "./AccountProvider";
-import namerserviceAbi from "../contract/abi/nameservice-abi.json";
+import namerserviceAbi from "../contract/abi/collections-abi.json";
 import { Abi } from "koilib/lib/interface";
 import { useCart } from "./CartProvider";
 import { useBoolean, useToast } from "@chakra-ui/react";
