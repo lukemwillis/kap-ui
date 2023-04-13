@@ -114,14 +114,13 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.UPSERT, params });
       },
       removeItem: (params: RemoveParams) => {
-        const item = state.items[params.name.toLowerCase()];
         event("remove_from_cart", {
           currency: "USD",
-          value: item.price,
+          value: 0,
           items: {
             item_name: `${params.name.toLowerCase()}.koin`,
-            value: item.price / item.years,
-            quantity: item.years,
+            value: 0,
+            quantity: 0,
           },
         });
         dispatch({ type: ActionTypes.REMOVE, params });
@@ -130,7 +129,7 @@ export const CartProvider = ({
         dispatch({ type: ActionTypes.CLEAR });
       },
     }),
-    [dispatch, state.items]
+    [dispatch]
   );
 
   useLocalStorage("CART", state, actions.loadState);
