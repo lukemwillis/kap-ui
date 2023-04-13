@@ -120,7 +120,7 @@ const Search: NextPage = () => {
         setReady.on();
       });
     }
-  }, [getName, q, query, setReady, replace]);
+  }, [q]);
 
   const isInCart = items && !!items[query];
 
