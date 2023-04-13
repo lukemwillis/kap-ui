@@ -67,6 +67,25 @@ const PLACEHOLDERS = {
   [SocialKeys.BTC]: "Your Bitcoin Address",
 };
 
+const INSTRUCTIONS = {
+  [SocialKeys.WEBSITE]:
+    "Enter your URL without the 'https' part. Example: kap.domains",
+  [SocialKeys.EMAIL]: "Enter your email. Example: luke@kap.domains",
+  [SocialKeys.GITHUB]: "Enter your github username. Example: lukemwillis",
+  [SocialKeys.TWITTER]:
+    "Enter your twitter handle without the '@'. Example: kapdomains",
+  [SocialKeys.REDDIT]:
+    "Enter your reddit username without the 'u/'. Example: kuixi",
+  [SocialKeys.DISCORD]:
+    "Enter your Discord user id, NOT your username. Your id is just a long number that you must turn on Discord developer mode to see. Example: 878398189361852447",
+  [SocialKeys.TELEGRAM]:
+    "Enter your Telegram username without the '@'. Example: lukemwillis",
+  [SocialKeys.ETH]:
+    "Enter your full ETH address. This will display as an etherscan link.",
+  [SocialKeys.BTC]:
+    "Enter your full BTC address. This will display as a blockstream link.",
+};
+
 const LABELS = {
   [SocialKeys.WEBSITE]: "Website",
   [SocialKeys.EMAIL]: "Email",
@@ -215,6 +234,8 @@ export default function SocialLinks({
                       />
                     </Flex>
                   )}
+
+                  <Text>{INSTRUCTIONS[key as SocialKeys]}</Text>
 
                   {!!error && (
                     <Card bg="red.500" color="white" padding="3" width="100%">
