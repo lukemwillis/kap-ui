@@ -27,10 +27,11 @@ import { NotAllowedIcon } from "@chakra-ui/icons";
 import Profile from "../components/Profile";
 import Head from "next/head";
 import { event, pageView } from "../utils/ga";
+import queryString from 'query-string';
 
 const Search: NextPage = () => {
   const {
-    query: { q },
+    asPath,
     replace,
   } = useRouter();
   const background = useColorModeValue("gray.200", "gray.700");
@@ -45,12 +46,12 @@ const Search: NextPage = () => {
   const { getName } = useNameService();
   const [query, setQuery] = useState("");
   const [name, setName] = useState<NameObject>();
-  const [ready, setReady] = useBoolean(false);
   const isMobile = useBreakpointValue({ base: true, md: false });
   const [error, setError] = useState("");
+  const [searching, setSearching] = useState(true);
 
   useEffect(() => {
-    if (ready) {
+    if (!searching) {
       pageView();
 
       const price = !name ? calculatePrice(query, 1) : 0;
@@ -64,9 +65,14 @@ const Search: NextPage = () => {
         },
       });
     }
-  }, [ready]);
+  }, [searching]);
 
   useEffect(() => {
+    setSearching(true);
+    setError("");
+    
+    const { q } = queryString.parse(window.location.search);
+
     if (typeof q !== "string") {
       return;
     }
@@ -85,11 +91,9 @@ const Search: NextPage = () => {
       if (code == 0x2d) {
         if (i == 0 || i == parsed.length - 1) {
           setError("Query cannot start or end with a hyphen");
-          setReady.on();
           return;
         } else if (lastHyphen == i - 1) {
           setError("Query cannot have consecutive hyphens");
-          setReady.on();
           return;
         } else {
           lastHyphen = i;
@@ -100,48 +104,24 @@ const Search: NextPage = () => {
         (code > 0x7a && code < 0xa1)
       ) {
         setError("Query contains a disallowed character: " + parsed.charAt(i));
-        setReady.on();
         return;
       }
     }
 
-    if (parsed !== query) {
-      setError("");
-      setReady.off();
-      setQuery(parsed);
+    setQuery(parsed);
 
-      event("search", {
-        search_term: parsed,
-      });
+    event("search", {
+      search_term: parsed,
+    });
 
-      // TODO use domain
-      getName!(`${parsed}.koin`).then((result) => {
-        setName(result);
-        setReady.on();
-      });
-    }
-  }, [q]);
+    // TODO use domain
+    getName!(`${parsed}.koin`).then((result) => {
+      setSearching(false);
+      setName(result);
+    });
+  }, [asPath]);
 
   const isInCart = items && !!items[query];
-
-  if (!ready) {
-    return (
-      <>
-        <Head>
-          <title>Searching... | KAP</title>
-        </Head>
-        <Flex
-          width="100%"
-          alignItems="center"
-          justifyContent="center"
-          direction="column"
-          gap="8"
-        >
-          <Spinner size="xl" />
-        </Flex>
-      </>
-    );
-  }
 
   if (error) {
     return (
@@ -163,6 +143,25 @@ const Search: NextPage = () => {
             inlineButton={isMobile}
             autoFocus
           />
+        </Flex>
+      </>
+    );
+  }
+
+  if (searching) {
+    return (
+      <>
+        <Head>
+          <title>Searching... | KAP</title>
+        </Head>
+        <Flex
+          width="100%"
+          alignItems="center"
+          justifyContent="center"
+          direction="column"
+          gap="8"
+        >
+          <Spinner size="xl" />
         </Flex>
       </>
     );
