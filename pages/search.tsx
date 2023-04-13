@@ -82,7 +82,6 @@ const Search: NextPage = () => {
     let lastHyphen = -1;
     for (let i = 0; i < parsed.length; i++) {
       const code = parsed.charCodeAt(i);
-      console.log({ parsed, i, code });
       if (code == 0x2d) {
         if (i == 0 || i == parsed.length - 1) {
           setError("Query cannot start or end with a hyphen");
