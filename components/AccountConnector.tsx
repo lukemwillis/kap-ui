@@ -36,7 +36,7 @@ export default function AccountConnector({
   sitePreferences,
 }: ConnectorProps) {
   const router = useRouter();
-  const { address, isConnecting, hasPressBadge } = useAccount();
+  const { address, isConnecting } = useAccount();
   const { names } = useNameService();
   const { profile } = useProfile();
   const { onOpen, onClose, isOpen } = useDisclosure();
@@ -100,23 +100,21 @@ export default function AccountConnector({
               <>
                 <Flex direction="column" alignItems="center" gap="4">
                   <Avatar size="8em" />
-
-                  {(parseInt(process.env.NEXT_PUBLIC_LIVE!) <= Date.now() || hasPressBadge) &&
-                    (profile?.name ? (
-                      <Text fontSize="1.5em" lineHeight="1">
-                        {profile.name}
-                      </Text>
-                    ) : (
-                      names.length === 0 && (
-                        <SearchBox
-                          placeholder="Pick a username..."
-                          buttonLabel="Search"
-                          inlineButton
-                          onSearch={onClose}
-                          inputRef={inputRef}
-                        />
-                      )
-                    ))}
+                  {profile?.name ? (
+                    <Text fontSize="1.5em" lineHeight="1">
+                      {profile.name}
+                    </Text>
+                  ) : (
+                    names.length === 0 && (
+                      <SearchBox
+                        placeholder="Pick a username..."
+                        buttonLabel="Search"
+                        inlineButton
+                        onSearch={onClose}
+                        inputRef={inputRef}
+                      />
+                    )
+                  )}
                   <Flex
                     borderColor="gray.500"
                     borderWidth="1px"
