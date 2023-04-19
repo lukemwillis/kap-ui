@@ -43,7 +43,7 @@ const Pricing: NextPage = () => {
                 </Shiny>
               </Heading>
               <Text>
-                Short account names with serious benefits. Whatver your budget,
+                Short account names with serious benefits. Whatever your budget,
                 find the username you really want. No compromising required.
               </Text>
             </Box>
