@@ -1,4 +1,5 @@
-import { ChevronRightIcon, ExternalLinkIcon } from "@chakra-ui/icons";
+
+import { ChevronRightIcon, ExternalLinkIcon, CheckIcon } from "@chakra-ui/icons";
 import {
   Accordion,
   AccordionButton,
@@ -15,6 +16,7 @@ import {
   Text,
   useColorModeValue,
   ListIcon,
+  
 } from "@chakra-ui/react";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -133,13 +135,14 @@ const About: NextPage = () => {
                 width: "1.5em",
                 height: "1.5em",
                 borderRadius: "50%",
-                background: "brand.orange",
+                background: "brand.navy",
                 borderColor: "white",
                 borderWidth: "2px",
                 position: "absolute",
                 marginLeft: "calc(-2.75em - 1px)",
               }}
             >
+              <CheckIcon position="absolute" marginLeft="-2.6em" marginTop="0.25em" />
               <Text fontWeight="bold">Q2 2023</Text>
               <Heading as="h3" size="lg">
                 Genesis
@@ -168,7 +171,9 @@ const About: NextPage = () => {
                 width: "1.5em",
                 height: "1.5em",
                 borderRadius: "50%",
-                background: "white",
+                background: "brand.orange",
+                borderColor: "white",
+                borderWidth: "2px",
                 position: "absolute",
                 marginLeft: "calc(-2.75em - 1px)",
               }}
