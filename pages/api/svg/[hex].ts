@@ -1,16 +1,17 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import { isASCII } from "../../../utils/characterSet";
 
 export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
-  const { name } = req.query;
+  const { hex } = req.query;
 
-  if (name) {
-    // TODO get_name
-    if (true) {
-      res
-        .status(200)
-        .setHeader("Cache-Control", "max-age=43200, immutable")
-        .setHeader("Content-Type", "image/svg+xml")
-        .send(`<?xml version="1.0" encoding="utf-8"?>
+  if (typeof hex === "string" && /^0x([a-fA-F0-9]{2})+$/.test(hex)) {
+    const name = Buffer.from(hex.substring(2), "hex").toString("utf8");
+    const isAscii = isASCII(name);
+    res
+      .status(200)
+      .setHeader("Cache-Control", "max-age=43200, immutable")
+      .setHeader("Content-Type", "image/svg+xml")
+      .send(`<?xml version="1.0" encoding="utf-8"?>
             <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
                 width="500px" height="500px" viewBox="-100 -100 1600 1600" enable-background="new 0 0 708.661 255.118"
@@ -24,7 +25,10 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                 </defs>
                 <style>
                     .heavy {
-                    font: bold 200px sans-serif;
+                        font: bold 200px sans-serif;
+                    }
+                    .light {
+                        font: normal 80px sans-serif;
                     }
                 </style>
                 <rect width="2000" height="2000" fill="url(#gradient)" x="-500" y="-500" />
@@ -86,12 +90,15 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                 <g fill="white">
                     <text x="50" y="1300" class="heavy">${name}</text>
                 </g>
+                ${
+                  !isAscii &&
+                  `<g fill="#dddddd">
+                     <text x="50" y="1400" class="light">⚠️ ${hex}</text>
+                   </g>`
+                }
             </svg>
         `);
-    } else {
-      res.status(404).json({ error: `Name '${name}' not found` });
-    }
   } else {
-    res.status(500).json({ error: "Name parameter is required" });
+    res.status(500).json({ error: "Hex parameter is required" });
   }
 }

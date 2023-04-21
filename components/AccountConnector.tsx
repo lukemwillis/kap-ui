@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { useAccount } from "../context/AccountProvider";
 import { CheckIcon, CopyIcon, WarningIcon } from "@chakra-ui/icons";
-import { ReactElement, useRef } from "react";
+import { ReactElement, useEffect, useRef } from "react";
 import Avatar from "./Avatar";
 import Link from "next/link";
 import SearchBox from "./SearchBox";
@@ -40,8 +40,14 @@ export default function AccountConnector({
   const { names } = useNameService();
   const { profile } = useProfile();
   const { onOpen, onClose, isOpen } = useDisclosure();
-  const { onCopy, hasCopied } = useClipboard(address || "");
+  const { onCopy, setValue, hasCopied } = useClipboard(address || "");
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (address) {
+      setValue(address);
+    }
+  }, [address, setValue]);
 
   return (
     <Popover
@@ -129,9 +135,7 @@ export default function AccountConnector({
                     </Text>
                     <IconButton
                       aria-label={hasCopied ? "Copied!" : "Copy"}
-                      onClick={() => {
-                        onCopy();
-                      }}
+                      onClick={onCopy}
                       size="sm"
                       variant="ghost"
                       color="gray.500"
