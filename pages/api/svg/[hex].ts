@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isASCII } from "../../../utils/characterSet";
+import { toASCII } from "punycode";
 
 export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
   const { hex } = req.query;
@@ -88,12 +89,12 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                     <polygon points="630.186,40.146 556.267,207.146 583.48,207.146 657.399,40.146"/>
                 </g>
                 <g fill="white">
-                    <text x="50" y="1300" class="heavy">${name}</text>
+                    <text x="50" y="${isAscii ? 1300 : 1200}" class="heavy">${name}</text>
                 </g>
                 ${
                   !isAscii &&
                   `<g fill="#dddddd">
-                     <text x="50" y="1400" class="light">⚠️ ${hex}</text>
+                     <text x="50" y="1300" class="light">⚠️ ${toASCII(name)}</text>
                    </g>`
                 }
             </svg>
