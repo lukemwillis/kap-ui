@@ -130,13 +130,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         const { result: uriResult } = await nftContract!.functions.uri({});
 
         if (uriResult?.value) {
-          const buffer = utils.toUint8Array(
-            localProfile.avatar_token_id.substring(2)
-          );
-          const tokenId = new TextDecoder().decode(buffer);
           const uri = normalizeIpfsUris(uriResult.value as string);
           try {
-            const metadata = await fetch(`${uri}/${tokenId}`);
+            const metadata = await fetch(`${uri}/${localProfile.avatar_token_id}`);
             const { image } = await metadata.json();
             const imageSrc = normalizeIpfsUris(image);
             setLocalAvatarSrc(imageSrc);
