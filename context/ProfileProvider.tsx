@@ -88,7 +88,6 @@ export const ProfileProvider = ({
 
         if (nftResult?.value) {
           const uri = normalizeIpfsUris(nftResult.value as string);
-          console.log(`${uri}/${profileResult.avatar_token_id}`)
           const metadata = await fetch(`${uri}/${profileResult.avatar_token_id}`);
           const { image } = await metadata.json();
           const imageSrc = normalizeIpfsUris(image);
