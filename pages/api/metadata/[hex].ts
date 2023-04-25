@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isASCII } from "../../../utils/characterSet";
+import { toASCII } from "punycode";
 
 export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
   const { hex } = req.query;
@@ -9,7 +10,7 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
     let description = `${name}, a KAP name.`;
 
     if (!isASCII(name)) {
-      name = `${name} ⚠️`;
+      name = `${toASCII(name)} ⚠️`;
       description =
         "⚠️ ATTENTION: This name contains non-ASCII characters as shown above. " +
         "Please be aware that there are characters that look identical or very " +
