@@ -11,6 +11,7 @@ import {
   useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react";
+import { utils } from "koilib";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import Airdrop from "../components/icons/Airdrop";
@@ -27,13 +28,10 @@ import { NotAllowedIcon } from "@chakra-ui/icons";
 import Profile from "../components/Profile";
 import Head from "next/head";
 import { event, pageView } from "../utils/ga";
-import queryString from 'query-string';
+import queryString from "query-string";
 
 const Search: NextPage = () => {
-  const {
-    asPath,
-    replace,
-  } = useRouter();
+  const { asPath, replace } = useRouter();
   const background = useColorModeValue("gray.200", "gray.700");
   const foreground = useColorModeValue("gray.600", "gray.400");
   const accentColor = "brand.orange";
@@ -70,7 +68,7 @@ const Search: NextPage = () => {
   useEffect(() => {
     setSearching(true);
     setError("");
-    
+
     const { q } = queryString.parse(window.location.search);
 
     if (typeof q !== "string") {
@@ -338,6 +336,8 @@ const Search: NextPage = () => {
     );
     // unavailable
   } else {
+    const buffer = new TextEncoder().encode(`${name.name}.${name.domain}`);
+    const token_id = "0x" + utils.toHexString(buffer);
     return (
       <>
         <Head>
@@ -392,15 +392,13 @@ const Search: NextPage = () => {
                   { day: "numeric", month: "long", year: "numeric" }
                 )}
               </Text>
-              {process.env.NEXT_PUBLIC_KOLLECTION_IS_LIVE === "true" && (
-                <Button
-                  as={Link}
-                  target="_blank"
-                  href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name.name}.${name.domain}`}
-                >
-                  View on Kollection
-                </Button>
-              )}
+              <Button
+                as={Link}
+                target="_blank"
+                href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${token_id}`}
+              >
+                View on Kollection
+              </Button>
             </Flex>
           </Flex>
           <Flex gap="4" justifyContent="center">
