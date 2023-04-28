@@ -78,6 +78,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
 
   const [avatarContractError, setAvatarContractError] = useState("");
   const [avatarTokenError, setAvatarTokenError] = useState("");
+  const [avatarImageError, setAvatarImageError] = useState("");
   const [bioHasError, setBioHasError] = useState(false);
   const [themeHasError, setThemeHasError] = useState(false);
   const [socialLinksHaveError, setSocialLinksHaveError] = useState(false);
@@ -137,8 +138,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
             const imageSrc = normalizeIpfsUris(image);
             setLocalAvatarSrc(imageSrc);
             setIsAvatarLoading(false);
+            setAvatarImageError("");
           } catch (e) {
-            setAvatarTokenError("Could not find NFT image");
+            setIsAvatarLoading(false);
+            setAvatarImageError("Could not load NFT image");
           }
         }
       }
@@ -365,9 +368,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                         variant="outline"
                         size="lg"
                       />
-                      {avatarContractError || avatarTokenError ? (
+                      {avatarContractError || avatarTokenError || avatarImageError ? (
                         <Card bg="red.500" color="white" padding="3">
-                          {avatarContractError || avatarTokenError}
+                          {avatarContractError || avatarTokenError || avatarImageError}
                         </Card>
                       ) : isAvatarLoading ? (
                         <Flex

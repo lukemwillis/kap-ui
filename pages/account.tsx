@@ -1,4 +1,5 @@
 import { ChevronDownIcon, WarningTwoIcon } from "@chakra-ui/icons";
+import { utils } from "koilib";
 import {
   Badge,
   Button,
@@ -166,97 +167,98 @@ const Account: NextPage = () => {
                   if (a.domain > b.domain) return 1;
                   return 0;
                 })
-                .map(({ name, domain, expiration, grace_period_end }) => (
-                  <Tr key={`${name}.${domain}`}>
-                    <Td>
-                      <Text fontSize="xl" wordBreak="break-all">
-                        {name}
-                        <wbr />
-                        <Text as="span" color={muted} wordBreak="keep-all">
-                          .{domain}
+                .map(({ name, domain, expiration, grace_period_end }) => {
+                  const buffer = new TextEncoder().encode(`${name}.${domain}`);
+                  const token_id = "0x" + utils.toHexString(buffer);
+                  return (
+                    <Tr key={`${name}.${domain}`}>
+                      <Td>
+                        <Text fontSize="xl" wordBreak="break-all">
+                          {name}
+                          <wbr />
+                          <Text as="span" color={muted} wordBreak="keep-all">
+                            .{domain}
+                          </Text>
                         </Text>
-                      </Text>
-                    </Td>
-                    <Td whiteSpace={{ base: "normal", md: "nowrap" }}>
-                      <Text color={muted}>
-                        {new Date(parseInt(expiration)).toLocaleDateString(
-                          undefined,
-                          { day: "numeric", month: "long", year: "numeric" }
-                        )}
-                      </Text>
-                      {parseInt(expiration) - Date.now() <
-                        1000 * 60 * 60 * 24 * 30 && (
-                        <Tooltip
-                          hasArrow
-                          label={`You have until ${new Date(
-                            parseInt(grace_period_end)
-                          ).toLocaleDateString(undefined, {
-                            day: "numeric",
-                            month: "long",
-                            year: "numeric",
-                          })} to renew this name.`}
-                        >
-                          {parseInt(expiration) < Date.now() ? (
-                            <Badge colorScheme="red">
-                              <WarningTwoIcon /> Expired
-                            </Badge>
-                          ) : (
-                            <Badge colorScheme="yellow">
-                              <WarningTwoIcon /> Expiring Soon
-                            </Badge>
+                      </Td>
+                      <Td whiteSpace={{ base: "normal", md: "nowrap" }}>
+                        <Text color={muted}>
+                          {new Date(parseInt(expiration)).toLocaleDateString(
+                            undefined,
+                            { day: "numeric", month: "long", year: "numeric" }
                           )}
-                        </Tooltip>
-                      )}
-                    </Td>
-                    <Td paddingInline={{ base: "4", md: "6" }}>
-                      <Menu placement="bottom-end">
-                        {isMobile ? (
-                          <MenuButton
-                            as={IconButton}
-                            icon={<FaEllipsisV />}
-                            aria-label="Manage"
-                            variant="ghost"
-                          />
-                        ) : (
-                          <MenuButton
-                            as={Button}
-                            rightIcon={<ChevronDownIcon />}
-                            variant="outline"
+                        </Text>
+                        {parseInt(expiration) - Date.now() <
+                          1000 * 60 * 60 * 24 * 30 && (
+                          <Tooltip
+                            hasArrow
+                            label={`You have until ${new Date(
+                              parseInt(grace_period_end)
+                            ).toLocaleDateString(undefined, {
+                              day: "numeric",
+                              month: "long",
+                              year: "numeric",
+                            })} to renew this name.`}
                           >
-                            Manage
-                          </MenuButton>
+                            {parseInt(expiration) < Date.now() ? (
+                              <Badge colorScheme="red">
+                                <WarningTwoIcon /> Expired
+                              </Badge>
+                            ) : (
+                              <Badge colorScheme="yellow">
+                                <WarningTwoIcon /> Expiring Soon
+                              </Badge>
+                            )}
+                          </Tooltip>
                         )}
-                        <MenuList fontSize="lg">
-                          <MenuItem
-                            icon={<FaCalendarPlus />}
-                            onClick={() =>
-                              openRenew(`${name}.${domain}`, expiration)
-                            }
-                          >
-                            Add Years
-                          </MenuItem>
-                          <MenuItem
-                            icon={<FaPaperPlane />}
-                            onClick={() => openTransfer(`${name}.${domain}`)}
-                          >
-                            Transfer
-                          </MenuItem>
-                          {process.env.NEXT_PUBLIC_KOLLECTION_IS_LIVE ===
-                            "true" && (
+                      </Td>
+                      <Td paddingInline={{ base: "4", md: "6" }}>
+                        <Menu placement="bottom-end">
+                          {isMobile ? (
+                            <MenuButton
+                              as={IconButton}
+                              icon={<FaEllipsisV />}
+                              aria-label="Manage"
+                              variant="ghost"
+                            />
+                          ) : (
+                            <MenuButton
+                              as={Button}
+                              rightIcon={<ChevronDownIcon />}
+                              variant="outline"
+                            >
+                              Manage
+                            </MenuButton>
+                          )}
+                          <MenuList fontSize="lg">
+                            <MenuItem
+                              icon={<FaCalendarPlus />}
+                              onClick={() =>
+                                openRenew(`${name}.${domain}`, expiration)
+                              }
+                            >
+                              Add Years
+                            </MenuItem>
+                            <MenuItem
+                              icon={<FaPaperPlane />}
+                              onClick={() => openTransfer(`${name}.${domain}`)}
+                            >
+                              Transfer
+                            </MenuItem>
                             <MenuItem
                               icon={<FaExternalLinkAlt />}
                               as="a"
-                              href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${name}.${domain}/sell`}
+                              href={`${process.env.NEXT_PUBLIC_KOLLECTION_URL}/${process.env.NEXT_PUBLIC_NAME_SERVICE_ADDR}/${token_id}/sell`}
                               target="_blank"
                             >
                               List For Sale
                             </MenuItem>
-                          )}
-                        </MenuList>
-                      </Menu>
-                    </Td>
-                  </Tr>
-                ))}
+                          </MenuList>
+                        </Menu>
+                      </Td>
+                    </Tr>
+                  );
+                })}
             </Tbody>
             <Tfoot>
               <Tr>
@@ -307,8 +309,11 @@ const Account: NextPage = () => {
                   </NumberInput>
                   <Text>
                     Total years cannot exceed 10. You will be charged $
-                    {calculatePrice(selectedName.substring(0, selectedName.length - 5), renewYears) || 0}.
-                    The new expiration date for {selectedName} will be{" "}
+                    {calculatePrice(
+                      selectedName.substring(0, selectedName.length - 5),
+                      renewYears
+                    ) || 0}
+                    . The new expiration date for {selectedName} will be{" "}
                     {new Date(
                       parseInt(selectedExpiry) +
                         86_400_000 * 365 * (renewYears || 0)
