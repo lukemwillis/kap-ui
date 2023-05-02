@@ -83,8 +83,10 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [themeHasError, setThemeHasError] = useState(false);
   const [socialLinksHaveError, setSocialLinksHaveError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
-  const { onCopy, setValue } = useClipboard(
-    `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`
+  const { onCopy, setValue, value } = useClipboard(
+    profile?.name
+      ? `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`
+      : ""
   );
 
   useEffect(() => {
@@ -133,7 +135,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
         if (uriResult?.value) {
           const uri = normalizeIpfsUris(uriResult.value as string);
           try {
-            const metadata = await fetch(`${uri}/${localProfile.avatar_token_id}`);
+            const metadata = await fetch(
+              `${uri}/${localProfile.avatar_token_id}`
+            );
             const { image } = await metadata.json();
             const imageSrc = normalizeIpfsUris(image);
             setLocalAvatarSrc(imageSrc);
@@ -225,7 +229,11 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
       });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
-      setValue(`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`);
+      setValue(
+        profile?.name
+          ? `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`
+          : ""
+      );
       setLocalAvatarSrc("");
       setAvatarContractError("");
       setAvatarTokenError("");
@@ -285,7 +293,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     <Card variant="outline" padding="2">
                       <Link
                         target="_blank"
-                        href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`}
+                        href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`}
                       >
                         {process.env.NEXT_PUBLIC_KAP_PLUS_URL}
                         {profile?.name} <ExternalLinkIcon mb="1" />
@@ -368,9 +376,13 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                         variant="outline"
                         size="lg"
                       />
-                      {avatarContractError || avatarTokenError || avatarImageError ? (
+                      {avatarContractError ||
+                      avatarTokenError ||
+                      avatarImageError ? (
                         <Card bg="red.500" color="white" padding="3">
-                          {avatarContractError || avatarTokenError || avatarImageError}
+                          {avatarContractError ||
+                            avatarTokenError ||
+                            avatarImageError}
                         </Card>
                       ) : isAvatarLoading ? (
                         <Flex

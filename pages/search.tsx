@@ -120,6 +120,8 @@ const Search: NextPage = () => {
   }, [asPath]);
 
   const isInCart = items && !!items[query];
+  const encoder = new TextEncoder();
+  const queryLength = encoder.encode(query).length;
 
   if (error) {
     return (
@@ -187,7 +189,7 @@ const Search: NextPage = () => {
               direction="column"
               textAlign={{ base: "center", md: "left" }}
             >
-              {query.length <= 10 ||
+              {queryLength <= 10 ||
               process.env.NEXT_PUBLIC_FREE_LAUNCHED === "true" ? (
                 <>
                   <Text>It&apos;s available!</Text>
@@ -280,7 +282,7 @@ const Search: NextPage = () => {
               maxWidth={{ base: "100%", md: "20em" }}
               direction="column"
             >
-              {query.length > 10 ? (
+              {queryLength > 10 ? (
                 <>
                   <Infinite size="8em" color={iconColor} />
                   <Heading as="h3" size="md" lineHeight="2">
@@ -311,7 +313,7 @@ const Search: NextPage = () => {
             borderColor={background}
             borderRadius="8"
           >
-            {query.length > 10 ? (
+            {queryLength > 10 ? (
               <>
                 <Heading>Want a premium name?</Heading>
                 <Text>

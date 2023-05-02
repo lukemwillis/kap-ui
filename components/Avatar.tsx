@@ -17,10 +17,8 @@ function Avatar({ src, size }: AvatarProps) {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    if (hasError) {
-      setHasError(false);
-    }
-  }, [src, avatarSrc, setHasError, hasError]);
+    setHasError(false);
+  }, [address, src, avatarSrc, setHasError]);
 
   if (!hasError && (src || avatarSrc)) {
     return (
@@ -49,7 +47,7 @@ function Avatar({ src, size }: AvatarProps) {
           borderRadius: "50%",
           overflow: "hidden",
           flexShrink: "0",
-          background: "white"
+          background: "white",
         }}
       />
     );
