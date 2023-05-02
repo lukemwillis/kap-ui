@@ -84,7 +84,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   const [socialLinksHaveError, setSocialLinksHaveError] = useState(false);
   const [hasChanges, setHasChanges] = useState(false);
   const { onCopy, setValue } = useClipboard(
-    `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`
+    `${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`
   );
 
   useEffect(() => {
@@ -225,7 +225,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
           profile.avatar_token_id === "0x" ? "" : profile.avatar_token_id,
       });
       setIsThemeLight(profile.theme ? isThemeColorLight(profile.theme) : true);
-      setValue(`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${profile?.name}`);
+      setValue(`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`);
       setLocalAvatarSrc("");
       setAvatarContractError("");
       setAvatarTokenError("");
