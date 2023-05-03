@@ -6,7 +6,13 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
   const { hex } = req.query;
 
   if (typeof hex === "string" && /^0x([a-fA-F0-9]{2})+$/.test(hex)) {
-    const name = Buffer.from(hex.substring(2), "hex").toString("utf8");
+    let name = Buffer.from(hex.substring(2), "hex").toString("utf8");
+    let domain;
+    if (name.includes(".")) {
+      const split = name.split(".");
+      domain = split.pop();
+      name = split.join(".");
+    }
     const isAscii = isASCII(name);
     res
       .status(200)
@@ -23,17 +29,20 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                         <stop stop-color="#c7007b" stop-opacity="1" offset="50%"></stop>
                         <stop stop-color="#2d388a" stop-opacity="1" offset="100%"></stop>
                     </linearGradient>
+                    <style>
+                        @import url('https://fonts.googleapis.com/css?family=Poppins:700');
+                        text {
+                            font-weight: bold;
+                            font-family: 'Poppins';
+                        }
+                    </style>
+                    <mask id="tla">
+                        <rect x="1120" y="25" width="200" height="200" fill="#fff" />
+                        <text font-size="90px" fill="#000" text-anchor="middle" alignment-baseline="middle" transform="translate(1220, 125) rotate(20)">TLA</text>
+                    </mask>
                 </defs>
-                <style>
-                    .heavy {
-                        font: bold 200px sans-serif;
-                    }
-                    .light {
-                        font: normal 80px sans-serif;
-                    }
-                </style>
                 <rect width="2000" height="2000" fill="url(#gradient)" x="-500" y="-500" />
-                <g fill="white">
+                <g fill="#fff">
                     <polygon points="104.687,129.11 113.291,138.4 158.395,88.217 141.441,88.217"/>
                     <polygon points="76.657,114.179 85.657,104.136 85.657,47.201 76.657,47.201"/>
                     <polygon points="157.385,187.467 124.325,187.467 130.774,194.467 163.869,194.467"/>
@@ -63,8 +72,6 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                         C481.86,166.85,477.564,159.711,471.117,155.712z"/>
                     <polygon points="587.657,47.146 514.182,213.146 493.552,213.146 490.453,220.146 524.229,220.146 600.803,47.146"/>
                     <polygon points="660.862,47.146 587.387,213.146 566.757,213.146 563.658,220.146 597.434,220.146 674.008,47.146"/>
-                </g>
-                <g fill="white">
                     <rect x="49.997" y="40.201" width="20.66" height="141.266"/>
                     <polygon points="145.001,181.467 96.564,129.17 139.665,81.217 114.254,81.217 71.587,128.826 120.089,181.467"/>
                     <path d="M264.895,181.467V81.217h-20.66v16.036l-5.137-5.211c-4.453-4.518-9.352-7.947-14.561-10.19
@@ -88,15 +95,15 @@ export default function generateSvg(req: NextApiRequest, res: NextApiResponse) {
                     <polygon points="556.98,40.146 483.062,207.146 510.275,207.146 584.194,40.146"/>
                     <polygon points="630.186,40.146 556.267,207.146 583.48,207.146 657.399,40.146"/>
                 </g>
-                <g fill="white">
-                    <text x="50" y="${isAscii ? 1300 : 1200}" class="heavy">${name}</text>
-                </g>
+                <text fill="#fff" x="50" y="${
+                  domain !== undefined ? 1140 : 1300
+                }" font-size="200px">${name}</text>
                 ${
-                  !isAscii &&
-                  `<g fill="#dddddd">
-                     <text x="50" y="1300" class="light">⚠️ ${toASCII(name)}</text>
-                   </g>`
+                  domain !== undefined
+                    ? `<text fill="#fff" x="50" y="1300" font-size="120px">.${domain}</text>`
+                    : `<circle cx="1220" cy="125" r="100" fill="#fff" mask="url(#tla)" />`
                 }
+                ${!isAscii && `<text x="1220" y="1300" font-size="80px">⚠️</text>`}
             </svg>
         `);
   } else {
