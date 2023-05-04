@@ -20,6 +20,8 @@
     "@roamin/my-koinos-wallet-sdk": "^0.0.9",
     "emoji-regex": "^10.2.1",
     "framer-motion": "^6",
+    "imagemin": "^8.0.1",
+    "imagemin-svgo": "^10.0.1",
     "koilib": "^5.4.0",
     "kondor-js": "^0.3.0",
     "next": "12.3.1",
@@ -34,6 +36,8 @@
   "devDependencies": {
     "@types/elliptic": "^6.4.14",
     "@types/gtag.js": "^0.0.12",
+    "@types/imagemin": "^8.0.1",
+    "@types/imagemin-svgo": "^10.0.2",
     "@types/node": "18.7.18",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",
