@@ -203,8 +203,11 @@ export default function ProfileForm({ names }: ProfileFormProps) {
   };
 
   const avatarTokenSetter = (token: string) => {
-    const buffer = new TextEncoder().encode(token);
-    const avatar_token_id = `0x${utils.toHexString(buffer)}`;
+    let avatar_token_id = "";
+    if (token) {
+      const buffer = new TextEncoder().encode(token);
+      avatar_token_id = `0x${utils.toHexString(buffer)}`;
+    }
     setLocalProfile({
       ...localProfile,
       avatar_token_id,
@@ -293,7 +296,9 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     <Card variant="outline" padding="2">
                       <Link
                         target="_blank"
-                        href={`${process.env.NEXT_PUBLIC_KAP_PLUS_URL}${encodeURI(profile?.name)}`}
+                        href={`${
+                          process.env.NEXT_PUBLIC_KAP_PLUS_URL
+                        }${encodeURI(profile?.name)}`}
                       >
                         {process.env.NEXT_PUBLIC_KAP_PLUS_URL}
                         {profile?.name} <ExternalLinkIcon mb="1" />
@@ -442,6 +447,7 @@ export default function ProfileForm({ names }: ProfileFormProps) {
                     >
                       {names
                         .map(({ name, domain }) => `${name}.${domain}`)
+                        // TODO just use default sort, paginate
                         .sort()
                         .map((name) => (
                           <MenuItem

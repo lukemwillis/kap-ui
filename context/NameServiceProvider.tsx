@@ -100,6 +100,7 @@ export const NameServiceProvider = ({
             names: NameObject[];
           }>({
             owner: address,
+            // TODO paginate
             nameOffset: "",
             descending: false,
             limit: 100,

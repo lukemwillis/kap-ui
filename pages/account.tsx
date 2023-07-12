@@ -160,6 +160,7 @@ const Account: NextPage = () => {
             </Thead>
             <Tbody>
               {names
+                // TODO just use default sort, paginate
                 .sort((a, b) => {
                   if (a.name < b.name) return -1;
                   if (a.name > b.name) return 1;
