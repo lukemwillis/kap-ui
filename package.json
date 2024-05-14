@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@armana/walletconnect-koinos-sdk-js": "^0.1.3",
     "@chakra-ui/icons": "^2.0.10",
     "@chakra-ui/react": "^2.3.6",
     "@dicebear/avatars": "^4.10.5",
