@@ -81,7 +81,7 @@ const About: NextPage = () => {
           KAP makes it easy to access dApps without buying tokens. You just get
           a free or premium username and go. Built on the Koinos blockchain, KAP
           is the backbone of social, gaming, and any other free-to-use dApp. KAP
-          is launching in Q2 2023 with premium account names. It will evolve to
+          launched in Q2 2023 with premium account names. It will evolve to
           include a host of features that make it easy to experience blockchain
           for free.
         </Text>
@@ -171,13 +171,14 @@ const About: NextPage = () => {
                 width: "1.5em",
                 height: "1.5em",
                 borderRadius: "50%",
-                background: "brand.orange",
+                background: "brand.navy",
                 borderColor: "white",
                 borderWidth: "2px",
                 position: "absolute",
                 marginLeft: "calc(-2.75em - 1px)",
               }}
-            >
+            >              
+              <CheckIcon position="absolute" marginLeft="-2.6em" marginTop="0.25em" />
               <Text fontWeight="bold">Q3 2023</Text>
               <Heading as="h3" size="lg">
                 Integration
@@ -200,18 +201,20 @@ const About: NextPage = () => {
             <Box
               borderLeft="2px"
               paddingLeft="2em"
-              paddingBottom="1em"
+              paddingBottom="1em"   
               _before={{
                 content: '""',
                 width: "1.5em",
                 height: "1.5em",
                 borderRadius: "50%",
-                background: "white",
+                background: "brand.orange",
+                borderColor: "white",
+                borderWidth: "2px",
                 position: "absolute",
                 marginLeft: "calc(-2.75em - 1px)",
               }}
             >
-              <Text fontWeight="bold">Q3 2023</Text>
+              <Text fontWeight="bold">Q3 2024</Text>
               <Heading as="h3" size="lg">
                 Tokenless Access
               </Heading>
@@ -222,7 +225,7 @@ const About: NextPage = () => {
                 </ListItem>
                 <ListItem>
                   <ListIcon as={ChevronRightIcon} mb="1" />
-                  Prepare protocol for free account launch
+                  Open free account registration
                 </ListItem>
               </List>
             </Box>
@@ -240,15 +243,11 @@ const About: NextPage = () => {
                 marginLeft: "calc(-2.75em - 1px)",
               }}
             >
-              <Text fontWeight="bold">Q4 2023</Text>
+              <Text fontWeight="bold">Q4 2024</Text>
               <Heading as="h3" size="lg">
                 Web2 Parity
               </Heading>
               <List>
-                <ListItem>
-                  <ListIcon as={ChevronRightIcon} mb="1" />
-                  Open free account registration
-                </ListItem>
                 <ListItem>
                   <ListIcon as={ChevronRightIcon} mb="1" />
                   Launch account abstraction features
@@ -273,7 +272,7 @@ const About: NextPage = () => {
                 marginLeft: "calc(-2.75em - 1px)",
               }}
             >
-              <Text fontWeight="bold">2024</Text>
+              <Text fontWeight="bold">2025</Text>
               <Heading as="h3" size="lg">
                 KAP DAO
               </Heading>
