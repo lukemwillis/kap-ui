@@ -16,10 +16,10 @@ export default function ConnectWallet({
   onConnect,
   onClick,
 }: ConnectWalletProps) {
-  const { address, connectKondor, connectMKW } = useAccount();
+  const { address, connectKondor, connectWalletConnect } = useAccount();
   const toast = useToast();
 
-  const connectCallback = async (wallet: "Kondor" | "MKW") => {
+  const connectCallback = async (wallet: "Kondor" | "WalletConnect") => {
     let connected = false;
 
     if (onClick) {
@@ -28,29 +28,16 @@ export default function ConnectWallet({
 
     if (wallet === "Kondor") {
       connected = await connectKondor();
-    } else if (wallet === "MKW") {
-      try {
-        connected = await connectMKW();
-      } catch (e) {
-        toast({
-          title: "Check browser settings",
-          description:
-            "Have you set up MKW in this browser? MKW requires support for popups and cross-site cookies. Please check your browser settings if you want to connect with MKW.",
-          status: "error",
-          duration: 10000,
-          isClosable: true,
-          position: "bottom-left",
-        });
-        return;
-      }
+    } else if (wallet === "WalletConnect") {
+      connected = await connectWalletConnect();
     }
 
     if (!connected) {
       toast({
         title: `Failed to connect with ${wallet}`,
-        description: `Please check that you have ${wallet} ${
-          wallet === "Kondor" ? "installed" : "set up"
-        } in this browser and try again.`,
+        description: `Please check that you have ${
+          wallet === "Kondor" ? "Kondor installed" : "a WalletConnect compatible wallet set up"
+        } and try again.`,
         status: "error",
         duration: 10000,
         isClosable: true,
@@ -59,9 +46,7 @@ export default function ConnectWallet({
       return;
     }
 
-    if (onConnect) {
-      onConnect();
-    }
+    onConnect?.();
   };
   return (
     <>
@@ -75,12 +60,12 @@ export default function ConnectWallet({
           icon={<Image src="/kondor-logo.png" alt="Kondor Logo" height={16} />}
         />
         <IconButton
-          onClick={() => connectCallback("MKW")}
-          aria-label="Connect with MKW"
+          onClick={() => connectCallback("WalletConnect")}
+          aria-label="Connect with WalletConnect"
           flex="1"
           height="auto"
           padding="4"
-          icon={<Image src="/mkw-logo.png" alt="MKW Logo" height={16} />}
+          icon={<Image src="/wallet-connect-logo.png" alt="WalletConnect Logo" height={16} />}
         />
       </Flex>
       {!address && (
@@ -107,7 +92,7 @@ export default function ConnectWallet({
           </StackDivider>
           <Button
             as="a"
-            href="https://chrome.google.com/webstore/detail/kondor/ghipkefkpgkladckmlmdnadmcchefhjl"
+            href="//chrome.google.com/webstore/detail/kondor/ghipkefkpgkladckmlmdnadmcchefhjl"
             target="_blank"
             justifyContent="start"
             leftIcon={
@@ -120,12 +105,12 @@ export default function ConnectWallet({
           </Button>
           <Button
             as="a"
-            href="https://mykw.vercel.app"
+            href="//konio.io/"
             target="_blank"
             justifyContent="start"
-            leftIcon={<Image src="/mkw-logo.png" alt="MKW Logo" height={6} />}
+            leftIcon={<Image src="/konio-logo.jpg" alt="Konio Logo" height={6} />}
           >
-            Set up My Koinos Wallet
+            Download Konio
           </Button>
         </>
       )}
